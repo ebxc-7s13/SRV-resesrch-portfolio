@@ -4,13 +4,13 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer
-      className="relative z-10 border-t-2 border-green-950/30"
+      className="site-footer relative z-10 border-t-2 border-green-950/30"
       style={{ backgroundColor: "#B7FF4A" }}
     >
-      <div className="max-w-7xl mx-auto px-6 py-5">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="footer-inner max-w-7xl mx-auto px-6 py-5">
+        <div className="footer-main flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           {/* Brand */}
-          <div className="flex items-center gap-4">
+          <div className="footer-brand flex items-center gap-4">
             <FooterLogo />
             <div>
               <span className="footer-name font-bold text-green-950 text-2xl md:text-4xl tracking-tight leading-tight">
@@ -25,7 +25,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <ul className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:justify-end">
+          <ul className="footer-links grid grid-cols-2 md:grid-cols-4 gap-1.5 md:justify-end">
               <li>
                 <Link
                   href="/research"
@@ -93,7 +93,7 @@ export default function Footer() {
             </ul>
         </div>
 
-        <div className="mt-5 pt-4 border-t border-green-950/30 flex flex-col md:flex-row justify-between items-center gap-3">
+        <div className="footer-legal mt-5 pt-4 border-t border-green-950/30 flex flex-col md:flex-row justify-between items-center gap-3">
           <p className="text-sm md:text-base text-green-950 font-sans font-extrabold uppercase tracking-brutal">
             © {new Date().getFullYear()} Siluveru R. V. — All rights reserved
           </p>

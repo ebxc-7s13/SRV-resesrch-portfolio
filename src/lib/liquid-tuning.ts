@@ -19,14 +19,12 @@ export type LiquidTuning = {
   rain: boolean;
 };
 
-// Fixed defaults: the shipped reference look (metalness 0.55 / roughness
-// 0.10 / displacement 5.5 / brightness 1.85, rain off). The popup's Reset
-// button restores exactly these.
+// Initial, environment-selection and Reset defaults share the same look.
 export const DEFAULT_LIQUID_TUNING: LiquidTuning = {
   brightness: 1.85,
-  displacement: 5.5,
-  metalness: 0.55,
-  roughness: 0.1,
+  displacement: 1,
+  metalness: 0,
+  roughness: 0,
   rain: false,
 };
 
@@ -122,6 +120,7 @@ export function setLiquidTuning(patch: Partial<LiquidTuning>) {
 }
 
 export function resetLiquidTuning() {
+  hydrated = true;
   current = { ...DEFAULT_LIQUID_TUNING };
   persist();
   emit();

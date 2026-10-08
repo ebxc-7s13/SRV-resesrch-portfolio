@@ -10,10 +10,7 @@
   padding: 28px 24px 24px;
   border: 1px solid rgb(var(--line));
   border-radius: 24px;
-  background:
-    radial-gradient(ellipse at 50% 40%, rgb(183 255 74 / 0.065), transparent 60%),
-    linear-gradient(155deg, rgb(12 24 19 / 0.88), rgb(7 14 11 / 0.94));
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+  background: none;
   contain: layout;
 }
 
@@ -41,55 +38,51 @@
   display: grid;
   justify-items: center;
   gap: 10px;
-  width: min(100%, 520px);
+  width: min(100%, 360px);
   min-width: 0;
 }
 .controls {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
+  gap: 8px;
   width: 100%;
-  padding: 5px;
-  border: 1px solid rgb(183 255 74 / 0.18);
-  border-radius: 12px;
-  background: linear-gradient(155deg, rgb(12 31 23 / 0.94), rgb(5 17 12 / 0.96));
-  box-shadow: inset 0 1px 0 rgb(229 255 211 / 0.08);
+  background: none;
 }
 .system {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 6px;
   min-width: 0;
-  min-height: 44px;
-  padding: 10px;
-  border: 1px solid transparent;
-  border-radius: 7px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 999px;
   background: transparent;
-  color: #c4d2c8;
-  font: 0.72rem/1.25 var(--font-jetbrains), monospace;
-  letter-spacing: 0.07em;
+  color: #fff;
+  font: 0.65rem/1.25 var(--font-jetbrains), monospace;
+  letter-spacing: 0.06em;
   cursor: pointer;
-  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 .system:hover, .system[data-selected="true"] {
-  background: rgb(116 177 77 / 0.13);
-  border-color: rgb(183 255 74 / 0.4);
-  color: #daffab;
+  background: transparent;
+  border-color: rgb(183 255 74 / 0.7);
+  box-shadow: 0 0 14px rgb(183 255 74 / 0.1);
+  color: #fff;
 }
 .system:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: 2px; }
 .system[aria-pressed="true"] { border-bottom-color: var(--xray-edge); }
-.system:disabled { opacity: 0.55; cursor: default; }
-.indicator { width: 4px; height: 4px; border: 1px solid currentColor; border-radius: 50%; flex-shrink: 0; }
-.system[data-selected="true"] .indicator { background: currentColor; box-shadow: 0 0 6px rgb(183 255 74 / 0.3); }
-.systemStatus { min-height: 18px; color: #b5c7ba; font: 0.68rem/1.55 var(--font-jetbrains), monospace; letter-spacing: 0.03em; text-align: center; }
+.system:disabled { border-color: rgb(255 255 255 / 0.12); box-shadow: none; cursor: default; }
+.systemIcon { width: 18px; height: 18px; flex-shrink: 0; }
+.systemStatus { min-height: 18px; color: #fff; font: 0.64rem/1.55 var(--font-jetbrains), monospace; letter-spacing: 0.03em; text-align: center; }
 
 .caption {
   width: 100%;
   min-width: 0;
   font: 0.7rem/1.6 var(--font-jetbrains), monospace;
   letter-spacing: 0.08em;
-  color: rgb(var(--ink) / 0.92);
+  color: #fff;
 }
 .captionLabel {
   display: flex;
@@ -99,7 +92,7 @@
   gap: 6px 20px;
   text-align: center;
 }
-.attribution { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.9em; letter-spacing: 0; text-decoration: underline; text-underline-offset: 3px; color: rgb(var(--muted)); transition: color var(--motion-micro) var(--ease-out); }
+.attribution { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.9em; letter-spacing: 0; text-decoration: underline; text-underline-offset: 3px; color: #fff; transition: color var(--motion-micro) var(--ease-out); }
 .attribution:hover { color: rgb(var(--accent)); }
 .attribution:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: 2px; }
 
@@ -125,10 +118,7 @@
   .captionLabel {
     gap: 4px 12px;
     padding: 8px 16px;
-    border: 1px solid rgb(255 255 255 / 0.1);
-    border-radius: 14px;
-    background: linear-gradient(160deg, rgb(10 24 19 / 0.84), rgb(8 18 14 / 0.9));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07);
+    background: none;
   }
   .attribution { pointer-events: auto; }
 }
@@ -136,8 +126,10 @@
 @media (max-width: 600px) {
   .host { padding: 18px 12px 12px; gap: 16px; border-radius: 18px; }
   .image { height: clamp(380px, 110vw, 500px); }
-  .system { padding: 10px 4px; gap: 5px; font-size: 0.64rem; letter-spacing: 0.02em; }
+  .controls { gap: 6px; }
+  .system { padding: 7px 6px; gap: 5px; font-size: 0.6rem; letter-spacing: 0.02em; }
   .caption { font-size: 0.62rem; }
   .captionLabel { flex-direction: column; gap: 0; }
 }
+@media (pointer: coarse) { .system { min-height: 44px; } }
 @media (prefers-reduced-motion: reduce) { .system { transition: none; } }

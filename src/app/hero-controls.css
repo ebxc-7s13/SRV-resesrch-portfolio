@@ -1,0 +1,96 @@
+/* Transparent controls for the home hero; the role marquee has its own surface. */
+.portfolio-shell[data-route="home"] .research-hero .hero-description {
+  margin: 24px 0 0;
+  padding: 0;
+  background: none;
+  color: #fff;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-domains span {
+  background: none;
+  border-color: rgb(255 255 255 / 0.2);
+  box-shadow: none;
+  color: #fff;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-actions a.button {
+  min-height: 44px;
+  padding: 12px 18px;
+  border: 1px solid rgb(255 255 255 / 0.38);
+  border-radius: 10px;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  color: #fff;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-actions a.button.secondary {
+  border-color: rgb(255 255 255 / 0.2);
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-actions a.button::after {
+  content: none;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links {
+  gap: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a {
+  min-height: 44px;
+  padding: 6px 0;
+  background: none;
+  color: #fff;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a::after {
+  left: 0;
+  right: 0;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-ledger {
+  border-color: rgb(255 255 255 / 0.15);
+  background: none;
+  box-shadow: none;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-ledger strong,
+.portfolio-shell[data-route="home"] .research-hero .hero-ledger > div > span,
+.portfolio-shell[data-route="home"] .research-hero .hero-ledger > p,
+.portfolio-shell[data-route="home"] .research-hero .hero-ledger .hero-scroll {
+  color: #fff;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-ledger .hero-scroll::before {
+  background: none;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-actions a.button:hover,
+.portfolio-shell[data-route="home"] .research-hero .hero-actions a.button:focus-visible {
+  border-color: #b7ff4a;
+  background: none;
+  box-shadow: 0 0 18px rgb(183 255 74 / 0.12);
+  color: #fff;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a:hover,
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a:focus-visible {
+  background: none;
+  color: #fff;
+}
+
+.portfolio-shell[data-route="home"] .research-hero .hero-domains span:hover {
+  box-shadow: none;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .portfolio-shell[data-route="home"] .research-hero .hero-actions a.button {
+    padding-inline: 10px;
+    font-size: 0.75rem;
+  }
+}

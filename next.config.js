@@ -49,9 +49,11 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              // Production: no unsafe-eval; dev: allow it for Next.js HMR
+              // The shared home/lab decoder needs WebAssembly. Keep this in
+              // the document policy because client navigation retains the
+              // starting route's CSP. JavaScript eval is still dev-only.
               isProd
-                ? "script-src 'self' 'unsafe-inline'"
+                ? "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'"
                 : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
               "style-src 'self' 'unsafe-inline'",
               // Images from self and data URIs only; blog rich text restricts
@@ -83,23 +85,6 @@ const nextConfig = {
         ],
       },
     ];
-    // Only the lab needs WebAssembly for its bundled mesh decoder. JavaScript
-    // eval and external script/network origins remain blocked in production.
-    const csp = routes[0].headers.find(
-      (header) => header.key === "Content-Security-Policy",
-    );
-    routes.push({
-      source: "/lab/:path*",
-      headers: [
-        {
-          key: csp.key,
-          value: csp.value.replace(
-            "script-src 'self'",
-            "script-src 'self' 'wasm-unsafe-eval'",
-          ),
-        },
-      ],
-    });
     routes.push({
       source: "/3d/:path*",
       headers: [

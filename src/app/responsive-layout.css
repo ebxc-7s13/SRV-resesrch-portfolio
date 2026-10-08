@@ -20,7 +20,6 @@
 .portfolio-shell[data-route="home"] .hero-role-marquee .marquee_text { font-size: clamp(1rem, 1.8vw, 1.5rem); letter-spacing: 0.16em; }
 .portfolio-shell[data-route="home"] .hero-description { margin: 24px 0; font-size: 1rem; line-height: 1.85; }
 .portfolio-shell[data-route="home"] .hero-ledger { grid-column: 1 / -1; margin: 0; }
-.portfolio-shell[data-route="home"] .home-anatomy { padding-block: 40px 0; }
 }
 
 @media (min-width: 901px) {
@@ -137,7 +136,6 @@
   .portfolio-shell[data-route="home"] .hero-ledger > div > span { font-size: 0.6rem; letter-spacing: 0.06em; }
   .portfolio-shell[data-route="home"] .hero-ledger > p { display: none; }
   .portfolio-shell[data-route="home"] .hero-ledger .hero-scroll { grid-column: 1 / -1; width: 100%; padding: 16px; border-top: 1px solid rgb(var(--line)); }
-  .portfolio-shell[data-route="home"] .home-anatomy { padding-top: 28px; }
   .portfolio-shell[data-route="home"] .home-lab-exhibit { margin-top: 32px; padding-block: 28px 36px; }
   .portfolio-shell[data-route="home"] .home-lab-passage { height: 90px; margin-bottom: 28px; }
   .portfolio-shell[data-route="home"] .home-lab-passage-line { gap: 8px; }
@@ -174,4 +172,29 @@
 
 @media (max-width: 360px) {
   .portfolio-shell[data-route="home"] .hero-actions { grid-template-columns: 1fr; }
+}
+
+/* Keep the desktop presentation intact; tighten only the compact layout. */
+@media (max-width: 900px) {
+  .portfolio-shell .mobile-navigation-panel {
+    background:
+      var(--glass-specular) top / 100% 1px no-repeat,
+      rgb(var(--panel) / 0.96);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    backdrop-filter: blur(24px) saturate(120%);
+  }
+  .portfolio-shell footer.site-footer {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .site-footer .footer-inner { padding: 16px 20px; }
+  .site-footer .footer-main { flex-direction: column; align-items: stretch; gap: 12px; }
+  .site-footer .footer-brand { gap: 12px; }
+  .site-footer .footer-brand img { width: 64px; height: 64px; object-fit: contain; }
+  .portfolio-shell .site-footer .footer-name { font-size: clamp(1rem, 4vw, 1.35rem); line-height: 1.4; }
+  .site-footer .footer-brand p { font-size: 0.65rem; line-height: 1.5; }
+  .site-footer .footer-links { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 8px; }
+  .portfolio-shell .site-footer .footer-chip { width: 100%; min-height: 44px; padding: 6px 12px; font-size: 0.8rem; }
+  .site-footer .footer-legal { flex-direction: column; margin-top: 12px; padding-top: 12px; gap: 4px; }
+  .site-footer .footer-legal > p { font-size: 0.65rem; line-height: 1.6; text-align: center; }
+  .site-footer .footer-legal a { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.75rem; }
 }

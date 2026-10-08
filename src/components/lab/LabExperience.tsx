@@ -220,8 +220,12 @@ export default function LabExperience({ content }: { content: LabContent }) {
   }, []);
   const onReady = useCallback(() => {
     setReady(true);
+    // Populate both benches when the room opens. Detail tiers still load
+    // only when a device is selected, and no GLBs load before entering 3D.
     setVisited((ids) =>
-      ids.includes("microscope") ? ids : [...ids, "microscope"],
+      researchDevices.every((device) => ids.includes(device.id))
+        ? ids
+        : researchDevices.map((device) => device.id),
     );
   }, []);
   const onFailure = useCallback(() => {
@@ -343,6 +347,8 @@ export default function LabExperience({ content }: { content: LabContent }) {
             ref={stage}
             className="lab-stage"
             data-capture={capture}
+            data-microscope-state={statuses.microscope || "idle"}
+            data-mmsa-state={statuses.mmsa || "idle"}
             aria-label="Laboratory visualization"
             tabIndex={entered ? 0 : -1}
             aria-describedby={entered ? "lab-camera-help" : undefined}

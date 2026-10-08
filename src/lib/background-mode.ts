@@ -5,6 +5,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { resetLiquidTuning } from "./liquid-tuning";
 
 export type BackgroundMode = "ambient" | "cells" | "liquid";
 
@@ -45,7 +46,10 @@ export function getBackgroundMode(): BackgroundMode {
 }
 
 export function setBackgroundMode(mode: BackgroundMode) {
+  // Apply the chosen reference look before the Liquid renderer mounts.
+  if (mode === "liquid") resetLiquidTuning();
   current = mode;
+  hydrated = true;
   try {
     localStorage.setItem(STORAGE_KEY, mode);
   } catch {

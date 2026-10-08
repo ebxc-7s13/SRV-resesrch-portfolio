@@ -10,6 +10,26 @@ const systems = [
   { key: "nervous", label: "NERVES", accessible: "Show nervous system" },
 ] as const;
 
+function AnatomyIcon({ system }: { system: AnatomySystem }) {
+  return (
+    <svg className={styles.systemIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      {system === "skeleton" ? <>
+        <path d="M8 17v3h8v-3l2-1a3 3 0 0 0 1.5-2.6V10a7.5 7.5 0 0 0-15 0v3.4A3 3 0 0 0 6 16z" />
+        <circle cx="8.5" cy="11" r="1.5" />
+        <circle cx="15.5" cy="11" r="1.5" />
+        <path d="m11 15 1-2 1 2M10.5 17v3m3-3v3" />
+      </> : system === "muscles" ? <>
+        <path d="m7.4 8.5 1.7.6M10 18a5 5 0 0 0 6-5" />
+        <path d="M4.5 8.5a3 3 0 0 1 4.2-3.9l.8.9.5-.4a2 2 0 0 1 2.8.1l.7.8a2 2 0 0 1 0 2.7L10 12" />
+        <path d="m4.5 8.5-1.8 4.5a3.2 3.2 0 0 0 1.5 4l4.6 2.3a10 10 0 0 0 12.7-4.1 3.9 3.9 0 0 0-5.9-4.8" />
+      </> : <>
+        <path d="M12 5a3 3 0 0 0-5.8-1A4 4 0 0 0 3 10a4 4 0 0 0 .5 7 4 4 0 0 0 8.5 2V5Zm0 0a3 3 0 0 1 5.8-1A4 4 0 0 1 21 10a4 4 0 0 1-.5 7 4 4 0 0 1-8.5 2" />
+        <path d="M6.2 4A3 3 0 0 0 7 7m10-3a3 3 0 0 1-1 3M3 10a3 3 0 0 1 3 1m15-1a3 3 0 0 0-3 1M7 14a3 3 0 0 1-3.5 3M17 14a3 3 0 0 0 3.5 3M8 18a3 3 0 0 1 4 1m4-1a3 3 0 0 0-4 1" />
+      </>}
+    </svg>
+  );
+}
+
 export default function XrayHero() {
   const host = useRef<HTMLDivElement>(null), canvas = useRef<HTMLCanvasElement>(null);
   const scene = useRef<XraySceneController | null>(null);
@@ -98,7 +118,7 @@ export default function XrayHero() {
                 scene.current?.setSystem(system.key); scene.current?.inspectAtCenter();
               }
             }}>
-            <span className={styles.indicator} aria-hidden="true" />{system.label}
+            <AnatomyIcon system={system.key} />{system.label}
           </button>)}
         </div>
         <span className={styles.systemStatus} role="status" aria-live="polite">{status}</span>

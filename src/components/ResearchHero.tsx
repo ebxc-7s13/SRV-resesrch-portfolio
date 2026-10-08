@@ -1,7 +1,4 @@
-/* Native lab links load its route-specific CSP with the document. */
-/* eslint-disable @next/next/no-html-link-for-pages */
 import { Entrance } from "./Reveal";
-import GalaxyButton from "./GalaxyButton";
 import HeroNameHover from "./HeroNameHover";
 import Shuffle from "./Shuffle";
 import Link from "next/link";
@@ -75,10 +72,8 @@ export default function ResearchHero({
           <span>Instrumentation</span>
         </div>
         <div className="hero-actions">
-          <GalaxyButton
+          <Link
             href="/research"
-            seed={1}
-            radius="6px"
             className="button interaction-magnetic"
             data-magnet
           >
@@ -87,13 +82,13 @@ export default function ResearchHero({
                 Explore research ↗
               </SiteText>
             </span>
-          </GalaxyButton>
-          <GalaxyButton href="#lab" seed={2} radius="6px" className="button secondary">
+          </Link>
+          <a href="#lab" className="button secondary">
             Explore the 3D lab{" "}
             <span aria-hidden="true" className="cta-arrow">
               ↓
             </span>
-          </GalaxyButton>
+          </a>
         </div>
         <div className="hero-archive-links">
           <Link href="/publications">
