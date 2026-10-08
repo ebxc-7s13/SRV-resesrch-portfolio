@@ -2,16 +2,17 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
-  AMBIENT_TUNING_LIMITS,
-  DEFAULT_AMBIENT_TUNING,
-  resetAmbientTuning,
-  setAmbientTuning,
-  useAmbientTuning,
-} from "@/lib/ambient-tuning";
+  DEFAULT_TECHNICAL_TUNING,
+  TECHNICAL_TUNING_LIMITS,
+  resetTechnicalTuning,
+  setTechnicalTuning,
+  useTechnicalTuning,
+} from "@/lib/technical-tuning";
 import {
+  BACKGROUND_MODES,
   setBackgroundMode,
   useBackgroundMode,
-  type BackgroundMode,
+  type TechnicalBackgroundMode,
 } from "@/lib/background-mode";
 import {
   CELLS_TUNING_LIMITS,
@@ -108,55 +109,30 @@ function CellsSliders() {
   );
 }
 
-function AmbientSliders() {
-  const tuning = useAmbientTuning();
-  const isDefault =
-    tuning.brightness === DEFAULT_AMBIENT_TUNING.brightness &&
-    tuning.speed === DEFAULT_AMBIENT_TUNING.speed &&
-    tuning.warp === DEFAULT_AMBIENT_TUNING.warp &&
-    tuning.scale === DEFAULT_AMBIENT_TUNING.scale;
+function TechnicalSliders({ mode }: { mode: TechnicalBackgroundMode }) {
+  const tuning = useTechnicalTuning(mode);
+  const isDefault = Object.entries(DEFAULT_TECHNICAL_TUNING).every(
+    ([key, value]) => tuning[key as keyof typeof tuning] === value,
+  );
+  const hint = {
+    flux: "Move to bend the field. Click to send a pulse.",
+    prism: "Move to tilt the crystals. Click to scatter them.",
+    membrane: "Move to press the surface. Click to launch a wave.",
+  }[mode];
   return (
     <>
-      <Slider
-        label="Brightness"
-        value={tuning.brightness}
-        min={AMBIENT_TUNING_LIMITS.brightness.min}
-        max={AMBIENT_TUNING_LIMITS.brightness.max}
-        step={AMBIENT_TUNING_LIMITS.brightness.step}
-        onChange={(brightness) => setAmbientTuning({ brightness })}
-      />
-      <Slider
-        label="Speed"
-        value={tuning.speed}
-        min={AMBIENT_TUNING_LIMITS.speed.min}
-        max={AMBIENT_TUNING_LIMITS.speed.max}
-        step={AMBIENT_TUNING_LIMITS.speed.step}
-        onChange={(speed) => setAmbientTuning({ speed })}
-      />
-      <Slider
-        label="Warp"
-        value={tuning.warp}
-        min={AMBIENT_TUNING_LIMITS.warp.min}
-        max={AMBIENT_TUNING_LIMITS.warp.max}
-        step={AMBIENT_TUNING_LIMITS.warp.step}
-        onChange={(warp) => setAmbientTuning({ warp })}
-      />
-      <Slider
-        label="Scale"
-        value={tuning.scale}
-        min={AMBIENT_TUNING_LIMITS.scale.min}
-        max={AMBIENT_TUNING_LIMITS.scale.max}
-        step={AMBIENT_TUNING_LIMITS.scale.step}
-        onChange={(scale) => setAmbientTuning({ scale })}
-      />
-      <button
-        type="button"
-        className="cells-reset"
-        disabled={isDefault}
-        onClick={resetAmbientTuning}
-      >
-        Reset to defaults
-      </button>
+      <p className="technical-settings-hint">{hint}</p>
+      <Slider label="Brightness" value={tuning.brightness}
+        {...TECHNICAL_TUNING_LIMITS.brightness}
+        onChange={(brightness) => setTechnicalTuning(mode, { brightness })} />
+      <Slider label="Speed" value={tuning.speed}
+        {...TECHNICAL_TUNING_LIMITS.speed}
+        onChange={(speed) => setTechnicalTuning(mode, { speed })} />
+      <Slider label="Pointer response" value={tuning.response}
+        {...TECHNICAL_TUNING_LIMITS.response}
+        onChange={(response) => setTechnicalTuning(mode, { response })} />
+      <button type="button" className="cells-reset" disabled={isDefault}
+        onClick={() => resetTechnicalTuning(mode)}>Reset to defaults</button>
     </>
   );
 }
@@ -224,7 +200,7 @@ function LiquidSliders() {
 }
 
 // Single environment control for the top-right of the menu: a 3D-bezel orb
-// button that cycles Ambient → Cells → Liquid, plus a small downward arrow
+// button that cycles the five backgrounds, plus a small downward arrow
 // that opens this environment's slider popup (water parameters for liquid:
 // ripple depth / metalness / roughness / brightness / rain).
 export default function CellsControl({ liquidOnly = false }: { liquidOnly?: boolean }) {
@@ -234,7 +210,7 @@ export default function CellsControl({ liquidOnly = false }: { liquidOnly?: bool
   const panelRef = useRef<HTMLDivElement>(null);
   const settingsButton = useRef<HTMLButtonElement>(null);
   const panelId = useId();
-  const modeOrder: BackgroundMode[] = ["ambient", "cells", "liquid"];
+  const modeOrder = BACKGROUND_MODES;
   const modeLabel = mode[0].toUpperCase() + mode.slice(1);
   const next = modeOrder[(modeOrder.indexOf(mode) + 1) % modeOrder.length];
   const nextLabel = next[0].toUpperCase() + next.slice(1);
@@ -379,7 +355,7 @@ export default function CellsControl({ liquidOnly = false }: { liquidOnly?: bool
           ) : mode === "liquid" ? (
             <LiquidSliders />
           ) : (
-            <AmbientSliders />
+            <TechnicalSliders mode={mode} />
           )}
         </div>,
         document.body,

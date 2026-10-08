@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import {
+  BACKGROUND_MODES,
   setBackgroundMode,
   useBackgroundMode,
   type BackgroundMode,
@@ -13,7 +14,7 @@ export default function ThemeToggle({
 }) {
   const [mounted, setMounted] = useState(false);
   const backgroundMode = useBackgroundMode();
-  const modeOrder: BackgroundMode[] = ["ambient", "cells", "liquid"];
+  const modeOrder = BACKGROUND_MODES;
   const nextBackgroundMode: BackgroundMode =
     modeOrder[(modeOrder.indexOf(backgroundMode) + 1) % modeOrder.length];
   const modeLabel =
@@ -75,13 +76,13 @@ export default function ThemeToggle({
       role="group"
       aria-label="Background"
     >
-      {/* Single toggle: one button cycles Ambient → Cells → Liquid.
+      {/* Single toggle: one button cycles the five backgrounds.
           aria-pressed carries the non-default state; the label always says
           what is on and what it switches to. */}
       <button
         type="button"
         className="dock-segment"
-        aria-pressed={backgroundMode !== "ambient"}
+        aria-pressed={backgroundMode !== "cells"}
         aria-label={backgroundLabel}
         title={backgroundLabel}
         onClick={() => setBackgroundMode(nextBackgroundMode)}

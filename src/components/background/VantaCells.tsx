@@ -72,8 +72,8 @@ function useDebouncedValue(value: number, delayMs: number) {
  * Optional Vanta CELLS site background. Centrally mounted once by
  * PortfolioFrame (never per-route, never inside the Lab). Owns exactly one
  * WebGL context while active: init once per activation, destroy on mode
- * change / unmount / context loss. Ambient stack is hidden by CSS
- * (html[data-bgmode="cells"]) and restored untouched.
+ * change / unmount / context loss. PortfolioFrame owns the selected mode's
+ * root CSS marker for all five backgrounds.
  */
 export default function VantaCellsLayer() {
   const mode = useBackgroundMode();
@@ -97,14 +97,6 @@ export default function VantaCellsLayer() {
     };
     effectRef.current?.setOptions(liveOptions.current);
   }, [reduced, liveSpeed, liveSize]);
-
-  // Drive the CSS crossfade of the ambient stack.
-  useEffect(() => {
-    document.documentElement.dataset.bgmode = mode;
-    return () => {
-      delete document.documentElement.dataset.bgmode;
-    };
-  }, [mode]);
 
   useEffect(() => {
     if (!enabled) return;

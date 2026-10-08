@@ -7,15 +7,13 @@ import CursorTrail from "./background/CursorTrail";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import Marquee from "./Marquee";
-import ResearchEnvironment from "./ResearchEnvironment";
 import BackgroundSystem from "./background/BackgroundSystem";
 import MotionEffects from "./MotionEffects";
 import { Reveal } from "./Reveal";
 import { setBackgroundMode, useBackgroundMode } from "@/lib/background-mode";
 
 // The optional WebGL layers (vanta/three, threejs-components) only download
-// when their mode is actually selected — the non-WebGL modes never fetch
-// these chunks.
+// when their mode is actually selected.
 const VantaCellsLayer = dynamic(
   () => import("./background/VantaCells"),
   { ssr: false, loading: () => null },
@@ -36,6 +34,10 @@ export default function PortfolioFrame({
   // This is what lets the optional WebGL layers only enter the tree (and
   // trigger their dynamic chunks) when the user actually picks them.
   const backgroundMode = useBackgroundMode();
+  useEffect(() => {
+    document.documentElement.dataset.bgmode = backgroundMode;
+    return () => { delete document.documentElement.dataset.bgmode; };
+  }, [backgroundMode, path]);
   const isPlayRoute = path === "/play";
   useEffect(() => {
     if (isPlayRoute) setBackgroundMode("liquid");
@@ -88,7 +90,6 @@ export default function PortfolioFrame({
       {!isPlayRoute && <CursorField />}
       {!isPlayRoute && <CursorTrail />}
       {!isPlayRoute && <MotionEffects />}
-      {!isAdmin && !isPlayRoute && <ResearchEnvironment />}
       {!isAdmin && !isPlayRoute && <BackgroundSystem />}
       {!isAdmin && !isPlayRoute && backgroundMode === "cells" && <VantaCellsLayer />}
       {!isAdmin && (isPlayRoute || backgroundMode === "liquid") && <LiquidMouseLayer />}

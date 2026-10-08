@@ -22,7 +22,7 @@ function occlusionEffect(globals) {
   return vm.runInNewContext(`(${callback})`, globals);
 }
 
-test("Ambient resumes after leaving an occluding home lab for another route", () => {
+test("Technical background resumes after leaving an occluding home lab for another route", () => {
   const lab = {};
   let currentLab = lab;
   let occluded = false;
@@ -39,13 +39,13 @@ test("Ambient resumes after leaving an occluding home lab for another route", ()
 
   const leaveHome = effect();
   observers[0].callback([{ isIntersecting: true }]);
-  assert.equal(occluded, true, "An intersecting lab suspends Ambient");
+  assert.equal(occluded, true, "An intersecting lab suspends Technical background");
   leaveHome();
   assert.equal(observers[0].disconnected, true);
 
   currentLab = null;
   assert.equal(effect(), undefined);
-  assert.equal(occluded, false, "The previous route cannot keep Ambient suspended");
+  assert.equal(occluded, false, "The previous route cannot keep Technical background suspended");
   assert.equal(observers.length, 1, "A route without the lab needs no observer");
 
   currentLab = lab;

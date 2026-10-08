@@ -1,79 +1,13 @@
 /* Global backdrop only. The foreground remains in the portfolio shell.
    Layer order: body base < GPU background (-2) < faint route structure (-1)
    < existing content. Neither background layer can receive pointer input.
-   overflow-x: clip keeps wide ambient SVG/marquee geometry from ever
+   overflow-x: clip keeps wide marquee geometry from ever
    widening the page — belt and braces behind the scroll containers. */
 .portfolio-shell,
 .research-marquee,
 .research-environment {
   overflow-x: clip;
 }
-.background-system {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
-  pointer-events: none;
-  contain: strict;
-  background: #070809;
-}
-
-.background-fallback,
-.background-system::after {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-/* Match Ambient's cyan/violet currents before the canvas mounts and when
-   canvas rendering is unavailable. A dark navy base keeps text readable. */
-.background-fallback {
-  background:
-    radial-gradient(ellipse 88% 72% at 78% 28%, rgb(38 229 223 / 0.22), transparent 68%),
-    radial-gradient(ellipse 84% 76% at 18% 62%, rgb(156 103 255 / 0.24), transparent 70%),
-    radial-gradient(ellipse 58% 56% at 92% 88%, rgb(183 255 74 / 0.07), transparent 64%),
-    radial-gradient(
-      ellipse 120% 96% at 50% 24%,
-      #111a2b 0%,
-      #0d1526 26%,
-      #090f1e 52%,
-      #070b18 76%,
-      #040710 100%
-    );
-}
-
-/* Contrast shade. The first pool calms the centre; the second is a bottom
-   vignette that seats text and cards on genuine black; the linear sweep adds
-   a faint top seat and a deeper footer edge. */
-.background-system::after {
-  content: "";
-  z-index: 2;
-  background:
-    radial-gradient(ellipse 58% 54% at 42% 38%, rgb(2 2 2 / 0.12), transparent 72%),
-    radial-gradient(ellipse 118% 52% at 50% 106%, rgb(2 2 2 / 0.5), transparent 74%),
-    linear-gradient(
-      180deg,
-      rgb(2 2 2 / 0.06),
-      transparent 30%,
-      transparent 62%,
-      rgb(2 2 2 / 0.24) 100%
-    );
-}
-
-.background-canvas {
-  position: absolute !important;
-  inset: 0;
-  z-index: 1;
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-  pointer-events: none !important;
-}
-
-.background-system[data-failed="true"] .background-canvas {
-  display: none;
-}
-
 /* ==========================================================================
    Cursor field — the site-wide cursor treatment (magnetic field lines).
    One fixed canvas under the content on every portfolio route: z -1 puts it
@@ -124,63 +58,8 @@ html[data-motion="paused"] canvas[data-cursor-trail] {
   }
 }
 
-/* The old route network is no longer the visual. A trace of its large grid and
-   diffuse light remains as scientific registration under the fluid material. */
-html[data-bgfluid="on"] .research-environment {
-  filter: none;
-  opacity: 1;
-}
-
-html[data-bgfluid="on"] .environment-network,
-html[data-bgfluid="on"] .environment-data-field,
-html[data-bgfluid="on"] .environment-contour,
-html[data-bgfluid="on"] .environment-floor {
-  display: none;
-}
-
-html[data-bgfluid="on"] .environment-grid {
-  opacity: 0.028;
-  transform: none;
-  translate: none;
-  mask-image: linear-gradient(#000, transparent 72%);
-}
-
-html[data-bgfluid="on"] .environment-light {
-  opacity: 0.24;
-}
-
-html[data-bgfluid="on"][data-theme="night"] .research-environment {
-  filter: grayscale(1);
-}
-
-html[data-bgfluid="on"][data-theme="night"] .environment-light {
-  opacity: 0.34;
-}
-
-@media (max-width: 768px), (pointer: coarse) {
-  html[data-bgfluid="on"] .environment-grid {
-    opacity: 0.018;
-  }
-
-  html[data-bgfluid="on"] .environment-light {
-    opacity: 0.16;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .background-system::after {
-    opacity: 1;
-  }
-}
-
-@media print {
-  .background-system {
-    display: none !important;
-  }
-}
-
 /* ==========================================================================
-   Vanta Cells — optional background on the same plane as .background-system.
+   Vanta Cells — background on the shared fixed backdrop plane.
    Layer order: body base < cells canvas (-2) < contrast shade < content.
    The canvas never receives pointer input; vanta tracks the mouse via
    window listeners, so interaction works through the foreground.
@@ -220,21 +99,6 @@ html[data-bgfluid="on"][data-theme="night"] .environment-light {
       transparent 64%,
       rgb(2 2 2 / 0.24) 100%
     );
-}
-
-/* Crossfade: the ambient stack yields the plane while cells is active and
-   is restored untouched on switch-back. Placed after the bgfluid rules so
-   it wins at equal specificity. */
-.research-environment,
-.background-system {
-  transition: opacity 0.4s ease;
-}
-
-html[data-bgmode="cells"] .research-environment,
-html[data-bgmode="cells"] .background-system,
-html[data-bgmode="liquid"] .research-environment,
-html[data-bgmode="liquid"] .background-system {
-  opacity: 0;
 }
 
 /* Dock background segment: the only control left, so it carries the full
@@ -283,8 +147,7 @@ html[data-bgmode="liquid"] .background-system {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .research-environment,
-  .background-system,
+  .technical-layer,
   .vanta-cells-layer,
   .liquid-layer {
     transition: none !important;
@@ -336,7 +199,7 @@ html[data-bgmode="liquid"] .background-system {
 }
 
 /* Static gradient for reduced-motion / WebGL-failure: same night language
-   as the ambient fallback, no animation, no canvas. */
+   as the portfolio surface, no animation, no canvas. */
 .liquid-fallback {
   position: absolute;
   inset: 0;
@@ -371,3 +234,62 @@ html[data-bgmode="liquid"] .background-system {
       rgb(2 2 2 / 0.24) 100%
     );
 }
+
+
+/* Original technical backgrounds: the same fixed, pointer-transparent plane
+   as Cells/Liquid. The contrast shade stays below all foreground content. */
+.technical-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  background: #070b10;
+}
+.technical-canvas,
+.technical-host,
+.technical-fallback,
+.technical-shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+.technical-canvas { z-index: 1; }
+.technical-host { z-index: 1; }
+.technical-fallback {
+  background:
+    repeating-linear-gradient(125deg, transparent 0 24px, rgb(76 167 177 / 0.08) 25px 26px),
+    radial-gradient(ellipse at 80% 35%, #123039, #070b10 75%);
+}
+.technical-layer[data-technical-mode="prism"] .technical-fallback {
+  background:
+    repeating-conic-gradient(from 45deg, #0c1720 0% 25%, #182524 0% 50%) 0 0 / 48px 48px;
+}
+.technical-layer[data-technical-mode="membrane"] .technical-fallback {
+  background:
+    repeating-radial-gradient(ellipse at 70% 40%, #0a1b24 0 10px, #173a3d 11px, #0a1b24 13px 23px);
+}
+.technical-shade {
+  z-index: 2;
+  background:
+    radial-gradient(ellipse 75% 80% at 23% 45%, rgb(2 5 8 / 0.64), transparent 85%),
+    linear-gradient(180deg, rgb(2 5 8 / 0.32), rgb(2 5 8 / 0.14) 28%, rgb(2 5 8 / 0.14) 65%, rgb(2 5 8 / 0.58));
+}
+.technical-settings-hint {
+  margin: 0 0 14px;
+  color: rgb(var(--muted));
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+@media (max-width: 768px), (pointer: coarse) {
+  .technical-layer {
+    bottom: auto;
+    height: 100vh;
+    height: 100lvh;
+  }
+}
+@media print { .technical-layer { display: none !important; } }

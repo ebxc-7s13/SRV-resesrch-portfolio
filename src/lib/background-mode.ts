@@ -7,7 +7,13 @@
 import { useSyncExternalStore } from "react";
 import { resetLiquidTuning } from "./liquid-tuning";
 
-export type BackgroundMode = "ambient" | "cells" | "liquid";
+export const BACKGROUND_MODES = ["cells", "liquid", "flux", "prism", "membrane"] as const;
+export type BackgroundMode = (typeof BACKGROUND_MODES)[number];
+export type TechnicalBackgroundMode = Exclude<BackgroundMode, "cells" | "liquid">;
+
+export function isTechnicalBackground(mode: BackgroundMode): mode is TechnicalBackgroundMode {
+  return mode === "flux" || mode === "prism" || mode === "membrane";
+}
 
 const STORAGE_KEY = "background-mode";
 const EVENT_NAME = "portfolio-background";
@@ -18,8 +24,8 @@ let hydrated = false;
 function readStored(): BackgroundMode {
   try {
     const value = localStorage.getItem(STORAGE_KEY);
-    if (value === "cells" || value === "liquid" || value === "ambient")
-      return value;
+    if (BACKGROUND_MODES.includes(value as BackgroundMode))
+      return value as BackgroundMode;
   } catch {
     /* storage unavailable — fall back to default */
   }

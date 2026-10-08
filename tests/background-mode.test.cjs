@@ -27,7 +27,7 @@ test("Fresh mobile visitors start with Liquid while desktop retains Cells", () =
 
 test("Explicit saved background choices are preserved on mobile and desktop", () => {
   for (const mobile of [false, true]) {
-    for (const stored of ["ambient", "cells", "liquid"]) {
+    for (const stored of ["cells", "liquid", "flux", "prism", "membrane"]) {
       assert.equal(fixture({ mobile, stored }).exports.getBackgroundMode(), stored);
     }
   }
@@ -42,11 +42,17 @@ test("Invalid or unavailable storage still uses the device default", () => {
 test("Changing the environment continues to persist the explicit choice", () => {
   const f = fixture({ mobile: true });
   f.exports.getBackgroundMode();
-  f.exports.setBackgroundMode("ambient");
-  assert.equal(f.exports.getBackgroundMode(), "ambient");
-  assert.equal(f.values.get("background-mode"), "ambient");
+  f.exports.setBackgroundMode("flux");
+  assert.equal(f.exports.getBackgroundMode(), "flux");
+  assert.equal(f.values.get("background-mode"), "flux");
   const blocked = fixture({ mobile: true, blocked: true });
   blocked.exports.getBackgroundMode();
   blocked.exports.setBackgroundMode("cells");
   assert.equal(blocked.exports.getBackgroundMode(), "cells");
+});
+
+
+test("Retired Ambient preferences migrate to the existing device defaults", () => {
+  assert.equal(fixture({ stored: "ambient" }).exports.getBackgroundMode(), "cells");
+  assert.equal(fixture({ mobile: true, stored: "ambient" }).exports.getBackgroundMode(), "liquid");
 });
