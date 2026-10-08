@@ -1,21 +1,27 @@
 .host {
   --xray-edge: #b7ff4a;
   --xray-secondary: #7de7ff;
-  position: absolute;
-  z-index: 1;
-  top: var(--space-8);
-  right: 0;
-  width: var(--xray-slot, 30%);
-  height: min(720px, calc(100% - 180px));
-  pointer-events: none;
-  contain: layout paint;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  padding: 28px 24px 24px;
+  border: 1px solid rgb(var(--line));
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgb(183 255 74 / 0.065), transparent 60%),
+    linear-gradient(155deg, rgb(12 24 19 / 0.88), rgb(7 14 11 / 0.94));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+  contain: layout;
 }
 
 .image {
-  position: absolute;
-  inset: 0 0 var(--space-16);
+  position: relative;
+  width: min(100%, 580px);
+  height: clamp(420px, 52vw, 600px);
 }
-
 .poster,
 .canvas {
   display: block;
@@ -25,86 +31,43 @@
   height: 100%;
   object-fit: contain;
 }
-
 .canvas { opacity: 0; }
-.canvas[data-ready="true"] { opacity: 1; pointer-events: auto; cursor: zoom-in; touch-action: pan-y; }
+.canvas[data-ready="true"] { opacity: 1; cursor: zoom-in; touch-action: pan-y; }
 .host[data-zoomed="true"] .canvas[data-ready="true"] { cursor: zoom-out; }
 .canvas:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: -2px; }
 .host[data-state="ready"] .poster { visibility: hidden; }
 
-.caption {
-  position: absolute;
-  bottom: 0;
-  inset-inline: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  /* Readable instrument label: 0.72rem (was 0.625rem) on its own smoked
-     surface, so it no longer depends on where the Vanta field happens to be. */
-  font: 0.72rem/1.55 var(--font-jetbrains), monospace;
-  letter-spacing: 0.1em;
-  color: rgb(var(--ink) / 0.92);
-}
-
-.captionLabel {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: center;
-  gap: var(--space-1) var(--space-3);
-  padding: 8px 16px;
-  text-align: center;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  border-radius: 14px;
-  background: linear-gradient(160deg, rgb(10 24 19 / 0.84), rgb(8 18 14 / 0.9));
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07);
-}
-.attribution { pointer-events: auto; font-size: 0.9em; letter-spacing: 0; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; color: rgb(var(--muted)); transition: color var(--motion-micro) var(--ease-out); }
-.attribution:hover { color: rgb(var(--accent)); }
-.attribution:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: 2px; }
-
-.host[data-compact="true"] { opacity: 0.22; top: 208px; height: 480px; }
-.host[data-compact="true"] .caption { display: none; }
-
-@media (max-width: 700px) {
-  .host { top: 204px; width: 150px; height: 400px; opacity: 0.12; }
-  .host[data-compact="true"] { top: 204px; height: 400px; opacity: 0.12; }
-  .caption { display: none; }
-}
-
 .instrument {
-  position: absolute;
-  bottom: 82px;
-  inset-inline: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-  pointer-events: auto;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  width: min(100%, 520px);
+  min-width: 0;
 }
 .controls {
-  display: flex;
-  gap: 3px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
   padding: 5px;
   border: 1px solid rgb(183 255 74 / 0.18);
   border-radius: 12px;
   background: linear-gradient(155deg, rgb(12 31 23 / 0.94), rgb(5 17 12 / 0.96));
-  box-shadow: inset 0 1px 0 rgb(229 255 211 / 0.08), 0 8px 24px rgb(0 0 0 / 0.18);
+  box-shadow: inset 0 1px 0 rgb(229 255 211 / 0.08);
 }
 .system {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-  min-height: 38px;
-  padding: 8px 11px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px;
   border: 1px solid transparent;
   border-radius: 7px;
   background: transparent;
   color: #c4d2c8;
-  font: 0.7rem/1.25 var(--font-jetbrains), monospace;
+  font: 0.72rem/1.25 var(--font-jetbrains), monospace;
   letter-spacing: 0.07em;
   cursor: pointer;
   transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
@@ -119,16 +82,32 @@
 .system:disabled { opacity: 0.55; cursor: default; }
 .indicator { width: 4px; height: 4px; border: 1px solid currentColor; border-radius: 50%; flex-shrink: 0; }
 .system[data-selected="true"] .indicator { background: currentColor; box-shadow: 0 0 6px rgb(183 255 74 / 0.3); }
-.systemStatus { min-height: 16px; color: #b5c7ba; font: 0.64rem/1.4 var(--font-jetbrains), monospace; letter-spacing: 0.05em; text-align: center; }
-/* Preserve the existing illustration slot; keep the lighter body discernible. */
-.host[data-compact="true"] { opacity: 1; }
-.host[data-compact="true"] .image { opacity: 0.75; }
-.host[data-compact="true"] .instrument { bottom: 0; }
-.host[data-compact="true"] .controls { flex-wrap: wrap; justify-content: center; }
-.host[data-compact="true"] .system { min-height: 36px; padding: 8px; font-size: 0.67rem; }
-@media (max-width: 700px) {
-  .host, .host[data-compact="true"] { opacity: 1; }
-  .host[data-compact="true"] .image { opacity: 0.65; }
-  .instrument { bottom: 0; }
+.systemStatus { min-height: 18px; color: #b5c7ba; font: 0.68rem/1.55 var(--font-jetbrains), monospace; letter-spacing: 0.03em; text-align: center; }
+
+.caption {
+  width: 100%;
+  min-width: 0;
+  font: 0.7rem/1.6 var(--font-jetbrains), monospace;
+  letter-spacing: 0.08em;
+  color: rgb(var(--ink) / 0.92);
+}
+.captionLabel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 20px;
+  text-align: center;
+}
+.attribution { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.9em; letter-spacing: 0; text-decoration: underline; text-underline-offset: 3px; color: rgb(var(--muted)); transition: color var(--motion-micro) var(--ease-out); }
+.attribution:hover { color: rgb(var(--accent)); }
+.attribution:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: 2px; }
+
+@media (max-width: 600px) {
+  .host { padding: 18px 12px 12px; gap: 16px; border-radius: 18px; }
+  .image { height: clamp(380px, 110vw, 500px); }
+  .system { padding: 10px 4px; gap: 5px; font-size: 0.64rem; letter-spacing: 0.02em; }
+  .caption { font-size: 0.62rem; }
+  .captionLabel { flex-direction: column; gap: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .system { transition: none; } }

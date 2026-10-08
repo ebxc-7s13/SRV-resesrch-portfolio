@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { useBackgroundMode } from "@/lib/background-mode";
 import { getLiquidTuning, useLiquidTuning } from "@/lib/liquid-tuning";
+import { configureLiquidViewport } from "@/lib/liquid-viewport";
 import type { LiquidApp } from "threejs-components/build/backgrounds/liquid1.min.js";
 
 function usePrefersReducedMotion() {
@@ -44,7 +45,7 @@ export default function LiquidMouseLayer() {
   const reduced = usePrefersReducedMotion();
   const tuning = useLiquidTuning();
 
-  const enabled = mode === "liquid" && !failed;
+  const enabled = mode === "liquid";
 
   // Water parameters apply live to the running instance — no rebuild, no
   // WebGL context churn while dragging sliders. Brightness stays CSS-only
@@ -63,7 +64,7 @@ export default function LiquidMouseLayer() {
   }, [tuning]);
 
   useEffect(() => {
-    if (!enabled || reduced) return;
+    if (!enabled || reduced || failed) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     let cancelled = false;
@@ -106,6 +107,7 @@ export default function LiquidMouseLayer() {
         if (cancelled || !canvas.isConnected || typeof create !== "function")
           return;
         app = create(canvas);
+        configureLiquidViewport(app, canvas, matchMedia("(max-width: 768px), (pointer: coarse)").matches);
         if (cancelled) {
           teardown();
           return;
@@ -134,7 +136,7 @@ export default function LiquidMouseLayer() {
       teardown();
       setReady(false);
     };
-  }, [enabled, reduced]);
+  }, [enabled, reduced, failed]);
 
   if (!enabled) return null;
 

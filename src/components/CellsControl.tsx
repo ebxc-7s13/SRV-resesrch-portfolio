@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   AMBIENT_TUNING_LIMITS,
   DEFAULT_AMBIENT_TUNING,
@@ -230,6 +231,8 @@ export default function CellsControl() {
   const mode = useBackgroundMode();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const settingsButton = useRef<HTMLButtonElement>(null);
   const panelId = useId();
   const modeOrder: BackgroundMode[] = ["ambient", "cells", "liquid"];
   const modeLabel = mode[0].toUpperCase() + mode.slice(1);
@@ -239,10 +242,10 @@ export default function CellsControl() {
   useEffect(() => {
     if (!open) return;
     const onPointerDown = (e: PointerEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+      if (!rootRef.current?.contains(e.target as Node) && !panelRef.current?.contains(e.target as Node)) setOpen(false);
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") { setOpen(false); settingsButton.current?.focus(); }
     };
     document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
@@ -251,6 +254,41 @@ export default function CellsControl() {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open ]);
+
+  // The header is transformed and uses backdrop blur. A body portal avoids
+  // its containing block and keeps every slider inside the visual viewport.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const panel = panelRef.current, anchor = rootRef.current;
+    if (!panel || !anchor) return;
+    const viewport = window.visualViewport;
+    const position = () => {
+      const width = viewport?.width ?? window.innerWidth;
+      const height = viewport?.height ?? window.innerHeight;
+      const leftEdge = (viewport?.offsetLeft ?? 0) + 16;
+      const topEdge = (viewport?.offsetTop ?? 0) + 16;
+      const availableHeight = Math.max(0, height - 32);
+      const rect = anchor.getBoundingClientRect();
+      const panelWidth = Math.min(300, width - 32);
+      const top = Math.max(topEdge, Math.min(rect.bottom + 10, topEdge + availableHeight - 100));
+      panel.style.width = `${panelWidth}px`;
+      panel.style.maxHeight = `${Math.max(0, topEdge + availableHeight - top)}px`;
+      panel.style.left = `${Math.max(leftEdge, Math.min(rect.right - panelWidth, leftEdge + width - 32 - panelWidth))}px`;
+      panel.style.top = `${top}px`;
+    };
+    position();
+    const observer = new ResizeObserver(position);
+    observer.observe(panel);
+    window.addEventListener("resize", position);
+    viewport?.addEventListener("resize", position);
+    viewport?.addEventListener("scroll", position);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", position);
+      viewport?.removeEventListener("resize", position);
+      viewport?.removeEventListener("scroll", position);
+    };
+  }, [open, mode]);
 
   // The popup always edits the live environment; switching environments
   // while it is open keeps it open on the new sliders.
@@ -288,6 +326,7 @@ export default function CellsControl() {
           <span className="env-label">{modeLabel}</span>
         </button>
         <button
+          ref={settingsButton}
           type="button"
           className="env-arrow"
           data-pointer
@@ -315,10 +354,12 @@ export default function CellsControl() {
           </svg>
         </button>
       </div>
-      {open && (
+      {open && createPortal(
         <div
+          ref={panelRef}
           id={panelId}
           className="cells-popup"
+          data-viewport-panel
           role="dialog"
           aria-label={`${modeLabel} background settings`}
         >
@@ -340,7 +381,8 @@ export default function CellsControl() {
           ) : (
             <AmbientSliders />
           )}
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

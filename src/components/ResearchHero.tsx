@@ -6,7 +6,6 @@ import HeroNameHover from "./HeroNameHover";
 import Shuffle from "./Shuffle";
 import Link from "next/link";
 import { SiteText } from "./SiteContent";
-import XrayHero from "./xray/XrayHero";
 
 const ROLE_TEXT = "BIOMEDICAL ENGINEER";
 
@@ -49,6 +48,8 @@ export default function ResearchHero({
             </HeroNameHover>
           </SiteText>
         </h1>
+      </Entrance>
+      <Entrance className="hero-summary" delay={0.1}>
         {/* Sci-fi role line: the text streams as a blurred trail behind a
             crisp copy (contrast-trick marquee). Hidden from AT; the role is
             plain text in the page elsewhere (hero description, eyebrow). */}
@@ -106,7 +107,6 @@ export default function ResearchHero({
           </Link>
         </div>
       </Entrance>
-      <XrayHero />
       <Entrance className="hero-ledger" delay={0.15}>
         <div data-reveal>
           <strong>{String(projectCount).padStart(2, "0")}</strong>

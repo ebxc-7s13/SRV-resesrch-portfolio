@@ -20,6 +20,7 @@ import "./hero-industrial.css";
 import "./hero-gallery.css";
 import "@/styles/text-animations.scss";
 import "@/styles/ui-polish.scss";
+import "./responsive-layout.css";
 
 // Supported CMS text must refresh on every public page, including Contact.
 export const dynamic = "force-dynamic";

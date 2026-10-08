@@ -17,6 +17,13 @@ declare module "threejs-components/build/backgrounds/liquid1.min.js" {
   };
 
   export type LiquidApp = {
+    three: {
+      maxPixelRatio?: number;
+      fpsLimit?: number;
+      isDisposed: boolean;
+      size: { width: number; height: number; pixelRatio: number };
+      resize: () => void;
+    };
     liquidPlane: LiquidPlane;
     loadImage: (url: string | null) => Promise<void>;
     loadEnvMap: (url: string | null) => Promise<void>;

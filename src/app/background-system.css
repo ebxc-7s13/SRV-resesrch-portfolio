@@ -324,6 +324,17 @@ html[data-bgmode="liquid"] .background-system {
   pointer-events: none !important;
 }
 
+/* Mobile browser toolbars change the small viewport while scrolling. Keep
+   the liquid render target on the large viewport so its ripples stay stable. */
+@media (max-width: 768px), (pointer: coarse) {
+  .liquid-layer {
+    bottom: auto;
+    height: 100vh;
+    height: 100lvh;
+    contain: layout paint;
+  }
+}
+
 /* Static gradient for reduced-motion / WebGL-failure: same night language
    as the ambient fallback, no animation, no canvas. */
 .liquid-fallback {

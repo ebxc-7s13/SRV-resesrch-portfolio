@@ -5,6 +5,7 @@ import { getDb } from "@/lib/db";
 import { getLabContent } from "@/lib/lab-content";
 import Link from "next/link";
 import ResearchHero from "@/components/ResearchHero";
+import XrayHero from "@/components/xray/XrayHero";
 import HomeLabSection from "@/components/HomeLabSection";
 import ResearchCard from "@/components/ui/ResearchCard";
 import GlassTitle from "@/components/GlassTitle";
@@ -263,6 +264,10 @@ export default async function Home() {
         projectCount={counts.projects}
         thesisCount={counts.theses}
       />
+
+      <section className="home-anatomy shell" aria-label="Interactive anatomical scan">
+        <XrayHero />
+      </section>
 
       {/* ═══ IMMERSIVE 3D RESEARCH LAB (HOME EXHIBIT) ═══ */}
       <Suspense fallback={null}>

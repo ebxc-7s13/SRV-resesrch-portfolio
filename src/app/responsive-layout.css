@@ -1,0 +1,137 @@
+/* Responsive presentation only. Content, archive features and lab behavior
+   continue to use their existing components. */
+.portfolio-shell[data-route="home"] .research-hero {
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 40px 64px;
+  padding-block: 54px 28px;
+  border-bottom: 1px solid rgb(var(--line));
+}
+.portfolio-shell[data-route="home"] .research-hero::after { display: none; }
+.portfolio-shell[data-route="home"] .hero-identity,
+.portfolio-shell[data-route="home"] .hero-summary { min-width: 0; }
+.portfolio-shell[data-route="home"] .hero-identity h1 { margin: 26px 0 0; line-height: 1.1; }
+.portfolio-shell[data-route="home"] .hero-surname { font-size: clamp(2.2rem, 4.25vw, 3.9rem); letter-spacing: -0.025em; }
+.portfolio-shell[data-route="home"] .hero-role-marquee { margin-top: 0; }
+.portfolio-shell[data-route="home"] .hero-role-marquee .marquee_text { font-size: clamp(1rem, 1.8vw, 1.5rem); letter-spacing: 0.16em; }
+.portfolio-shell[data-route="home"] .hero-description { margin: 24px 0; font-size: 1rem; line-height: 1.85; }
+.portfolio-shell[data-route="home"] .hero-ledger { grid-column: 1 / -1; margin: 0; }
+.portfolio-shell[data-route="home"] .home-anatomy { padding-block: 40px 0; }
+.portfolio-shell[data-route="home"] .home-lab-exhibit { margin-top: 48px; padding-top: 40px; }
+.portfolio-shell[data-route="home"] .home-lab-passage { height: 140px; margin-bottom: 36px; }
+
+/* Bound the portalled popup on every viewport, including landscape phones. */
+.cells-popup[data-viewport-panel] {
+  position: fixed;
+  z-index: 100;
+  width: min(300px, calc(100vw - 32px));
+  right: auto;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: rgb(var(--panel) / 0.98);
+}
+.cells-popup[data-viewport-panel] .cells-slider { min-width: 0; }
+.cells-popup[data-viewport-panel] .cells-slider input { display: block; min-width: 0; max-width: 100%; }
+.cells-popup[data-viewport-panel] .cells-close { min-width: 44px; min-height: 44px; }
+
+@media (pointer: coarse) {
+  .cells-popup[data-viewport-panel] input[type="range"],
+  .cells-popup[data-viewport-panel] .cells-reset,
+  .cells-popup[data-viewport-panel] .cells-toggle { min-height: 44px; }
+  .portfolio-shell .navigation-bar.shell { height: 48px; }
+  .portfolio-shell .env-arrow { min-width: 44px; min-height: 44px; }
+}
+
+/* Compact editorial treatment, with the existing complete quote. */
+.portfolio-shell[data-route="about"] .philosophy-panel {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: start;
+  gap: 20px 28px;
+  padding: clamp(24px, 4vw, 48px);
+  text-align: left;
+  border-radius: 18px;
+}
+.portfolio-shell[data-route="about"] .philosophy-mark { width: 48px; height: 48px; margin: 4px 0 0; }
+.portfolio-shell[data-route="about"] .philosophy-icon { width: 24px; height: 24px; }
+.portfolio-shell[data-route="about"] .philosophy-quote {
+  max-width: 68ch;
+  margin: 0;
+  font-family: var(--font-space), system-ui, sans-serif;
+  font-size: clamp(1rem, 0.94rem + 0.35vw, 1.2rem);
+  font-style: normal;
+  line-height: 1.85;
+  letter-spacing: 0;
+  text-wrap: pretty;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+}
+.portfolio-shell[data-route="about"] .philosophy-attribution {
+  grid-column: 2;
+  align-items: flex-start;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .portfolio-shell[data-route="home"] .research-hero { gap: 32px; }
+  .portfolio-shell[data-route="home"] .hero-surname { font-size: clamp(2rem, 4.1vw, 3.2rem); }
+}
+
+@media (max-width: 700px) {
+  .portfolio-shell[data-route="home"] .research-hero { grid-template-columns: 1fr; gap: 24px; padding-block: 30px 28px; }
+  .portfolio-shell[data-route="home"] .hero-surname { font-size: clamp(1.85rem, 8.2vw, 3.4rem); }
+  .portfolio-shell[data-route="home"] .hero-identity h1 { margin-top: 22px; line-height: 1.12; }
+  .portfolio-shell[data-route="home"] .hero-description { margin-block: 18px; font-size: 1rem; line-height: 1.75; }
+  .portfolio-shell[data-route="home"] .hero-domains { gap: 8px; margin-bottom: 20px; }
+  .portfolio-shell[data-route="home"] .hero-domains span { font-size: 0.62rem; letter-spacing: 0.06em; padding: 7px 10px; }
+  .portfolio-shell[data-route="home"] .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .portfolio-shell[data-route="home"] .hero-actions .galaxy-button { min-width: 0; }
+  .portfolio-shell[data-route="home"] .hero-actions .button { width: 100%; min-width: 0; min-height: 48px; padding: 12px 10px; font-size: 0.75rem; text-align: center; justify-content: center; }
+  .portfolio-shell[data-route="home"] .hero-archive-links { margin-top: 16px; }
+  .portfolio-shell[data-route="home"] .hero-archive-links a { min-height: 44px; display: inline-flex; align-items: center; }
+  .portfolio-shell[data-route="home"] .hero-ledger { display: grid; grid-template-columns: 1fr 1fr; }
+  .portfolio-shell[data-route="home"] .hero-ledger > div { padding: 16px 12px; gap: 10px; }
+  .portfolio-shell[data-route="home"] .hero-ledger > div > span { font-size: 0.6rem; letter-spacing: 0.06em; }
+  .portfolio-shell[data-route="home"] .hero-ledger > p { display: none; }
+  .portfolio-shell[data-route="home"] .hero-ledger .hero-scroll { grid-column: 1 / -1; width: 100%; padding: 16px; border-top: 1px solid rgb(var(--line)); }
+  .portfolio-shell[data-route="home"] .home-anatomy { padding-top: 28px; }
+  .portfolio-shell[data-route="home"] .home-lab-exhibit { margin-top: 32px; padding-block: 28px 36px; }
+  .portfolio-shell[data-route="home"] .home-lab-passage { height: 90px; margin-bottom: 28px; }
+  .portfolio-shell[data-route="home"] .home-lab-passage-line { gap: 8px; }
+  .portfolio-shell[data-route="home"] .home-lab-passage-line em { white-space: normal; text-align: center; max-width: 27ch; font-size: 0.55rem; line-height: 1.7; }
+  .portfolio-shell[data-route="home"] .home-lab-heading h2 { font-size: clamp(1.7rem, 6.6vw, 2.7rem); line-height: 1.2; letter-spacing: -0.025em; }
+  .portfolio-shell[data-route="home"] .home-lab-heading p { font-size: 0.95rem; line-height: 1.75; }
+  .portfolio-shell[data-route="home"] .home-lab-meta { font-size: 0.62rem; gap: 8px 16px; letter-spacing: 0.06em; }
+  .portfolio-shell[data-route="home"] .home-lab-after { align-items: stretch; gap: 10px; }
+  .portfolio-shell[data-route="home"] .home-lab-after > a { flex: 1 1 140px; justify-content: center; text-align: center; }
+  .portfolio-shell[data-route="home"] .home-lab-hint { flex-basis: 100%; line-height: 1.7; }
+  .portfolio-shell[data-route="home"] .home-section { padding-block: 36px; }
+  .portfolio-shell[data-route="home"] .home-section > div:first-child:has(> a) { flex-wrap: wrap; align-items: flex-start; gap: 20px; margin-bottom: 28px; }
+  .portfolio-shell[data-route="home"] .home-section h2 { font-size: clamp(1.4rem, 5.6vw, 2rem); overflow-wrap: anywhere; line-height: 1.3; }
+  .portfolio-shell[data-route="home"] .home-section .flex.items-center { flex-wrap: wrap; }
+  .portfolio-shell[data-route="home"] .home-section .pane-frost { padding: 32px 20px; border-radius: 18px; }
+  .portfolio-shell[data-route="home"] .home-section p { overflow-wrap: break-word; }
+
+  .portfolio-shell[data-route="about"] .page-title { font-size: clamp(1.7rem, 7vw, 2.6rem); line-height: 1.2; }
+  .portfolio-shell[data-route="about"] .page-intro p { font-family: var(--font-space), system-ui, sans-serif; font-weight: 400; font-size: 1rem; line-height: 1.8; }
+  .portfolio-shell[data-route="about"] .researcher-intro { gap: 24px; padding-bottom: 40px; }
+  .portfolio-shell[data-route="about"] .researcher-intro p { font-size: 1rem; line-height: 1.8; }
+  .portfolio-shell[data-route="about"] .about-section h2 { font-size: clamp(1.4rem, 5.4vw, 1.8rem); line-height: 1.35; margin-bottom: 28px; }
+  .portfolio-shell[data-route="about"] .academic-background > .space-y-6 > div { padding: 22px 18px; }
+  .portfolio-shell[data-route="about"] .academic-background .flex.items-start { flex-direction: column; gap: 14px; }
+  .portfolio-shell[data-route="about"] .academic-background h3 { font-size: 1.1rem; line-height: 1.5; }
+  .portfolio-shell[data-route="about"] .academic-background p { overflow-wrap: break-word; }
+  .portfolio-shell[data-route="about"] .theme-map .depth-card,
+  .portfolio-shell[data-route="about"] .capability-map .depth-card { padding: 24px 20px; min-width: 0; }
+  .portfolio-shell[data-route="about"] .capability-map li { min-width: 0; overflow-wrap: anywhere; }
+  .portfolio-shell[data-route="about"] .philosophy-panel { grid-template-columns: 1fr; gap: 18px; padding: 24px 20px; }
+  .portfolio-shell[data-route="about"] .philosophy-quote { text-align: left; line-height: 1.8; hyphens: none; }
+  .portfolio-shell[data-route="about"] .philosophy-attribution { grid-column: 1; }
+}
+
+@media (max-width: 360px) {
+  .portfolio-shell[data-route="home"] .hero-actions { grid-template-columns: 1fr; }
+}
