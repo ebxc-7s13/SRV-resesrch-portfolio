@@ -121,3 +121,6 @@ venv/
 Thumbs.db
 
 .env*
+# These exact files contain placeholders or loopback-only evaluation settings.
+!.env.example
+!.env.development.example

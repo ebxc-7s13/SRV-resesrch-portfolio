@@ -24,6 +24,8 @@ The contact policy should be reviewed by the owner: the form stores names, addre
 
 Manual screen-reader testing and independently sourced multi-client proxy tests are not covered by the automated route smoke checks. Third-party asset terms remain separate from ownership of the original website.
 
+The installed `r3f-qa-release` skill is a stub with no authored release runbook. This audit reports observed model loading, rendered screenshots and browser errors; it does not assert formal 3D release certification from that skill.
+
 ## Publication verification
 
 - Live website: https://srv-resesrch-portfolio.vercel.app — anonymously accessible over HTTPS, with no Vercel login needed on the production domain.
