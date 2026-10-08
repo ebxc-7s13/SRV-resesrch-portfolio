@@ -25,20 +25,20 @@
   pointer-events: none;
 }
 
-/* Gradient blacks: the CSS first paint. Light enters top-right (signal) and
-   upper-left (cyan whisper), then the field falls through five stops into a
-   true #040506 base so the page black is graded rather than flat. */
+/* Match Ambient's cyan/violet currents before the canvas mounts and when
+   canvas rendering is unavailable. A dark navy base keeps text readable. */
 .background-fallback {
   background:
-    radial-gradient(ellipse 88% 60% at 78% 10%, rgb(183 255 74 / 0.05), transparent 58%),
-    radial-gradient(ellipse 74% 56% at 13% 32%, rgb(125 231 255 / 0.035), transparent 56%),
+    radial-gradient(ellipse 88% 72% at 78% 28%, rgb(38 229 223 / 0.22), transparent 68%),
+    radial-gradient(ellipse 84% 76% at 18% 62%, rgb(156 103 255 / 0.24), transparent 70%),
+    radial-gradient(ellipse 58% 56% at 92% 88%, rgb(183 255 74 / 0.07), transparent 64%),
     radial-gradient(
       ellipse 120% 96% at 50% 24%,
-      #14181c 0%,
-      #101317 26%,
-      #0b0e10 52%,
-      #070809 76%,
-      #040506 100%
+      #111a2b 0%,
+      #0d1526 26%,
+      #090f1e 52%,
+      #070b18 76%,
+      #040710 100%
     );
 }
 

@@ -44,14 +44,14 @@ export type FluidPalette = {
 };
 
 export const FLUID_PRESETS: Record<BackgroundTheme, FluidPalette> = {
-  // NIGHT: near-black editorial field with restrained signal-color
-  // filaments — lime signal voice, cyan whisper, neutral particles.
+  // NIGHT: cyan and violet silk currents with the portfolio's lime signal.
+  // Saturated strands sit over a deep navy field to preserve text contrast.
   night: {
-    base: "#070809",
-    fluid: "#c7cdc9",
+    base: "#070b18",
+    fluid: "#26e5df",
     accent: "#b7ff4a",
-    accent2: "#5a6a70",
-    particle: "#8f9699",
+    accent2: "#9c67ff",
+    particle: "#aaf4ef",
     contrast: 1.35,
     brightness: 1.12,
     flowSpeed: 0.32,
