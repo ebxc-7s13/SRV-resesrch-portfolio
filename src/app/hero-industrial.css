@@ -1,0 +1,186 @@
+/* ==========================================================================
+   HERO — Industrial Brutalism pass (Tactical Telemetry archetype, dark).
+   Scope: `.research-hero` and descendants ONLY. No other route, card, or
+   content component is affected. All symbology is ::before/::after so DOM
+   copy stays byte-identical. Square corners, 1-2px compartment rules,
+   mono telemetry markers, CRT scanline overlay. No animation involved, so
+   reduced-motion needs no variant. Revert: delete the import in layout.tsx.
+   ========================================================================== */
+
+/* Compartment: hero reads as one engineered unit inside the page flow.
+   No top rule: it ran directly behind the fixed navigation panel as a
+   stray full-width line. The bottom rule and corner crosses stay. */
+.research-hero {
+  position: relative;
+  border-top: 0;
+  border-bottom: 2px solid rgb(var(--line));
+}
+
+/* Registration crosses at the four compartment corners. */
+.research-hero::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(rgb(var(--faint)), rgb(var(--faint))),
+    linear-gradient(rgb(var(--faint)), rgb(var(--faint))),
+    linear-gradient(rgb(var(--faint)), rgb(var(--faint))),
+    linear-gradient(rgb(var(--faint)), rgb(var(--faint))),
+    linear-gradient(rgb(var(--faint)), rgb(var(--faint))),
+    linear-gradient(rgb(var(--faint)), rgb(var(--faint))),
+    linear-gradient(rgb(var(--faint)), rgb(var(--faint))),
+    linear-gradient(rgb(var(--faint)), rgb(var(--faint)));
+  background-size:
+    13px 1px, 1px 13px,
+    13px 1px, 1px 13px,
+    13px 1px, 1px 13px,
+    13px 1px, 1px 13px;
+  background-position:
+    left 0 top 6px, left 6px top 0,
+    right 0 top 6px, right 6px top 0,
+    left 0 bottom 6px, left 6px bottom 0,
+    right 0 bottom 6px, right 6px bottom 0;
+  opacity: 0.9;
+}
+
+/* Coordinate strip: revision stamp, typewriter spacing. */
+.hero-coordinate {
+  letter-spacing: 0.22em;
+}
+.hero-coordinate::after {
+  content: " /// REV 02";
+  color: rgb(var(--faint));
+}
+
+/* Ledger: heavier rules, tabular meter, 90-degree discipline. */
+.hero-ledger {
+  border-top: 2px solid rgb(var(--line));
+  border-bottom: 1px solid rgb(var(--line));
+  font-variant-numeric: tabular-nums;
+}
+.hero-ledger strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Instrument planes are now dossier cards (see hero-gallery.css), which
+   are born square with 1px compartment borders — no override needed. */
+
+/* Hero CTAs: mechanical keys — square, 1px, uppercase already. */
+.hero-actions .button {
+  border-radius: 0;
+  border-width: 1px;
+}
+
+/* Composition note keeps its existing readout; no extra tag — the
+   coordinate strip above already carries the telemetry stamp. */
+
+@media (max-width: 700px) {
+  .research-hero::after {
+    inset: 4px; /* tighter registration on small viewports */
+  }
+}
+
+/* ==========================================================================
+   HERO ROLE MARQUEE — contrast-trick blur trail (adapted from the
+   marquee-blur demo). A blurred, high-contrast copy streams behind a crisp
+   copy of the same text. transform/translate + filter only, GPU-friendly,
+   infinite linear loop. Hidden from AT (role appears in plain text above).
+   ========================================================================== */
+.hero-role-marquee {
+  position: relative;
+  height: clamp(1.9rem, 3.4vw, 2.7rem);
+  margin-top: 14px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  /* Edge masks: the trail dissolves into the background at both ends. */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+.hero-role-marquee .marquee_text {
+  position: absolute;
+  min-width: 100%;
+  white-space: nowrap;
+  text-align: center;
+  margin: 0;
+  font-family: var(--font-scifi), var(--font-display),
+    sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.7vw, 2.1rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgb(var(--accent));
+  animation: role-marquee 14s infinite linear;
+}
+.hero-role-marquee .marquee_blur {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  /* Same background as the hero so the contrast trick reads as a
+     "ghost" trail, not a boxed stripe. */
+  background: rgb(var(--page));
+  background-image:
+    linear-gradient(to right, rgb(var(--page)) 0, transparent 1.5rem),
+    linear-gradient(to left, rgb(var(--page)) 0, transparent 1.5rem);
+  filter: contrast(15);
+}
+.hero-role-marquee .marquee_blur .marquee_text {
+  filter: blur(0.06em);
+  opacity: 0.9;
+  color: rgb(var(--accent) / 0.55);
+  /* Phase-shift the ghost copy so it trails behind the crisp copy instead
+     of overlapping it exactly (which hid the trail entirely). */
+  animation-delay: -0.4s;
+}
+.hero-role-marquee .marquee_clear {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.hero-role-marquee .marquee_clear .marquee_text {
+  text-shadow:
+    0 0 18px rgb(var(--accent) / 0.4),
+    0 0 46px rgb(var(--accent) / 0.16);
+}
+@keyframes role-marquee {
+  from {
+    translate: 70%;
+  }
+  to {
+    translate: -70%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-role-marquee .marquee_text {
+    animation: none;
+    position: static;
+    min-width: 0;
+    white-space: normal;
+  }
+  .hero-role-marquee .marquee_blur {
+    display: none;
+  }
+}
+@media (max-width: 700px) {
+  .hero-role-marquee {
+    height: 2.1rem;
+    margin-top: 10px;
+  }
+  .hero-role-marquee .marquee_text {
+    font-size: clamp(1rem, 3.8vw, 1.3rem);
+    letter-spacing: 0.22em;
+  }
+}
+/* The gallery column is gone — the identity column owns the row. */
+.hero-composition {
+  display: none;
+}

@@ -1,0 +1,11 @@
+{
+  "framework": "nextjs",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build",
+  "crons": [
+    {
+      "path": "/api/cron/cleanup",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}

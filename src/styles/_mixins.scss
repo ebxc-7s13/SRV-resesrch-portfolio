@@ -1,0 +1,76 @@
+@use "tokens" as *;
+
+// Motion is opt-in: runs only when the engine says so AND the OS allows it.
+// Existing convention: html[data-motion-running="true"] + data-motion!="paused".
+// This mixin keeps every new animation behind the same gate.
+@mixin motion-on {
+  @media (prefers-reduced-motion: no-preference) {
+    html[data-motion-running="true"]:not([data-motion="paused"]) & {
+      @content;
+    }
+  }
+}
+
+@mixin motion-off {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+  html[data-motion="paused"] &,
+  html[data-motion-running="false"] & {
+    @content;
+  }
+}
+
+// Fine pointers only — touch taps must never stick a hover state.
+@mixin fine-pointer {
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
+}
+
+@mixin coarse-pointer {
+  @media (hover: none), (pointer: coarse) {
+    @content;
+  }
+}
+
+// Single focus treatment (replaces the 2px vs 3px conflict in globals/design-system).
+@mixin focus-ring {
+  outline: 2px solid rgb(var(--accent) / 0.9);
+  outline-offset: 3px;
+}
+
+// Stagger helper: generates nth-child delays up to $count.
+// Usage: @include stagger(8, 0.05s, 0.05s);
+@mixin stagger($count, $base: 0.05s, $step: 0.05s) {
+  @for $i from 1 through $count {
+    &:nth-child(#{$i}) {
+      animation-delay: $base + ($i - 1) * $step;
+    }
+  }
+}
+
+// Word-index stagger with a cap so long titles don't cascade forever.
+@mixin word-stagger($step: $text-word-step, $base: $text-word-base-delay, $cap: $text-word-max-stagger) {
+  animation-delay: calc(#{$base} + min(var(--wi, 0), #{$cap}) * #{$step});
+}
+
+@mixin char-stagger($step: $text-char-step, $base: $text-word-base-delay) {
+  animation-delay: calc(#{$base} + var(--ci, 0) * #{$step});
+}
+
+// A stationary clipped base always paints every glyph, even when the moving
+// highlight image travels beyond the text's edges. Never move the base ink.
+@mixin shimmer-ink {
+  background-color: rgb(var(--muted));
+  background-image: linear-gradient(
+    105deg,
+    rgb(255 255 255 / 0) 38%,
+    rgb(255 255 255) 50%,
+    rgb(255 255 255 / 0) 62%
+  );
+  background-size: 240% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+}

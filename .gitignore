@@ -1,0 +1,123 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# testing
+coverage/
+
+# next.js
+.next/
+out/
+
+# production
+build/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+.env.production
+.env.development
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# database
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# logs
+*.log
+server-err.log
+server-out.log
+
+# Public research PDFs are source assets and must remain available in clones.
+
+# Windows
+desktop.ini
+
+# backups
+*.backup
+backups/
+
+# IDE
+.vscode/
+.idea/
+
+# project screenshots & raw assets
+Btech ECG project/
+Screenshot *.png
+wallpapers/
+
+# raw research data (duplicates of public/ files)
+Mtech coal volume detection/
+Mtech microgravity/
+Mtech microscope/
+
+# text output files
+cv_output.txt
+elsevier_output.txt
+thesis_output.txt
+main_paper.txt
+server-admin-test.log
+
+.repair-baseline/
+.qa/
+private/
+
+# Recoverable originals are kept locally, outside the production assets.
+source-assets/
+.neon
+
+# All real environment files and credential formats; keep sanitized templates.
+.env*
+!.env.example
+!.env.development.example
+.aws/
+*.key
+*.p12
+*.pfx
+.netlify/
+
+# Local agent installations, generated knowledge graphs and original documents.
+.agents/
+.claude/
+.codex/
+.opencode/
+.freebuff/
+.impeccable/
+graphify-out/
+skills-lock.json
+byld_research_enhanced/
+.image-backups/
+
+# Local verification output and tool caches.
+verify/
+audit/
+audit-dependencies.json
+playwright-report/
+test-results/
+dist/
+.npm/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+Thumbs.db
+
+.env*

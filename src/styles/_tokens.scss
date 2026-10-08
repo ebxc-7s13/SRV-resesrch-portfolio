@@ -1,0 +1,57 @@
+// SCSS source of truth for authoring. Runtime values stay as CSS custom
+// properties in design-system.css so CMS / theme JS keep working.
+// SCSS vars here mirror those tokens for math, loops and mixins.
+$font-display: var(--font-display, var(--font-space));
+$font-space: var(--font-space);
+$font-mono: var(--font-jetbrains);
+
+$page: 7 8 9;
+$surface: 12 14 16;
+$panel: 17 20 23;
+$tint: 21 25 28;
+$ink: 242 242 239;
+$muted: 184 188 191;
+$faint: 115 121 125;
+$accent: 183 255 74;
+$on-accent: 12 18 6;
+$line: 32 33 34;
+
+// Motion scale — matches --motion-* / --duration-* in design-system.css
+$motion-micro: 150ms;
+$motion-standard: 300ms;
+$motion-large: 620ms;
+$duration-fast: 160ms;
+$duration-normal: 280ms;
+$duration-reveal: 520ms;
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-spring: cubic-bezier(0.34, 1.4, 0.44, 1);
+$ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+// Text-animation tuning (single place to tune all copy motion)
+$text-word-duration: 0.85s;
+$text-word-base-delay: 120ms;
+$text-word-step: 55ms;
+$text-word-max-stagger: 20; // cap: long titles don't drift past ~1.2s
+$text-char-step: 22ms;
+$text-shimmer-duration: 7s;
+$text-scan-duration: 2.4s;
+
+// Layout
+$shell-max: 1200px;
+$shell-gutter-desktop: 32px;
+$shell-gutter-mobile: 20px;
+$reading-max: 820px;
+$nav-height: 40px;
+$nav-height-mobile: 40px;
+$marquee-height: 28px;
+
+// Breakpoints (match existing CSS: 640 / 700 / 768 / 900 / 1000 / 1230)
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1000px;
+$bp-xl: 1230px;
+
+// Radii
+$radius-sm: 6px;
+$radius: 14px;
+$radius-lg: 24px;

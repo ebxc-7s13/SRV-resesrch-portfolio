@@ -1,0 +1,10 @@
+{
+  "source": "https://s3.us-east-2.amazonaws.com/brainder/software/brain4blender/smallfiles/pial_Full_obj.tar.bz2",
+  "license": "CC-BY-SA-3.0",
+  "licenseEvidence": "https://brainder.org/research/brain-for-blender/",
+  "author": "Anderson M. Winkler",
+  "sha256": "b405015b9039bc0b0effb8947423b6c4ea9513406459fefd85e8f8b7c330ada2",
+  "triangles": 579114,
+  "uniformSourceScale": 0.0009188038675449694,
+  "placement": "Uniform fit into the inspected Z-Anatomy intracranial envelope; then the identical shared body transform. No browser-side independent fitting."
+}

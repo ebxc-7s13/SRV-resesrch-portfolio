@@ -1,0 +1,197 @@
+// UI/UX polish layer (SCSS). Small, surgical overrides on top of
+// design-system.css / globals.css — no token rewrites, no route changes.
+// Every rule fixes one audited issue; see comments.
+@use "tokens" as *;
+@use "mixins" as *;
+
+// 1. Single shell measure. globals.css said calc(100% - 40px), design-system
+// said min(1200px, 100% - 64px). Lock one: 1200px + 32px desktop gutters.
+.shell {
+  width: min($shell-max, calc(100% - #{$shell-gutter-desktop * 2}));
+  margin-inline: auto;
+
+  @media (max-width: $bp-sm) {
+    width: calc(100% - #{$shell-gutter-mobile * 2});
+  }
+}
+
+// 2. Single focus treatment. Replaces 3px (globals) vs 2px (design-system) drift.
+.portfolio-shell a:focus-visible,
+.portfolio-shell button:focus-visible,
+.portfolio-shell summary:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  @include focus-ring;
+}
+
+// 3. Single control height: 44px touch floor everywhere (was 44 / 46 / 48 mixed).
+.button,
+.carousel-control,
+.theme-dock button,
+.nav-search {
+  min-height: 44px;
+}
+
+// 4. Sticky offsets account for marquee (28px) + nav (72/64px).
+// Archive rails and case contents were sliding under the fixed header.
+.archive-rail {
+  top: calc(#{$nav-height} + #{$marquee-height} + 30px);
+}
+
+.case-contents {
+  top: calc(#{$nav-height} + #{$marquee-height} + 26px);
+}
+
+.portfolio-shell [id] {
+  scroll-margin-top: calc(#{$nav-height} + #{$marquee-height} + 26px);
+}
+
+// 5. Research cards: fixed 250px/440px heights cropped real hardware.
+// Aspect-ratio keeps evidence uncropped and stops layout shift.
+.research-card-media {
+  aspect-ratio: 4 / 3;
+  height: auto;
+  min-height: 220px;
+}
+
+.research-study .research-card-media {
+  aspect-ratio: 1 / 1;
+  height: auto;
+  min-height: 320px;
+}
+
+@include coarse-pointer {
+  .research-card-media {
+    min-height: 200px;
+  }
+}
+
+// 6. Discovery toolbar wraps instead of squeezing search + counts.
+.discovery-toolbar {
+  flex-wrap: wrap;
+  row-gap: 16px;
+}
+
+.archive-search input {
+  min-width: min(260px, 100%);
+  max-width: 100%;
+}
+
+// 7. Project index rows: keep the 82px reading rhythm on desktop,
+// guarantee 44px touch targets and visible focus on mobile.
+.project-index button {
+  min-height: 44px;
+
+  @include fine-pointer {
+    &:hover {
+      background: rgb(var(--tint) / 0.45);
+    }
+  }
+}
+
+// 8. Card summaries: line-clamp needs the standard property too
+// (webkit-only clamp silently fails in some engines).
+.research-card-summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  @supports (line-clamp: 3) {
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+  }
+}
+
+// 9. Nav + dock: stable hit targets, no layout jump on scroll.
+.navigation-bar.shell {
+  max-width: 1440px;
+}
+
+.theme-dock {
+  // Already fixed; just keep it clear of the iOS home indicator.
+  bottom: max(20px, env(safe-area-inset-bottom));
+}
+
+// 10. Hero ledger wraps on small screens instead of clipping tabular numerals.
+.hero-ledger {
+  flex-wrap: wrap;
+  row-gap: 16px;
+
+  strong {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// 11. Long publication/thesis titles: pretty wrap, no orphaned word alone.
+.document-body h3,
+.patent-body h2,
+.thesis-cover h2,
+.case-hero h1 {
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+
+// 12. Touch: hover-only affordances get a static equivalent.
+@include coarse-pointer {
+  .media-action {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .research-card-link:hover .research-card-image {
+    transform: none;
+  }
+}
+
+// 13. Title voices: Michroma for main titles everywhere (same as home),
+// Geist Pixel for record/item titles (papers, patents, theses, notes,
+// projects, milestones). Family only — size/weight/spacing/color untouched.
+.portfolio-shell .page-title,
+.portfolio-shell .section-heading h2,
+.portfolio-shell .home-section h2,
+.portfolio-shell .original-glass-title h2,
+.portfolio-shell .case-hero h1,
+.portfolio-shell .case-section h2,
+.portfolio-shell .archive-group h2,
+.portfolio-shell .home-lab-heading h2,
+.portfolio-shell .about-section h2,
+.portfolio-shell .contact-brief h2,
+.portfolio-shell .hero-identity h1,
+.portfolio-shell .note-reading .original-page-title {
+  font-family: var(--font-display), var(--font-space), sans-serif;
+}
+
+.portfolio-shell .document-body h3,
+.portfolio-shell .patent-body h2,
+.portfolio-shell .thesis-cover h2,
+.portfolio-shell .thesis-flow summary h3,
+.portfolio-shell .note-record h2,
+.portfolio-shell .research-card-body h2,
+.portfolio-shell .research-study h2,
+.portfolio-shell .home-note h3,
+.portfolio-shell .milestone-card h3 {
+  font-family: var(--font-pixel), var(--font-display), sans-serif;
+}
+
+// 14. Footer: neon-green surface, white text with white glow.
+.portfolio-shell footer {
+  background: rgb(var(--accent));
+  border-color: rgb(var(--accent));
+  box-shadow: 0 0 60px rgb(var(--accent) / 0.35);
+}
+
+.portfolio-shell footer[class*="border-white"] {
+  border-color: rgb(255 255 255 / 0.4);
+}
+
+.portfolio-shell footer [class*="text-white"] {
+  color: #fff;
+  text-shadow:
+    0 0 12px rgb(255 255 255 / 0.8),
+    0 0 32px rgb(255 255 255 / 0.4);
+}
+
+.portfolio-shell footer [class*="border-white"] {
+  border-color: rgb(255 255 255 / 0.3);
+}

@@ -1,0 +1,121 @@
+/* ==========================================================================
+   GALAXY BUTTON — homepage CTA/navigation buttons only.
+   Everything is scoped under .galaxy-button: no global selectors, no body
+   styles, no other buttons affected. Neon green (#B7FF4A) primary with a
+   restrained cyan (#7DE7FF) secondary — no purple anywhere. Layers sit on
+   top of each button's existing liquid-glass look without replacing it.
+   ========================================================================== */
+.galaxy-button {
+  --galaxy-primary: #b7ff4a;
+  --galaxy-secondary: #7de7ff;
+  --galaxy-bg: #0c0e10;
+  --galaxy-text: #f2f2ef;
+  position: relative;
+  display: inline-block;
+  border-radius: var(--galaxy-radius, 6px);
+  transition: transform 250ms ease;
+}
+.galaxy-button:hover,
+.galaxy-button:focus-within {
+  transform: scale(1.05);
+}
+.galaxy-button:active {
+  transform: scale(1);
+}
+/* The untouched anchor paints above the effect layers. */
+.galaxy-button > a {
+  position: relative;
+  z-index: 1;
+}
+/* Hover luminance + neon edge over the existing glass. */
+.galaxy-button .backdrop {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  background: rgb(255 255 255 / 0.07);
+  box-shadow:
+    0 0 18px rgb(183 255 74 / 0.22),
+    inset 0 0 12px rgb(183 255 74 / 0.07);
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+.galaxy-button:hover .backdrop,
+.galaxy-button:focus-within .backdrop {
+  opacity: 1;
+}
+/* Star fields: clipped to the button shape, never intercept clicks. */
+.galaxy-button .galaxy__container,
+.galaxy-button .galaxy {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+}
+.galaxy-button .star {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--galaxy-primary);
+}
+.galaxy-button .star--static {
+  opacity: 0.35;
+}
+.galaxy-button .galaxy__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 260%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  animation: galaxy-orbit 16s linear infinite;
+  animation-play-state: paused;
+}
+.galaxy-button:hover .galaxy__ring,
+.galaxy-button:focus-within .galaxy__ring {
+  animation-play-state: running;
+}
+.galaxy-button .galaxy .star {
+  left: 50%;
+  top: 50%;
+  width: var(--ss);
+  height: var(--ss);
+  transform: translate(var(--sx), var(--sy));
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+.galaxy-button .galaxy .star:nth-child(even) {
+  background: var(--galaxy-secondary);
+}
+.galaxy-button:hover .galaxy .star,
+.galaxy-button:focus-within .galaxy .star {
+  opacity: var(--so);
+  animation: galaxy-twinkle var(--sd) ease-in-out var(--sdel) infinite;
+}
+@keyframes galaxy-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes galaxy-twinkle {
+  0%,
+  100% {
+    opacity: var(--so);
+  }
+  50% {
+    opacity: 0.12;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .galaxy-button:hover,
+  .galaxy-button:focus-within,
+  .galaxy-button:active {
+    transform: none;
+  }
+  .galaxy-button .galaxy__ring,
+  .galaxy-button .galaxy .star {
+    animation: none;
+  }
+}

@@ -1,0 +1,7 @@
+/* Shuffle (React Bits) support: SplitText wraps each character in a span.
+   The hero rule forces every h1 span to block, which would stack the letters
+   vertically — this guard keeps shuffle characters inline. Scoped to hero
+   shuffle instances only; nothing else moves. */
+.hero-identity h1 span.shuffle-char {
+  display: inline-block;
+}

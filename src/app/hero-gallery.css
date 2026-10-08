@@ -1,0 +1,139 @@
+/* ==========================================================================
+   HERO GALLERY — cursor-reactive dossier stack (replaces floating planes).
+   Brutalist telemetry language: 90-degree corners, 1px compartment
+   borders, mono kickers, hazard-red active tick. transform/opacity motion
+   only; layout is absolute so nothing reflows. Content order: model (back),
+   figure (mid), microscope (front).
+   ========================================================================== */
+
+.hero-gallery {
+  position: relative;
+  height: 495px;
+  perspective: 1100px;
+}
+
+.hero-gcard {
+  position: absolute;
+  background: var(--card-surface);
+  border: 1px solid rgb(var(--line));
+  border-radius: 0;
+  box-shadow:
+    12px 24px 60px rgb(0 0 0 / 0.2),
+    3px 3px 0 rgb(var(--line));
+}
+
+/* Fan geometry — static rotate property composes with motion transforms. */
+.hero-gcard-0 {
+  top: 16%;
+  left: 3%;
+  right: 3%;
+  rotate: -2deg;
+  z-index: 1;
+}
+.hero-gcard-1 {
+  left: -4%;
+  bottom: 2%;
+  width: 46%;
+  rotate: -5deg;
+  z-index: 2;
+}
+.hero-gcard-2 {
+  right: -1%;
+  top: 0;
+  width: 36%;
+  rotate: 4deg;
+  z-index: 3;
+}
+.hero-gcard.is-active {
+  z-index: 4;
+  border-color: rgb(var(--line));
+  box-shadow:
+    12px 24px 60px rgb(0 0 0 / 0.25),
+    3px 3px 0 rgb(var(--hazard, 255 42 42));
+}
+
+.hero-gcard-link {
+  display: block;
+  will-change: transform;
+}
+
+.hero-gcard-kicker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgb(var(--line));
+  font:
+    0.58rem var(--font-jetbrains),
+    monospace;
+  letter-spacing: 0.08em;
+  color: rgb(var(--muted));
+}
+.hero-gcard-index {
+  color: rgb(var(--hazard, 255 42 42));
+  font-weight: 700;
+}
+
+.hero-gcard-media {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  background: #f5f6f5;
+}
+.hero-gcard-1 .hero-gcard-media {
+  aspect-ratio: 4 / 3;
+  background: #fff;
+}
+.hero-gcard-2 .hero-gcard-media {
+  aspect-ratio: 1 / 1;
+}
+
+.hero-gcard-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  font-size: 0.8rem;
+  color: rgb(var(--ink));
+  border-top: 1px solid rgb(var(--line));
+}
+.hero-gcard-caption > span:last-child {
+  color: rgb(var(--accent));
+  font-size: 1.1rem;
+}
+
+/* Scanline sweep limited to the engineering (back) plane. */
+.hero-gcard-0 .hero-gcard-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgb(0 0 0 / 0.08) 2px,
+    rgb(0 0 0 / 0.08) 4px
+  );
+}
+
+@media (max-width: 1000px) {
+  .hero-gallery {
+    height: 430px;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero-gallery {
+    height: 440px;
+  }
+  .hero-gcard-0 {
+    top: 12%;
+  }
+  .hero-gcard-1 {
+    width: 52%;
+  }
+  .hero-gcard-2 {
+    width: 40%;
+  }
+}

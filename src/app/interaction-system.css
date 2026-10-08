@@ -1,0 +1,710 @@
+/* Instrument-light motion: shared input, limited amplitude, readable source content. */
+.scientific-trail {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+}
+.scientific-trail i {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+  opacity: 0;
+}
+.scientific-trail i:first-child {
+  width: 18px;
+  height: 18px;
+  margin: -5px;
+  border: 1px solid currentColor;
+  background: transparent;
+}
+.scientific-trail[data-interactive="true"] i:first-child {
+  border-radius: var(--radius-sm);
+  width: 25px;
+  height: 25px;
+  margin: -8px;
+}
+.scientific-trail b {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+}
+.environment-data-field {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  transform: translate3d(
+    calc(var(--scene-x, 0) * -24px),
+    calc(var(--scene-y, 0) * -18px),
+    0
+  );
+}
+.environment-data-field > span {
+  position: absolute;
+  display: block;
+  transform: translate3d(var(--node-x, 0px), var(--node-y, 0px), 0);
+}
+.environment-data-field i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  background: rgb(var(--accent));
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgb(var(--accent) / 0.5);
+}
+.environment-data-field small {
+  position: absolute;
+  white-space: nowrap;
+  top: 10px;
+  font:
+    8px var(--font-jetbrains),
+    monospace;
+  letter-spacing: 0.1em;
+  color: rgb(var(--muted));
+}
+.environment-data-field .field-layer-1 {
+  filter: blur(0.6px);
+  opacity: 0.65;
+}
+.environment-data-field .field-layer-2 {
+  opacity: 0.35;
+}
+.environment-network {
+  position: absolute;
+  inset: 4%;
+  width: 92%;
+  height: 92%;
+  stroke: rgb(var(--accent));
+  stroke-width: 0.6;
+  opacity: 0.065;
+  transform: translate3d(
+    calc(var(--scene-x, 0) * 16px),
+    calc(var(--scene-y, 0) * 12px),
+    0
+  );
+}
+.environment-network circle {
+  fill: rgb(var(--accent));
+}
+.environment-neural .environment-network {
+  opacity: 0.15;
+}
+.environment-neural .environment-grid {
+  opacity: 0.07;
+  transform: perspective(900px) rotateX(15deg)
+    rotateY(calc(var(--scene-x, 0) * 3deg));
+}
+.environment-blueprint .environment-grid {
+  background-size: 48px 48px;
+  opacity: 0.24;
+}
+.environment-blueprint .environment-data-field i {
+  width: 14px;
+  height: 14px;
+  background: none;
+  border: 1px solid rgb(var(--accent));
+  border-radius: 0;
+}
+.environment-blueprint .environment-network {
+  opacity: 0.035;
+}
+.environment-archive .environment-network {
+  display: none;
+}
+.environment-archive .environment-contour {
+  transform: rotate(-15deg)
+    translate3d(calc(var(--scene-x, 0) * 20px), var(--page-depth, 0px), 0);
+  opacity: 0.12;
+}
+.environment-temporal .environment-network {
+  opacity: 0.17;
+  stroke-dasharray: 4 12;
+}
+.environment-temporal .environment-floor {
+  transform: perspective(800px) rotateX(48deg) rotateZ(-25deg);
+}
+.environment-identity .environment-data-field {
+  border: 1px solid rgb(var(--accent) / 0.06);
+  border-radius: 50%;
+  inset: 12%;
+}
+.environment-signal .environment-network {
+  stroke-dasharray: 2 22;
+  opacity: 0.19;
+}
+.environment-signal .environment-data-field i {
+  background: none;
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgb(var(--accent));
+}
+.environment-particle .environment-network {
+  display: none;
+}
+.environment-particle .environment-data-field {
+  opacity: 0.4;
+}
+.interaction-surface {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: perspective(1100px) rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
+  /* No transform transition here: MotionEngine damps --tilt-x/y per frame,
+     so a CSS transform transition would double-smooth and lag the pointer. */
+  transition:
+    box-shadow 0.35s,
+    border-color 0.35s,
+    translate 0.35s var(--ease-out);
+}
+/* Two lights instead of one: a wide accent pool that reads as ambient
+   response, plus a tight specular core under the pointer so the highlight has
+   an actual surface to sit on. Both are painted from the --glass-x/y values
+   MotionEngine already damps — no new listeners, no new sampling. */
+.interaction-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      450px circle at var(--glass-x, 50%) var(--glass-y, 50%),
+      rgb(var(--accent) / 0.1),
+      transparent 70%
+    ),
+    radial-gradient(
+      140px circle at var(--glass-x, 50%) var(--glass-y, 50%),
+      rgb(255 255 255 / 0.05),
+      transparent 68%
+    );
+  transition: opacity 0.35s var(--ease-out);
+}
+.interaction-surface:hover::after {
+  opacity: 1;
+}
+/* Magnet amplitude kept at 70% — physical, never toy-like. */
+.interaction-magnetic {
+  transform: perspective(1100px)
+    translate3d(
+      calc(var(--magnet-x, 0px) * 0.7),
+      calc(var(--magnet-y, 0px) * 0.7),
+      0
+    )
+    rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+.interaction-glow:hover {
+  box-shadow: 0 15px 50px rgb(var(--accent) / 0.1);
+}
+.interaction-floating,
+.interaction-parallax {
+  transform: perspective(1100px) translateY(var(--reveal-depth, 0px))
+    rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+/* Image zoom responses read faster at 0.45s; 0.6s trailed the pointer. */
+.interaction-model img,
+.interaction-image img,
+.interaction-object img {
+  transition: transform 0.45s var(--ease-out);
+}
+.interaction-model:hover img {
+  transform: translateZ(22px) scale(1.015);
+}
+.interaction-image:hover img,
+.interaction-image:focus-visible img {
+  transform: scale(1.025);
+}
+/* Hero device/figure planes: gentle image response on hover + keyboard focus */
+.hero-device-link img,
+.hero-figure-plane img {
+  transition: transform 0.45s var(--ease-out);
+}
+.hero-device-link:hover img,
+.hero-device-link:focus-visible img,
+.hero-figure-plane:hover img,
+.hero-figure-plane:focus-visible img {
+  transform: scale(1.03);
+}
+/* Header rule doubles as a scroll-progress instrument (accent segment). */
+.header-rule span {
+  scale: calc(0.05 + var(--scroll-progress, 0) * 0.95) 1;
+}
+/* Refined, consistent focus treatment. */
+:is(a, button, summary, [tabindex]):focus-visible {
+  outline: 2px solid rgb(var(--accent) / 0.9);
+  outline-offset: 3px;
+}
+.hero-identity h1,
+.page-header h1,
+.lab-intro h1 {
+  font-family: var(--font-display), var(--font-space), sans-serif;
+}
+.hero-surname {
+  text-shadow:
+    0 0 32px rgb(var(--accent) / 0.22),
+    0 2px 0 rgb(var(--accent) / 0.12);
+}
+.hero-given {
+  text-shadow: 0 1px 0 rgb(var(--line));
+}
+.hero-coordinate,
+.lab-eyebrow {
+  font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion-running="true"] .hero-surname {
+    background: linear-gradient(
+      105deg,
+      rgb(var(--ink)) 35%,
+      rgb(var(--accent)) 49%,
+      rgb(var(--ink)) 62%
+    );
+    background-size: 220% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: instrument-scan 2.8s ease-out 1;
+  }
+  /* Staggered section arrival: MotionEngine writes --reveal-delay (ms) from
+     each element's position among its revealing siblings, so a grid of cards
+     arrives as a wave instead of every card snapping in on the same frame.
+     `both` fill holds the from-state through the delay, so the stagger reads
+     as deliberate sequencing, never as a flash. */
+  html[data-motion-running="true"] [data-reveal][data-in-view="true"] {
+    animation: depth-arrival 0.68s var(--ease-out) both;
+    animation-delay: calc(var(--reveal-delay, 0) * 1ms);
+  }
+}
+@keyframes instrument-scan {
+  from {
+    background-position: 110% 0;
+  }
+  to {
+    background-position: -10% 0;
+  }
+}
+@keyframes depth-arrival {
+  from {
+    opacity: 0.25;
+    translate: 0 24px;
+    /* A quarter-degree of settle: enough to register as the element coming
+       forward into place, far too little to move any hit target. */
+    scale: 0.994;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+@media (max-width: 760px), (pointer: coarse) {
+  .scientific-trail {
+    display: none;
+  }
+  .environment-data-field > span:nth-child(n + 10) {
+    display: none;
+  }
+  .environment-network {
+    opacity: 0.045 !important;
+  }
+  .interaction-surface {
+    transform: none !important;
+  }
+  .environment-data-field small {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scientific-trail {
+    display: none !important;
+  }
+  .interaction-surface,
+  .environment-data-field,
+  .environment-network {
+    transform: none !important;
+  }
+  .interaction-surface img {
+    transform: none !important;
+  }
+  .hero-surname {
+    animation: none !important;
+    color: rgb(var(--ink)) !important;
+  }
+  /* Hover lift and press scale are movement: remove under reduced motion.
+     Color, border and background feedback stays comprehensible. */
+  .research-card-link,
+  .thesis-index a {
+    translate: none !important;
+  }
+  a:active,
+  button:active {
+    scale: none !important;
+  }
+}
+
+/* ==========================================================================
+   Adapted interaction patterns (Aceternity-style, rebuilt on the portfolio
+   token + input system). Everything is transform/opacity/filter only, driven
+   by the shared MotionEngine variables, and fully theme-aware.
+   ========================================================================== */
+
+/* Server-rendered word reveal (SplitWords, Aceternity Text Generate adapted):
+   the split happens in JSX so hydration stays exact, and the entrance is pure
+   CSS keyed off the live data-motion-running attribute set by MotionEffects —
+   no JS dependency, no flash of unstyled text, instant visibility under
+   reduced/paused motion. */
+.reveal-word {
+  display: inline-block;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion-running="true"] .reveal-word {
+    opacity: 0.1;
+    transform: perspective(900px) translateY(22px) rotateX(24deg);
+    filter: blur(7px);
+    animation: word-reveal 0.85s var(--ease-out) forwards;
+    animation-delay: calc(120ms + var(--wi, 0) * 55ms);
+  }
+}
+@keyframes word-reveal {
+  to {
+    opacity: 1;
+    transform: perspective(900px) translateY(0) rotateX(0deg);
+    filter: blur(0);
+  }
+}
+
+/* Glare sweep on research card media (Glare Card pattern). The band rides
+   the existing --glass-x pointer variable, so it costs no extra listeners. */
+.research-card-media::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 42%,
+    rgb(var(--ink) / 0.06) 47%,
+    rgb(255 255 255 / 0.14) 50%,
+    rgb(var(--ink) / 0.06) 53%,
+    transparent 58%
+  );
+  transform: translateX(calc((var(--glass-x, 50%) - 50%) * 1.6));
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+.research-card-link:hover .research-card-media::after,
+.research-card-link:focus-visible .research-card-media::after {
+  opacity: 1;
+}
+
+/* Magnetic primary CTAs: MotionEngine supplies the damped --magnet-x/y pull
+   (~4px max), already smooth per frame — no CSS transform transition, which
+   would double-smooth and drag behind the pointer. */
+a[data-magnet].interaction-magnetic,
+button[data-magnet].interaction-magnetic {
+  transition:
+    box-shadow var(--motion-standard) var(--ease-out),
+    background var(--motion-micro) var(--ease-out),
+    border-color var(--motion-micro) var(--ease-out),
+    translate var(--motion-micro) var(--ease-out);
+}
+a[data-magnet].interaction-magnetic:hover,
+button[data-magnet].interaction-magnetic:hover {
+  box-shadow:
+    0 6px 26px rgb(var(--accent) / 0.22),
+    inset 0 1px 0 rgb(255 255 255 / 0.18);
+}
+@media (max-width: 760px), (pointer: coarse) {
+  [data-magnet] {
+    transform: none !important;
+  }
+}
+html[data-motion="paused"] .scientific-trail {
+  display: none !important;
+}
+html[data-motion="paused"] .interaction-surface {
+  transform: none !important;
+}
+html[data-motion="paused"] .interaction-magnetic {
+  transform: none !important;
+}
+
+/* ==========================================================================
+   Hover + press feedback (feedback purpose, tens/day tier: fast and subtle).
+   All transform/opacity/translate/scale only — composes with the
+   MotionEngine CSS variables instead of overriding them. :hover motion is
+   gated to fine pointers; :active press and :focus-visible lift are
+   universal so touch and keyboard get confirmation too. Content unchanged.
+   ========================================================================== */
+
+/* Linked cards lift: keyboard/touch confirmation to go with the
+   pointer-only tilt. translate composes with the tilt transform. */
+.research-card-link,
+.thesis-index a {
+  transition: translate var(--motion-standard) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .research-card-link:hover,
+  .thesis-index a:hover {
+    translate: 0 -3px;
+  }
+}
+.research-card-link:focus-visible,
+.thesis-index a:focus-visible {
+  translate: 0 -3px;
+}
+
+/* Pressed: a real 120ms confirmation on every row, filter, nav and dock
+   control. scale composes with magnetic/tilt transforms. */
+.nav-item,
+.filter-list a,
+.project-index button,
+.timeline-filters button,
+.theme-dock button,
+.mobile-menu-toggle,
+.hero-device-link,
+.hero-figure-plane {
+  transition:
+    scale var(--motion-micro) var(--ease-out),
+    background var(--motion-micro) var(--ease-out),
+    border-color var(--motion-micro) var(--ease-out),
+    color var(--motion-micro) var(--ease-out);
+}
+.nav-item:active,
+.filter-list a:active,
+.project-index button:active,
+.timeline-filters button:active,
+.theme-dock button:active,
+.mobile-menu-toggle:active,
+.hero-device-link:active,
+.hero-figure-plane:active {
+  scale: 0.97;
+  transition-duration: 100ms;
+}
+
+/* Filter + search controls: missing hover transitions, stated plainly. */
+.filter-list a:hover {
+  color: rgb(var(--ink));
+}
+.timeline-filters button:hover {
+  border-color: rgb(var(--accent) / 0.5);
+}
+.nav-search {
+  transition:
+    color var(--motion-micro) var(--ease-out),
+    background var(--motion-micro) var(--ease-out),
+    scale var(--motion-micro) var(--ease-out);
+}
+.nav-search:active {
+  scale: 0.94;
+  transition-duration: 100ms;
+}
+.mobile-menu-toggle:hover {
+  color: rgb(var(--accent));
+}
+
+/* Disclosure open: brief state-indication fade. Occasional tier. */
+@media (prefers-reduced-motion: no-preference) {
+  .reading-disclosure[open] > :not(summary),
+  .lab-detail[open] > :not(summary) {
+    animation: disclose-in 200ms var(--ease-out);
+  }
+}
+@keyframes disclose-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+/* ==========================================================================
+   Depth response + hover physics, round two. transform/opacity/translate/
+   scale only. The hero planes ride the already-damped --scene-x/y engine
+   variables at different factors, so the composition gains true layered
+   depth with zero extra listeners. Vars read 0 on coarse pointers, paused
+   motion and reduced motion, so this is inert everywhere but fine pointers.
+   ========================================================================== */
+/* Microscope plane completes the existing layered depth: the model drifts
+   with the pointer (+8) while the figure counter-moves (-14); the
+   microscope leads (+22) as the near layer. Vars read 0 on coarse
+   pointers, paused motion and reduced motion, so this is inert there. */
+.hero-microscope-plane {
+  translate: calc(var(--scene-x, 0) * 22px) calc(var(--scene-y, 0) * 16px);
+}
+
+/* Marquee respects the reader: pause the strip while hovered. Direction
+   stays inline (left/right); duration and play state live here so hover
+   can pause without fighting inline styles. */
+.marquee-track {
+  /* Full-width strip scrolling over the animating background: promote to its
+     own layer so the 80s loop never repaints, it only composites. */
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: scrollLeft 80s linear infinite;
+}
+.research-marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Footer links already carry Tailwind hover states; no override. */
+
+/* ==========================================================================
+   Ambient life (round three). In Ambient mode the only visible environment
+   layer is .environment-light (the network/field/contour/floor are hidden by
+   the bgfluid rules), so it is where extra life belongs. Two additive layers:
+   a broad accent tint that snaps to the pointer (reads the --mx/--my values
+   MotionEngine already damps), and a slow autonomous wash that drifts on its
+   own so the field never looks frozen while the visitor is still.
+   transform/opacity only — no new listeners, no new sampling. The old white
+   specular circle is gone: the site-wide cursor field (CursorField, magnetic
+   field lines) is the cursor treatment now.
+   ========================================================================== */
+.environment-light {
+  background: radial-gradient(
+    ellipse at var(--mx, 76%) var(--my, 18%),
+    rgb(var(--accent) / 0.075),
+    transparent 60%
+  );
+}
+
+.environment-light::after {
+  content: "";
+  position: absolute;
+  inset: -34%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgb(var(--accent) / 0.07),
+    transparent 72%
+  );
+  opacity: 0.5;
+  /* No will-change here on purpose: this layer is full-viewport, so a hint
+     would pin a composited surface for the life of the page. The animation is
+     transform/opacity only, which the compositor promotes on its own while it
+     is actually running — so the hint costs memory and buys nothing. */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion-running="true"] .environment-light::after {
+    animation: ambient-wash 27s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes ambient-wash {
+  from {
+    transform: translate3d(-13%, -9%, 0) scale(0.85);
+    opacity: 0.35;
+  }
+  to {
+    transform: translate3d(15%, 11%, 0) scale(1.18);
+    opacity: 0.75;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .environment-light::after {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Cursor-aware shell controls (round four). Nav items and the environment
+   controls join the depth cards as pointer-tracked surfaces: MotionEngine
+   writes --glass-x/--glass-y relative to whichever control is hovered, so the
+   glow below follows the cursor *inside* the control. Light-only — no
+   transform is written for these, so every hit target stays exactly put. The
+   light sits at z-index 0 with the control's own content lifted to 1, so it
+   paints over the control background and under the icon/label.
+   ========================================================================== */
+:is(.nav-item, .mobile-menu-toggle, .env-main, .env-arrow) {
+  position: relative;
+}
+:is(.nav-item, .mobile-menu-toggle, .env-main, .env-arrow)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      58px circle at var(--glass-x, 50%) var(--glass-y, 50%),
+      rgb(var(--accent) / 0.18),
+      transparent 72%
+    ),
+    radial-gradient(
+      22px circle at var(--glass-x, 50%) var(--glass-y, 50%),
+      rgb(255 255 255 / 0.08),
+      transparent 70%
+    );
+  transition: opacity var(--motion-micro) var(--ease-out);
+}
+/* Flex items take z-index without needing position, so this lifts the icon,
+   label and tip above the light without changing layout or hit areas. */
+:is(.nav-item, .mobile-menu-toggle, .env-main, .env-arrow) > * {
+  z-index: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+  :is(.nav-item, .mobile-menu-toggle, .env-main, .env-arrow):hover::before {
+    opacity: 1;
+  }
+}
+:is(
+  .nav-item,
+  .mobile-menu-toggle,
+  .env-main,
+  .env-arrow
+):focus-visible::before {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.nav-item, .mobile-menu-toggle, .env-main, .env-arrow)::before {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Touch press acknowledgement. Coarse pointers never receive the hover light
+   above (it is gated to fine pointers), so a press needs its own immediate
+   response or touch feels inert. Compositor-only: the standalone `scale`
+   property composes with each surface's existing transform instead of
+   overriding it, so cards keep their tilt math and nothing reflows. No JS, no
+   listeners, and suppressed under reduced motion.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) and (pointer: coarse) {
+  .depth-card:active,
+  .interaction-surface:active,
+  .research-card-link:active {
+    scale: 0.985;
+  }
+  :is(.nav-item, .mobile-menu-toggle, .env-main, .env-arrow):active {
+    scale: 0.96;
+  }
+}
+/* Fast confirmation on the press, a slower release — the same asymmetry the
+   rest of the interaction system uses. */
+@media (pointer: coarse) {
+  .depth-card,
+  .interaction-surface,
+  .research-card-link {
+    transition: scale 90ms var(--ease-out);
+  }
+  :is(.nav-item, .mobile-menu-toggle, .env-main, .env-arrow) {
+    transition:
+      scale 90ms var(--ease-out),
+      color var(--motion-micro) var(--ease-out),
+      background var(--motion-micro) var(--ease-out);
+  }
+}

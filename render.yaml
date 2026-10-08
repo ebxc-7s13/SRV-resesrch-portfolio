@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: raja-viveka-vardhan-portfolio
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run db:migrate && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CRON_SECRET
+        generateValue: true
+      - key: TRUSTED_PROXY_HOPS
+        sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false

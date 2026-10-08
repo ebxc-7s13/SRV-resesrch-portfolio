@@ -1,0 +1,85 @@
+{
+  "name": "secure-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx scripts/dev.ts",
+    "setup:local": "node scripts/setup-local.mjs",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --ext .js,.cjs,.mjs,.ts,.tsx src scripts tests next.config.js tailwind.config.ts neon.ts",
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "tsx scripts/migrate-postgres.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:rotate-admin": "tsx scripts/rotate-admin.ts",
+    "qa:db": "tsx scripts/qa-database.ts",
+    "test": "node --test tests/*.test.cjs",
+    "db:correct-figures": "tsx scripts/correct-figures.ts",
+    "models:inspect": "node scripts/models/inspect.mjs",
+    "models:convert": "node scripts/models/convert.mjs",
+    "models:validate": "node scripts/models/validate.mjs"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@neon/config": "^1.8.3",
+    "@neon/env": "^1.5.0",
+    "@next/env": "15.5.27",
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "@react-three/postprocessing": "^3.1.1",
+    "autoprefixer": "^10.4.0",
+    "bcryptjs": "^2.4.3",
+    "geist": "^1.7.2",
+    "gsap": "^3.15.0",
+    "jose": "^5.4.0",
+    "maath": "^0.10.8",
+    "motion": "^13.4.0",
+    "next": "15.5.27",
+    "pg": "^8.13.0",
+    "postcss": "^8.4.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "sanitize-html": "^2.13.0",
+    "tailwindcss": "^3.4.0",
+    "three": "^0.186.0",
+    "threejs-components": "^0.0.27",
+    "tsx": "^4.15.0",
+    "vanta": "^0.5.24",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@electric-sql/pglite-socket": "^0.2.11",
+    "@gltf-transform/core": "^4.5.0",
+    "@gltf-transform/extensions": "^4.5.0",
+    "@gltf-transform/functions": "^4.5.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.14.0",
+    "@types/pg": "^8.11.0",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "@types/sanitize-html": "^2.11.0",
+    "@types/three": "^0.186.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "15.5.27",
+    "meshoptimizer": "^1.2.0",
+    "sass": "^1.104.1",
+    "typescript": "^5.5.0"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.28"
+    }
+  },
+  "description": "Research portfolio built with Next.js, React, TypeScript and Neon PostgreSQL, with interactive anatomy and laboratory scenes.",
+  "main": "next.config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "keywords": [],
+  "author": "Raja Viveka Vardhan Siluveru",
+  "engines": {
+    "node": "22.x"
+  }
+}

@@ -1,0 +1,362 @@
+/* Global backdrop only. The foreground remains in the portfolio shell.
+   Layer order: body base < GPU background (-2) < faint route structure (-1)
+   < existing content. Neither background layer can receive pointer input.
+   overflow-x: clip keeps wide ambient SVG/marquee geometry from ever
+   widening the page — belt and braces behind the scroll containers. */
+.portfolio-shell,
+.research-marquee,
+.research-environment {
+  overflow-x: clip;
+}
+.background-system {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  background: #070809;
+}
+
+.background-fallback,
+.background-system::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Gradient blacks: the CSS first paint. Light enters top-right (signal) and
+   upper-left (cyan whisper), then the field falls through five stops into a
+   true #040506 base so the page black is graded rather than flat. */
+.background-fallback {
+  background:
+    radial-gradient(ellipse 88% 60% at 78% 10%, rgb(183 255 74 / 0.05), transparent 58%),
+    radial-gradient(ellipse 74% 56% at 13% 32%, rgb(125 231 255 / 0.035), transparent 56%),
+    radial-gradient(
+      ellipse 120% 96% at 50% 24%,
+      #14181c 0%,
+      #101317 26%,
+      #0b0e10 52%,
+      #070809 76%,
+      #040506 100%
+    );
+}
+
+/* Contrast shade. The first pool calms the centre; the second is a bottom
+   vignette that seats text and cards on genuine black; the linear sweep adds
+   a faint top seat and a deeper footer edge. */
+.background-system::after {
+  content: "";
+  z-index: 2;
+  background:
+    radial-gradient(ellipse 58% 54% at 42% 38%, rgb(2 2 2 / 0.12), transparent 72%),
+    radial-gradient(ellipse 118% 52% at 50% 106%, rgb(2 2 2 / 0.5), transparent 74%),
+    linear-gradient(
+      180deg,
+      rgb(2 2 2 / 0.06),
+      transparent 30%,
+      transparent 62%,
+      rgb(2 2 2 / 0.24) 100%
+    );
+}
+
+.background-canvas {
+  position: absolute !important;
+  inset: 0;
+  z-index: 1;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: none !important;
+}
+
+.background-system[data-failed="true"] .background-canvas {
+  display: none;
+}
+
+/* ==========================================================================
+   Cursor field — the site-wide cursor treatment (magnetic field lines).
+   One fixed canvas under the content on every portfolio route: z -1 puts it
+   above the -2 background stack but below everything a visitor reads or
+   clicks. It never receives pointer input. The lab route lifts it above its
+   own opaque page surface (see lab.css).
+   ========================================================================== */
+canvas[data-cursor-field] {
+  z-index: -1;
+}
+
+html[data-bgmode="cells"] canvas[data-cursor-field],
+html[data-bgmode="liquid"] canvas[data-cursor-field] {
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   Cursor trail — the small neon fade-out behind the native cursor head.
+   One fixed canvas above the content (the ghosts must follow the cursor
+   over cards, nav and modals) that never receives pointer input. The
+   component already gates its rAF loop; these rules are belt-and-braces so
+   the layer never paints where it shouldn't: touch, reduced motion, a
+   paused motion shell, or print.
+   ========================================================================== */
+canvas[data-cursor-trail] {
+  z-index: 9990;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  canvas[data-cursor-trail] {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  canvas[data-cursor-trail] {
+    display: none;
+  }
+}
+
+html[data-motion="paused"] canvas[data-cursor-trail] {
+  display: none;
+}
+
+@media print {
+  canvas[data-cursor-trail] {
+    display: none !important;
+  }
+}
+
+/* The old route network is no longer the visual. A trace of its large grid and
+   diffuse light remains as scientific registration under the fluid material. */
+html[data-bgfluid="on"] .research-environment {
+  filter: none;
+  opacity: 1;
+}
+
+html[data-bgfluid="on"] .environment-network,
+html[data-bgfluid="on"] .environment-data-field,
+html[data-bgfluid="on"] .environment-contour,
+html[data-bgfluid="on"] .environment-floor {
+  display: none;
+}
+
+html[data-bgfluid="on"] .environment-grid {
+  opacity: 0.028;
+  transform: none;
+  translate: none;
+  mask-image: linear-gradient(#000, transparent 72%);
+}
+
+html[data-bgfluid="on"] .environment-light {
+  opacity: 0.24;
+}
+
+html[data-bgfluid="on"][data-theme="night"] .research-environment {
+  filter: grayscale(1);
+}
+
+html[data-bgfluid="on"][data-theme="night"] .environment-light {
+  opacity: 0.34;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  html[data-bgfluid="on"] .environment-grid {
+    opacity: 0.018;
+  }
+
+  html[data-bgfluid="on"] .environment-light {
+    opacity: 0.16;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .background-system::after {
+    opacity: 1;
+  }
+}
+
+@media print {
+  .background-system {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Vanta Cells — optional background on the same plane as .background-system.
+   Layer order: body base < cells canvas (-2) < contrast shade < content.
+   The canvas never receives pointer input; vanta tracks the mouse via
+   window listeners, so interaction works through the foreground.
+   ========================================================================== */
+.vanta-cells-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+  background: #070809;
+}
+
+.vanta-cells-host,
+.vanta-cells-host canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: none !important;
+}
+
+/* Contrast shade: keeps text, buttons and navigation legible over cells. */
+.vanta-cells-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 62% 52% at 50% 40%, rgb(2 2 2 / 0.1), transparent 70%),
+    radial-gradient(ellipse 118% 52% at 50% 106%, rgb(2 2 2 / 0.46), transparent 74%),
+    linear-gradient(
+      180deg,
+      rgb(2 2 2 / 0.16),
+      transparent 26%,
+      transparent 64%,
+      rgb(2 2 2 / 0.24) 100%
+    );
+}
+
+/* Crossfade: the ambient stack yields the plane while cells is active and
+   is restored untouched on switch-back. Placed after the bgfluid rules so
+   it wins at equal specificity. */
+.research-environment,
+.background-system {
+  transition: opacity 0.4s ease;
+}
+
+html[data-bgmode="cells"] .research-environment,
+html[data-bgmode="cells"] .background-system,
+html[data-bgmode="liquid"] .research-environment,
+html[data-bgmode="liquid"] .background-system {
+  opacity: 0;
+}
+
+/* Dock background segment: the only control left, so it carries the full
+   pill surface itself (the wrapper dock is chromeless now). */
+.theme-dock .dock-segment {
+  width: auto;
+  min-width: 44px;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--radius);
+  color: rgb(var(--muted));
+  font:
+    0.62rem var(--font-jetbrains),
+    monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-grid;
+  place-items: center;
+  background: rgb(var(--surface));
+  box-shadow: var(--shadow);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .theme-dock .dock-segment:hover {
+    background: rgb(var(--panel));
+  }
+}
+
+/* Phones: full-height touch target for the environment toggle. */
+@media (pointer: coarse) {
+  .theme-dock .dock-segment {
+    height: 44px;
+  }
+}
+
+.theme-dock .dock-segment[aria-pressed="true"] {
+  background: rgb(var(--tint));
+  color: rgb(var(--accent));
+  border-color: rgb(var(--line));
+}
+
+.theme-dock .dock-segment:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .research-environment,
+  .background-system,
+  .vanta-cells-layer,
+  .liquid-layer {
+    transition: none !important;
+  }
+}
+
+@media print {
+  .vanta-cells-layer,
+  .liquid-layer {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Liquid Mouse — optional background on the same plane as the cells layer.
+   Layer order: body base < liquid canvas (-2) < contrast shade < content.
+   The canvas never receives pointer input; the effect tracks the mouse via
+   document.body listeners, so cursor response works through the foreground.
+   Never mounted together with Vanta Cells (mode store allows exactly one).
+   ========================================================================== */
+.liquid-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+  background: #070809;
+}
+
+.liquid-host,
+.liquid-host canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: none !important;
+}
+
+/* Static gradient for reduced-motion / WebGL-failure: same night language
+   as the ambient fallback, no animation, no canvas. */
+.liquid-fallback {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 88% 60% at 78% 10%, rgb(183 255 74 / 0.05), transparent 58%),
+    radial-gradient(ellipse 74% 56% at 13% 32%, rgb(125 231 255 / 0.035), transparent 56%),
+    radial-gradient(
+      ellipse 120% 96% at 50% 24%,
+      #14181c 0%,
+      #101317 26%,
+      #0b0e10 52%,
+      #070809 76%,
+      #040506 100%
+    );
+}
+
+/* Contrast shade: keeps text, buttons and navigation legible over liquid. */
+.liquid-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 62% 52% at 50% 40%, rgb(2 2 2 / 0.1), transparent 70%),
+    radial-gradient(ellipse 118% 52% at 50% 106%, rgb(2 2 2 / 0.46), transparent 74%),
+    linear-gradient(
+      180deg,
+      rgb(2 2 2 / 0.16),
+      transparent 26%,
+      transparent 64%,
+      rgb(2 2 2 / 0.24) 100%
+    );
+}

@@ -1,0 +1,9 @@
+# Consistent source line endings for Windows, Linux and GitHub Actions.
+* text=auto eol=lf
+*.glb -text
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.webp -text
+*.mp4 -text
+*.pdf -text

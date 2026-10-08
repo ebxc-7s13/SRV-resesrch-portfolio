@@ -1,0 +1,62 @@
+{
+  "asset": "jean_shorts.obj",
+  "author": "Cortu Johnstone",
+  "license": "CC0-1.0",
+  "licenseEvidence": "Author-authored MHCLO and MHMAT headers: Cortu Johnstone - CC0; official CC0 pack listing",
+  "licenseNote": "OBJ carries an old generic MakeClothes AGPL3 exporter header; the explicit author release and official pack identify the clothing asset as CC0.",
+  "page": "https://static.makehumancommunity.org/assets/assetpacks/pants01.html",
+  "archive": "https://files.makehumancommunity.org/asset_packs/pants01/pants01_cc0.zip",
+  "archiveSHA256": "e4e0ec60db34f279be291a83cfd7b342a7c5cf09bb7676682a5f39f4f6ac4ad9",
+  "objectSHA256": "b541561dbe3eef586b643a1e38e15c5bbabce0f46ed7d1f75326b9cfcfd467a1",
+  "sourceFiles": {
+    "cortu_jeans_shorts.mhclo": "f26d763703d6730789df5b9818e4871665928d502b4f68762c8aa96fd3779fab",
+    "cortu_jeans_shorts.thumb": "8eca7b7319a465fef774dc326e72f0e701149b14733c56521a0ea9dd9effbb06",
+    "jean_shorts.mhmat": "91234aad335549161f166b4c9fae8322d6896469efcbf8c64d84ffd56747675c",
+    "jean_shorts.obj": "b541561dbe3eef586b643a1e38e15c5bbabce0f46ed7d1f75326b9cfcfd467a1",
+    "jean_shorts_diff.png": "36c3c78d65b2b044975bce458fdd93d203e5aaf8a48b890370c02ae8321051c7",
+    "jean_shorts_norm.png": "3fb964ed5ad1313a074650ce7957085a6fcde1d8339c86f21e2874c345356c13"
+  },
+  "fittingLandmarks": {
+    "bodyHeight": 2,
+    "waistbandY": 1.18,
+    "lowerHemY": 0.812,
+    "hipHalfWidth": 0.233,
+    "frontFlyZ": 0.157,
+    "seatZ": -0.2
+  },
+  "modifications": "Subdivided real source topology; calibrated to the shared two-unit body hip/thigh landmarks; retained crotch bridge with front fly clearance and seat shaping; fabric thickness/hem rims; source diffuse baked into emerald vertex colors; merged only into base layer.",
+  "tiers": {
+    "shorts": {
+      "vertices": 4142,
+      "triangles": 8288,
+      "bounds": [
+        [
+          -0.2328653484582901,
+          0.812408447265625,
+          -0.2001001536846161
+        ],
+        [
+          0.23287618160247803,
+          1.1816596984863281,
+          0.17772071063518524
+        ]
+      ]
+    },
+    "shorts-low": {
+      "vertices": 1391,
+      "triangles": 2786,
+      "bounds": [
+        [
+          -0.2328086793422699,
+          0.8124903440475464,
+          -0.20012469589710236
+        ],
+        [
+          0.2328086644411087,
+          1.181599736213684,
+          0.17773084342479706
+        ]
+      ]
+    }
+  }
+}

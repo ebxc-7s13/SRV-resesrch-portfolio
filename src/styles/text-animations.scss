@@ -1,0 +1,262 @@
+// Unified text-animation system (SCSS).
+// Server-rendered spans (AnimatedText / SplitWords) + pure CSS entrances.
+// No JS per word, no hydration fork, no layout shift (transform/opacity/filter only).
+//
+// Usage in React:
+//   <AnimatedText as="h1" variant="words">Title here</AnimatedText>
+//   <AnimatedText variant="shimmer" as="p">Lead paragraph</AnimatedText>
+//   <AnimatedText variant="chars" as="span">SILUVERU</AnimatedText>
+//   <AnimatedText variant="scan">One-shot accent scan</AnimatedText>
+//   <AnimatedText variant="type" caret>Typed lead…</AnimatedText>
+//   <AnimatedText variant="lines">Masked block reveal</AnimatedText>
+@use "tokens" as *;
+@use "mixins" as *;
+
+// Base: words and chars share the hidden-until-animated state only when motion is on.
+// When motion is off/paused/reduced, text is instantly readable.
+.t-anim {
+  text-wrap: pretty;
+}
+
+.t-anim .reveal-word,
+.t-anim .t-word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.t-anim .reveal-char,
+.t-anim .t-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+// --- Variant: words (default, Text-Generate effect) ---
+// Backwards compatible with existing .reveal-word spans from SplitWords.
+.t-anim[data-anim="words"] .reveal-word,
+.t-anim[data-anim="words"] .t-word {
+  @include motion-on {
+    opacity: 0.1;
+    transform: perspective(900px) translateY(22px) rotateX(24deg);
+    filter: blur(7px);
+    animation: t-word-reveal $text-word-duration $ease-out forwards;
+    @include word-stagger;
+  }
+}
+
+@keyframes t-word-reveal {
+  to {
+    opacity: 1;
+    transform: perspective(900px) translateY(0) rotateX(0deg);
+    filter: blur(0);
+  }
+}
+
+// Legacy selector keeps working without the React wrapper.
+.reveal-word {
+  display: inline-block;
+  @include motion-on {
+    opacity: 0.1;
+    transform: perspective(900px) translateY(22px) rotateX(24deg);
+    filter: blur(7px);
+    animation: t-word-reveal $text-word-duration $ease-out forwards;
+    @include word-stagger;
+  }
+}
+
+// --- Variant: chars (display names, eyebrows, kickers) ---
+.t-anim[data-anim="chars"] .reveal-char,
+.t-anim[data-anim="chars"] .t-char {
+  @include motion-on {
+    opacity: 0;
+    transform: translateY(0.55em) rotate(4deg);
+    animation: t-char-reveal 0.6s $ease-out forwards;
+    @include char-stagger;
+  }
+}
+
+@keyframes t-char-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+// --- Variant: shimmer (lead paragraphs, section intros) ---
+// All call sites share one white sweep over stationary base ink. A moving
+// no-repeat gradient alone leaves letters unpainted at either end of the loop.
+.t-anim[data-anim="shimmer"],
+.t-shimmer {
+  line-height: 1.8;
+}
+
+.t-anim[data-anim="shimmer"],
+.t-shimmer,
+.text-shimmer {
+  color: rgb(var(--muted));
+
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    @include motion-on {
+      @include shimmer-ink;
+      color: transparent;
+      animation: t-shimmer-sweep $text-shimmer-duration ease-in-out infinite;
+    }
+  }
+
+  @include motion-off {
+    background: none;
+    color: rgb(var(--muted));
+    animation: none;
+  }
+}
+
+@keyframes t-shimmer-sweep {
+  0% {
+    background-position: 115% 0;
+  }
+  55%,
+  100% {
+    background-position: -15% 0;
+  }
+}
+
+// --- Variant: scan (hero surname, one-shot instrument pass) ---
+.t-anim[data-anim="scan"] {
+  @include motion-on {
+    background: linear-gradient(
+      105deg,
+      rgb(var(--ink)) 35%,
+      rgb(var(--accent)) 49%,
+      rgb(var(--ink)) 62%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: t-instrument-scan $text-scan-duration ease-out 1;
+  }
+}
+
+@keyframes t-instrument-scan {
+  from {
+    background-position: 110% 0;
+  }
+  to {
+    background-position: -10% 0;
+  }
+}
+
+// --- Variant: type (typewriter for short leads, respects reduced motion) ---
+.t-anim[data-anim="type"] {
+  @include motion-on {
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+    animation: t-type-in 1.6s steps(44, end) 0.25s both;
+  }
+
+  &[data-caret="true"]::after {
+    content: "▍";
+    color: rgb(var(--accent));
+    margin-left: 2px;
+    @include motion-on {
+      animation: t-caret-blink 1s steps(1) infinite;
+    }
+  }
+}
+
+@keyframes t-type-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes t-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+// On narrow screens typewriter would clip — fall back to plain readable text.
+// (Retargeting the word-reveal keyframes here would animate the whole block
+// with steps() timing and no split spans — visibly broken — so disable.)
+@media (max-width: 700px) {
+  .t-anim[data-anim="type"] {
+    white-space: normal;
+    overflow: visible;
+    max-width: none;
+    clip-path: none;
+    animation: none;
+  }
+}
+
+// --- Variant: lines (section headings, masked block rise) ---
+.t-anim[data-anim="lines"] .t-line {
+  display: block;
+  overflow: hidden;
+}
+
+.t-anim[data-anim="lines"] .t-line > span {
+  display: block;
+  @include motion-on {
+    transform: translateY(110%);
+    animation: t-line-rise 0.7s $ease-out forwards;
+    animation-delay: calc(0.1s + var(--li, 0) * 90ms);
+  }
+}
+
+@keyframes t-line-rise {
+  to {
+    transform: translateY(0);
+  }
+}
+
+// Motion off: everything readable, no hidden states, no infinite loops.
+@include motion-off {
+  .t-anim .reveal-word,
+  .t-anim .t-word,
+  .t-anim .reveal-char,
+  .t-anim .t-char,
+  .t-anim[data-anim="lines"] .t-line > span {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
+
+  .t-anim[data-anim="shimmer"],
+  .t-shimmer,
+  .t-anim[data-anim="scan"],
+  .t-anim[data-anim="type"] {
+    animation: none !important;
+    background: none !important;
+    color: rgb(var(--ink)) !important;
+    clip-path: none !important;
+  }
+
+  .t-anim[data-anim="type"][data-caret="true"]::after {
+    display: none;
+  }
+}
+
+// Pausing the global motion toggle freezes word reveals mid-blur today.
+// Settle them to readable instead of leaving a permanent blur band. Covers
+// every split variant — words (.reveal-word/.t-word), chars
+// (.reveal-char/.t-char) and masked lines — not just the legacy class.
+html[data-motion="paused"] .reveal-word,
+html[data-motion="paused"] .t-word,
+html[data-motion="paused"] .reveal-char,
+html[data-motion="paused"] .t-char,
+html[data-motion="paused"] .t-anim[data-anim="lines"] .t-line > span,
+html[data-motion-running="false"] .reveal-word,
+html[data-motion-running="false"] .t-word,
+html[data-motion-running="false"] .reveal-char,
+html[data-motion-running="false"] .t-char,
+html[data-motion-running="false"] .t-anim[data-anim="lines"] .t-line > span {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  animation: none;
+}

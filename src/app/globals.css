@@ -1,0 +1,576 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  color: rgb(var(--ink));
+  background: rgb(var(--page));
+  font-family: var(--font-space), system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+h1 {
+  font-size: clamp(2.25rem, 5vw, 4.5rem);
+}
+h2 {
+  font-size: clamp(1.65rem, 3vw, 2.5rem);
+}
+h3 {
+  font-size: 1.35rem;
+}
+a,
+button,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+summary {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid rgb(var(--accent));
+  outline-offset: 4px;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 78px;
+  -webkit-text-size-adjust: 100%; /* no font inflation in landscape */
+}
+
+/* Controls never hold selectable text and never double-tap-zoom: taps fire
+   immediately and long-press doesn't pop a selection callout. */
+button,
+[role="button"],
+summary {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* iOS zooms any focused input under 16px; coarse pointers get the readable
+   floor so the page never jumps. Fine pointers keep design sizes. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Home-indicator clearance for the page footer (the dock pads itself). */
+@media (max-width: 767px) {
+  footer {
+    padding-bottom: calc(65px + env(safe-area-inset-bottom, 0px));
+  }
+}
+::selection {
+  background: rgb(var(--accent));
+  color: rgb(var(--on-accent));
+}
+@keyframes scrollLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes scrollRight {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes crossfadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.font-mono,
+code,
+pre {
+  font-family: var(--font-jetbrains), monospace;
+}
+.prose-research {
+  line-height: 1.85;
+}
+.prose-research h2,
+.prose-research h3 {
+  margin: 2em 0 0.7em;
+}
+.prose-research p,
+.prose-research ul,
+.prose-research ol {
+  margin-bottom: 1.25em;
+}
+.prose-research ul {
+  padding-left: 1.4em;
+  list-style: disc;
+}
+.prose-research ol {
+  padding-left: 1.4em;
+  list-style: decimal;
+}
+.prose-research a {
+  color: rgb(var(--accent));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.prose-research pre {
+  padding: 20px;
+  overflow: auto;
+  background: var(--card-panel);
+  border: 1px solid rgb(var(--line));
+}
+.prose-research blockquote {
+  border-left: 2px solid rgb(var(--accent));
+  padding: 12px 24px;
+}
+.prose-research table {
+  display: block;
+  max-width: 100%;
+  overflow: auto;
+  border-collapse: collapse;
+}
+.prose-research td,
+.prose-research th {
+  border-bottom: 1px solid rgb(var(--line));
+  padding: 12px;
+  text-align: left;
+}
+figcaption {
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: rgb(var(--muted));
+  margin-top: 12px;
+}
+video {
+  max-height: 580px;
+  object-fit: contain;
+}
+/* Functional additions preserve the original typography and theme artwork.
+   Values stay synchronized with the token block in design-system.css. */
+body {
+  --page: 7 8 9;
+  --surface: 12 14 16;
+  --panel: 17 20 23;
+  --ink: 242 242 239;
+  --muted: 184 188 191;
+  --faint: 115 121 125;
+  --accent: 183 255 74;
+  --on-accent: 12 18 6;
+  --line: 32 33 34;
+  --tint: 21 25 28;
+  --danger: 248 113 113;
+}
+.skip-link {
+  position: fixed;
+  left: 12px;
+  top: -100px;
+  padding: 12px;
+  background: white;
+  color: black;
+  z-index: 200;
+}
+.skip-link:focus {
+  top: 5px;
+}
+.nav-content {
+  padding-right: 200px;
+}
+.mobile-navigation {
+  max-height: calc(100dvh - 110px);
+  overflow: auto;
+}
+.original-theme-controls button {
+  min-width: 32px;
+  min-height: 32px;
+}
+.original-glass-title {
+  display: contents;
+}
+.depth-plane {
+  transform: perspective(1200px) translateY(var(--depth-y, 0px))
+    rotateX(var(--depth-rotate, 0deg)) scale(var(--depth-scale, 1));
+  transform-origin: center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+/* Card glass sits above the animating background, so blur cost is paid on
+   every frame for every card. 5px reads nearly identically on these small
+   surfaces at a quarter of the sample footprint; saturate dropped here (it
+   is spent once, on the navigation pane, where the surface is single).
+   Edge treatment uses the shared liquid-glass recipe from design-system.css
+   — hairline ring, bright top edge, soft underlight, graded shadow — so the
+   pane reads as one piece of glass rather than a blurred "black rounded rect". */
+.liquid-surface {
+  position: relative;
+  isolation: isolate;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  box-shadow:
+    var(--glass-hairline, inset 0 0 0 1px rgba(255, 255, 255, 0.05)),
+    var(--glass-edge, inset 0 1px 0 rgba(255, 255, 255, 0.16)),
+    var(--glass-underlight, inset 0 -1px 0 rgba(255, 255, 255, 0.04)),
+    var(--glass-depth, 0 12px 30px rgba(0, 0, 0, 0.12));
+  /* Deliberately no `transition` here. These panes carry Tailwind
+     `transition-colors` (and border hover states) of their own; declaring a
+     transition on this class would win the specificity tie and silently drop
+     them. All hover feedback rides ::after below, which owns its own
+     transition. */
+}
+/* Pointer sheath: a tight specular highlight that follows the cursor, a faint
+   accent underlight rising from the bottom edge, and a soft accent bloom —
+   light moving across wet glass rather than a broad grey wash. Everything
+   fades through the single opacity transition below, so hover stays smooth
+   without touching any property the pane already animates. */
+.liquid-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  border-radius: inherit;
+  opacity: 0;
+  background:
+    radial-gradient(
+      220px circle at var(--glass-x, 50%) var(--glass-y, 30%),
+      rgba(255, 255, 255, 0.14),
+      transparent 62%
+    ),
+    radial-gradient(
+      170px circle at var(--glass-x, 50%) 108%,
+      rgba(183, 255, 74, 0.06),
+      transparent 70%
+    ),
+    radial-gradient(
+      300px circle at var(--glass-x, 50%) 50%,
+      rgba(183, 255, 74, 0.05),
+      transparent 72%
+    );
+  transition: opacity 0.35s var(--ease-out, ease);
+}
+.liquid-surface:hover::after,
+.liquid-surface:focus-within::after {
+  opacity: 1;
+}
+/* No backdrop-filter support: the translucent gradients alone leave text at
+   risk, so seat the pane on an opaque surface instead. */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .liquid-surface {
+    background-color: rgba(12, 14, 16, 0.94);
+  }
+}
+/* A step sheerer than .liquid-surface, for panes where the background is the
+   show (research highlights, collaboration panel). Less frosting plus a
+   saturation/brightness lift lets the moving fluid read through like lit
+   liquid glass instead of a dark frost — and the smaller blur samples a
+   smaller footprint, so it is also the cheaper filter. The @supports
+   fallback above still applies (the modifier only strengthens the filter). */
+.liquid-surface-clear {
+  -webkit-backdrop-filter: blur(3px) saturate(1.25) brightness(1.12);
+  backdrop-filter: blur(3px) saturate(1.25) brightness(1.12);
+}
+.carousel-slide {
+  position: absolute;
+}
+.project-slide {
+  width: min(420px, calc(100vw - 68px));
+}
+.theme-slide {
+  width: min(360px, calc(100vw - 68px));
+}
+.project-track {
+  height: var(--carousel-height, 620px);
+}
+.theme-track {
+  height: var(--carousel-height, 450px);
+}
+.carousel-control {
+  padding: 10px 18px;
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--radius-sm);
+  color: rgb(var(--ink));
+  background: rgb(var(--surface));
+  min-height: 44px;
+  font-size: 12px;
+}
+.original-carousel:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: -3px;
+}
+.figure-trigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--radius);
+  background: #fff;
+}
+.figure-image {
+  width: 100%;
+  height: auto;
+  max-height: 700px;
+  object-fit: contain;
+}
+.figure-hint {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: rgb(var(--ink));
+  background: rgb(var(--surface) / 0.95);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 11px;
+}
+.figure-dialog {
+  width: min(1200px, 95vw);
+  max-height: 92dvh;
+  overflow: auto;
+  padding: 20px;
+  background: var(--card-surface);
+  color: rgb(var(--ink));
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--radius);
+}
+.figure-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.9);
+}
+.dialog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+.dialog-toolbar h2 {
+  font-size: 20px;
+}
+.figure-full {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.figure-scroll {
+  overflow: auto;
+  background: #fff;
+}
+.figure-dialog p {
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 16px;
+}
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--radius-sm);
+  background: rgb(var(--accent));
+  color: rgb(var(--on-accent));
+}
+.button.secondary {
+  background: rgb(var(--panel));
+  color: rgb(var(--ink));
+}
+.text-link {
+  color: rgb(var(--accent));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-size: 13px;
+}
+.shell {
+  max-width: 1200px;
+  width: calc(100% - 40px);
+  margin-inline: auto;
+}
+input,
+textarea,
+select {
+  min-height: 44px;
+}
+input[type="checkbox"] {
+  min-height: 18px;
+}
+@media (max-width: 767px) {
+  .original-navigation .nav-content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .original-theme-controls {
+    top: auto;
+    bottom: 18px;
+    right: 16px;
+  }
+  .original-theme-controls button {
+    min-height: 38px;
+    min-width: 38px;
+  }
+  .original-home-hero {
+    min-height: 0;
+  }
+  .original-home-hero h1 {
+    font-size: clamp(2.25rem, 9vw, 3.2rem);
+    overflow-wrap: anywhere;
+  }
+  .original-home-hero .py-24 {
+    padding-top: 60px;
+    padding-bottom: 65px;
+  }
+  .original-carousel {
+    padding-block: 12px;
+  }
+
+  .project-slide .p-6 {
+    padding: 18px;
+  }
+  .theme-slide .p-6 {
+    padding: 20px;
+  }
+  .figure-dialog {
+    padding: 12px;
+  }
+  .dialog-toolbar h2 {
+    font-size: 16px;
+  }
+  footer {
+    padding-bottom: 65px;
+  }
+}
+[data-motion-running="false"] *,
+[data-motion-running="false"] *::before,
+[data-motion-running="false"] *::after {
+  animation-play-state: paused !important;
+}
+/* Offscreen suspension. OffscreenPause marks an element once a running,
+   infinite CSS loop leaves the viewport — marquee strips, the drifting
+   starfield on depth cards and hero planes, shimmer sweeps, the patent ring,
+   the lab spinner — and this holds that loop where it stands. A paused
+   animation keeps its progress, so re-entry resumes mid-cycle with no visible
+   jump. Finite entrances, transitions and CSS-controlled play states are
+   never marked (see OffscreenPause), so only background loops are affected. */
+[data-anim-paused="true"],
+[data-anim-paused="true"]::before,
+[data-anim-paused="true"]::after {
+  animation-play-state: paused !important;
+}
+[data-motion-running="false"] .depth-plane {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  html *,
+  html *::before,
+  html *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  html .depth-plane {
+    transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .original-page-title {
+    font-size: clamp(2rem, 8.5vw, 3rem);
+    overflow-wrap: anywhere;
+    line-height: 1.05;
+  }
+}
+
+/* ==========================================================================
+   Site cursor — pure neon green dot (no black outline), rendered by the
+   native cursor system (a data-URL image), so tracking is pixel-perfect
+   and has none of the lag of a JS-drawn element. Fine pointers only:
+   touch keeps the OS default and text inputs keep the I-beam so selection
+   still feels native. `auto` is the fallback when image cursors are
+   unavailable.
+   ========================================================================== */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  [role="button"],
+  summary,
+  label,
+  select {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='6.5' fill='%23b7ff4a'/></svg>")
+        11 11,
+      auto;
+  }
+  /* Interactive targets: the dot becomes a neon ARROW — the universal
+     "this is clickable" shape. An arrow at the true click point reads
+     instantly, where the old dot+ring looked identical to the idle dot. */
+  a,
+  button,
+  [role="button"],
+  summary,
+  label,
+  select {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M5 3 L23 13 L14.5 15.5 L11 24 Z' fill='%23b7ff4a' stroke='%23070809' stroke-width='1.4' stroke-linejoin='round'/></svg>")
+        5 3,
+      pointer;
+  }
+  /* While pressed: a target RETICLE — instant, unambiguous confirmation that
+     the click landed (the old style had no pressed feedback at all). */
+  a:active,
+  button:active,
+  [role="button"]:active,
+  summary:active,
+  label:active,
+  select:active {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><circle cx='15' cy='15' r='7.5' fill='none' stroke='%23b7ff4a' stroke-width='2'/><circle cx='15' cy='15' r='2.5' fill='%23b7ff4a'/><path d='M15 1 V6 M15 24 V29 M1 15 H6 M24 15 H29' stroke='%23b7ff4a' stroke-width='2' stroke-linecap='round'/></svg>")
+        15 15,
+      pointer;
+  }
+  /* Text entry keeps an I-beam for native-feeling selection, but tinted to
+     the same voice. */
+  input,
+  textarea {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><path d='M11 3 V19 M6 5.5 C8.5 6.5 8.5 8 11 8 C13.5 8 13.5 6.5 16 5.5 M6 16.5 C8.5 15.5 8.5 14 11 14 C13.5 14 13.5 15.5 16 16.5' fill='none' stroke='%23b7ff4a' stroke-width='2' stroke-linecap='round'/></svg>")
+        11 11,
+      text;
+  }
+  /* Draggable and resize affordances keep their shapes but get the neon
+     stroke so the treatment survives everywhere. */
+  [draggable="true"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><path d='M13 4 L13 22 M4 13 L22 13 M13 4 L9.5 7.5 M13 4 L16.5 7.5 M13 22 L9.5 18.5 M13 22 L16.5 18.5 M4 13 L7.5 9.5 M4 13 L7.5 16.5 M22 13 L18.5 9.5 M22 13 L18.5 16.5' fill='none' stroke='%23b7ff4a' stroke-width='2' stroke-linecap='round'/></svg>")
+        13 13,
+      move;
+  }
+}

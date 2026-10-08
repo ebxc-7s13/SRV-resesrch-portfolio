@@ -1,0 +1,203 @@
+[
+  {
+    "id": "mmsa",
+    "source": "source-assets/research-devices/mmsa/MMSAmodel.obj",
+    "sourceBytes": 31442897,
+    "sha256": "8f75c3697fdd9cafd15c5a973a12b9e64a103a29159d6ff6599689890afe1693",
+    "units": "Not specified; physical dimensions cannot be inferred.",
+    "missingTextures": [],
+    "sourceVertices": 389568,
+    "sourceFaces": 779396,
+    "triangles": 779396,
+    "sourceNormals": 0,
+    "sourceUVs": 0,
+    "objects": [
+      "geometry_0"
+    ],
+    "groups": [],
+    "materialLibraries": [],
+    "sourceMaterials": [],
+    "indexConnectedComponents": 1,
+    "degenerateIndexFaces": 0,
+    "materialPolicy": "No material/texture references supplied. One neutral material; no invented component classifications.",
+    "normalPolicy": "Normals calculated from the original indexed triangles. Positions and topology unchanged.",
+    "bounds": {
+      "min": [
+        -1.0004141330718994,
+        -0.7641751766204834,
+        -0.6703848242759705
+      ],
+      "max": [
+        0.9956997036933899,
+        0.758000373840332,
+        0.6658886671066284
+      ],
+      "dimensions": [
+        1.9961138367652893,
+        1.5221755504608154,
+        1.3362734913825989
+      ],
+      "center": [
+        -0.0023572146892547607,
+        -0.0030874013900756836,
+        -0.0022480785846710205
+      ]
+    },
+    "meshes": [
+      {
+        "name": "geometry_0",
+        "vertices": 389568,
+        "triangles": 779396,
+        "hasUV": false,
+        "hasNormals": true,
+        "materials": [
+          {
+            "name": "Neutral engineering surface (presentation)",
+            "color": "#a9b3b5",
+            "opacity": 1,
+            "map": null
+          }
+        ]
+      }
+    ],
+    "orientation": {
+      "rotationX": 0,
+      "evidence": "Support feet at minimum Y in front X/Y projection."
+    },
+    "normalization": {
+      "uniformScale": 0.5009734322670215,
+      "translation": [
+        0.001180901933466198,
+        0.38283146108482097,
+        0.001126227644568629
+      ],
+      "bounds": {
+        "min": [
+          -0.5,
+          0,
+          -0.33471875871268836
+        ],
+        "max": [
+          0.5,
+          0.7625695100272976,
+          0.3347187587126884
+        ],
+        "dimensions": [
+          1,
+          0.7625695100272976,
+          0.6694375174253768
+        ]
+      },
+      "interpretation": "Longest dimension is one display unit. Not a claim about manufactured size."
+    },
+    "outputs": {
+      "high": {
+        "url": "/3d/microgravity/mmsa.glb",
+        "bytes": 2470636,
+        "triangles": 779396,
+        "vertices": 389568
+      },
+      "medium": {
+        "url": "/3d/microgravity/mmsa-medium.glb",
+        "bytes": 1052560,
+        "triangles": 272788,
+        "vertices": 136264
+      },
+      "low": {
+        "url": "/3d/microgravity/mmsa-low.glb",
+        "bytes": 332984,
+        "triangles": 77938,
+        "vertices": 38840
+      }
+    }
+  },
+  {
+    "id": "microscope",
+    "source": "source-assets/research-devices/microscope/Microscope N180608.3ds",
+    "sourceBytes": 142968,
+    "sha256": "dc2082522581e1342ef72b41384a2e8c0e710b46681877ac4733713d980525cf",
+    "units": "Not specified; physical dimensions cannot be inferred.",
+    "missingTextures": [],
+    "format": "3DS, not OBJ",
+    "sourceNormals": "Derived by 3DS importer",
+    "materialLibraries": [],
+    "materialPolicy": "Preserve embedded diffuse colors and opacity; translate Phong finish into neutral PBR roughness.",
+    "bounds": {
+      "min": [
+        -0.3663388310331275,
+        -0.5082362997676892,
+        -0.7674748802593708
+      ],
+      "max": [
+        0.36633883033628045,
+        0.5082363366805647,
+        0.7674748711876564
+      ],
+      "dimensions": [
+        0.7326776613694079,
+        1.016472636448254,
+        1.5349497514470274
+      ],
+      "center": [
+        -3.4842351226416213e-10,
+        1.8456437711478202e-8,
+        -4.535857189846837e-9
+      ]
+    },
+    "meshes": [
+      {
+        "name": "Layer_dia-",
+        "vertices": 5098,
+        "triangles": 4046,
+        "hasUV": true,
+        "hasNormals": true,
+        "materials": [
+          {
+            "name": "Material",
+            "color": "#e1e1e1",
+            "opacity": 1,
+            "map": null
+          }
+        ]
+      }
+    ],
+    "orientation": {
+      "rotationX": -1.5707963267948966,
+      "evidence": "Base at minimum Z; rotate -90 degrees about X into Y-up."
+    },
+    "normalization": {
+      "uniformScale": 0.6514871246158257,
+      "translation": [
+        2.2699343215352586e-10,
+        0.5000000029550525,
+        1.2024131535302025e-8
+      ],
+      "bounds": {
+        "min": [
+          -0.2386650314379016,
+          -5.551115123125783e-17,
+          -0.3311094175851701
+        ],
+        "max": [
+          0.2386650314379016,
+          1,
+          0.33110941758517015
+        ],
+        "dimensions": [
+          0.4773300628758032,
+          1,
+          0.6622188351703402
+        ]
+      },
+      "interpretation": "Longest dimension is one display unit. Not a claim about manufactured size."
+    },
+    "outputs": {
+      "high": {
+        "url": "/3d/microscopes/microscope.glb",
+        "bytes": 35244,
+        "triangles": 4046,
+        "vertices": 5098
+      }
+    }
+  }
+]

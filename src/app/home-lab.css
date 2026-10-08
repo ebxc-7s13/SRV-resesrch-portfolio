@@ -1,0 +1,298 @@
+/* Home laboratory exhibit — identity → world passage + embedded lab.
+   Inherits portfolio tokens (--page/--ink/--muted/--accent/--line) and the
+   laboratory vars (--lab-*) from lab.css. No scroll hijack, no FPS trap. */
+
+.home-lab-exhibit {
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-24, 96px) 0 var(--space-16, 64px);
+  margin-top: var(--space-16, 64px);
+  border-top: 1px solid rgb(var(--line));
+  background:
+    radial-gradient(
+      1200px 320px at 50% -80px,
+      rgb(var(--tint) / 0.55),
+      transparent 70%
+    );
+}
+
+/* Passage: layered technical grid + mask + perspective expansion. */
+.home-lab-passage {
+  --lab-enter: 0;
+  position: relative;
+  height: clamp(140px, 26vh, 260px);
+  margin-bottom: var(--space-12, 48px);
+  overflow: hidden;
+  perspective: 900px;
+}
+
+.home-lab-passage-grid {
+  position: absolute;
+  inset: -40px 0;
+  background-image:
+    linear-gradient(rgb(var(--line) / 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--line) / 0.5) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: calc(0.25 + var(--lab-enter) * 0.55);
+  transform:
+    rotateX(calc(48deg - var(--lab-enter) * 34deg))
+    scale(calc(1.15 - var(--lab-enter) * 0.15));
+  transform-origin: 50% 100%;
+  mask-image: linear-gradient(to bottom, transparent, black 35%, black 75%, transparent);
+}
+
+.home-lab-passage-mask {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    620px 200px at 50% 100%,
+    rgb(var(--accent) / 0.16),
+    transparent 70%
+  );
+  opacity: var(--lab-enter);
+}
+
+.home-lab-passage-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1200px;
+  width: calc(100% - 40px);
+  margin-inline: auto;
+}
+
+.home-lab-passage-line span {
+  height: 1px;
+  flex: 1;
+  background: rgb(var(--line));
+}
+
+.home-lab-passage-line em {
+  font-style: normal;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgb(var(--muted));
+  white-space: nowrap;
+}
+
+/* Heading */
+.home-lab-heading .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgb(var(--muted));
+  margin-bottom: var(--space-4, 16px);
+}
+
+.home-lab-heading h2 {
+  font-size: clamp(2.7rem, 1.85rem + 3.3vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  margin: 0 0 var(--space-4, 16px);
+}
+
+.home-lab-heading h2 span {
+  color: rgb(var(--accent));
+  text-shadow:
+    0 0 18px rgb(var(--accent) / 0.35),
+    0 0 42px rgb(var(--accent) / 0.18);
+}
+
+.home-lab-heading p {
+  max-width: 68ch;
+  color: rgb(var(--muted));
+  font-size: 15px;
+  line-height: 1.8;
+  margin: 0 0 var(--space-6, 24px);
+}
+
+.home-lab-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(var(--muted));
+  margin-bottom: var(--space-8, 32px);
+}
+
+/* Stage: the laboratory lives here. Reuse lab.css vars by scoping. */
+.home-lab-stage {
+  --lab-ink: rgb(var(--ink));
+  --lab-muted: rgb(var(--muted));
+  --lab-line: rgb(var(--line));
+  --lab-paper: transparent;
+  --lab-accent: rgb(var(--accent));
+  border: 1px solid rgb(var(--line));
+  border-radius: var(--radius, 14px);
+  overflow: clip;
+  background: rgb(var(--surface) / 0.55);
+  box-shadow: var(--shadow, 0 18px 50px rgb(0 0 0 / 0.22));
+}
+
+.home-lab-stage .lab-intro {
+  padding-top: var(--space-8, 32px);
+}
+
+.home-lab-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 24px;
+  color: rgb(var(--muted));
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 13px;
+}
+
+/* After: resume page flow explicitly — never trap. */
+.home-lab-after {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  padding-top: var(--space-6, 24px);
+}
+
+.home-lab-continue {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid rgb(var(--line));
+  border-radius: 7px;
+  background: rgb(var(--accent));
+  color: rgb(var(--on-accent));
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.home-lab-continue.secondary {
+  background: rgb(var(--panel));
+  color: rgb(var(--ink));
+}
+
+.home-lab-hint {
+  font-size: 12px;
+  color: rgb(var(--muted));
+  font-family: var(--font-jetbrains), monospace;
+}
+
+/* Mobile: simplify, keep tap hotspots large, reduce chrome. */
+@media (max-width: 767px) {
+  .home-lab-exhibit {
+    padding: 64px 0 48px;
+  }
+  .home-lab-passage {
+    height: 150px;
+  }
+  .home-lab-passage-line em {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+  .home-lab-stage {
+    border-radius: 10px;
+  }
+}
+
+/* Hero refinement (identity preserved): hierarchy, spacing, depth. */
+.research-hero .hero-identity h1 {
+  text-wrap: balance;
+}
+
+.research-hero .hero-surname {
+  display: block;
+  letter-spacing: 0.02em;
+}
+
+.research-hero .hero-given {
+  display: block;
+  margin-top: var(--space-2, 8px);
+  color: rgb(var(--ink));
+}
+
+.research-hero .hero-description {
+  max-width: 58ch;
+  text-wrap: pretty;
+}
+
+.research-hero .hero-domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--space-4, 16px);
+}
+
+.research-hero .hero-domains span {
+  border: 1px solid rgb(var(--line));
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(var(--muted));
+  background: rgb(var(--surface) / 0.6);
+}
+
+.research-hero .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: var(--space-6, 24px);
+}
+
+.research-hero .hero-actions .button {
+  transition:
+    transform var(--duration-fast, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),
+    border-color var(--duration-fast, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),
+    background-color var(--duration-fast, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));
+}
+
+.research-hero .hero-actions .button:hover {
+  transform: translateY(-1px);
+}
+
+.research-hero .hero-actions .button:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.research-hero .hero-composition {
+  transform: translateY(var(--page-depth, 0px));
+  will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .research-hero .hero-composition {
+    transform: none;
+  }
+}
+
+/* Reduced motion: passage becomes a static divider, no transform. */
+@media (prefers-reduced-motion: reduce) {
+  .home-lab-passage-grid {
+    transform: none;
+    opacity: 0.3;
+  }
+  .research-hero .hero-composition {
+    transform: none;
+  }
+}
+
+// Static divider when the motion engine is off (pre-hydration unset counts as
+// off: parallax vars read 0 there anyway). The old data-motion="active" gate
+// never matched — layout.tsx always pre-renders data-motion="active".
+html:not([data-motion-running="true"]) .home-lab-passage-grid {
+  transform: none;
+}

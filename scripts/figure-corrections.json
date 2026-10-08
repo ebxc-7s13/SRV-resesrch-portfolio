@@ -1,0 +1,178 @@
+[
+  {
+    "projectVariable": "oralCancerId",
+    "file": "/research/oral-cancer/model.png",
+    "caption": "AFiS-Net architecture: ConvNeXt V2 + SwinV2 Transformer dual-branch classifier with cross-attention fusion.",
+    "section": "computational_method",
+    "nextCaption": "FASCANet denoising architecture with wavelet and residual branches.",
+    "nextSection": "computational_method"
+  },
+  {
+    "projectVariable": "oralCancerId",
+    "file": "/research/oral-cancer/rawcolorrep.png",
+    "caption": "Raw pseudo-RGB color representation of confocal AFI at 405/488/638 nm excitation.",
+    "section": "data_acquisition",
+    "nextCaption": "Raw and denoised spectral-channel images across the study groups.",
+    "nextSection": "results"
+  },
+  {
+    "projectVariable": "fascanetId",
+    "file": "/research/oral-cancer/model.png",
+    "caption": "FASCANet dual-branch architecture with db2 wavelet decomposition and Spatial Cross-Attention.",
+    "section": "computational_method",
+    "nextCaption": "FASCANet denoising architecture with wavelet and residual branches.",
+    "nextSection": "computational_method"
+  },
+  {
+    "projectVariable": "fascanetId",
+    "file": "/research/oral-cancer/rawcolorrep.png",
+    "caption": "Input AFI images with visible photon-dependent noise.",
+    "section": "data_acquisition",
+    "nextCaption": "Raw and denoised spectral-channel images across the study groups.",
+    "nextSection": "results"
+  },
+  {
+    "projectVariable": "microgravityId",
+    "file": "/research/microgravity/WhatsApp Image 2026-05-15 at 10.04.52.jpeg",
+    "caption": "Microgravity simulation platform — dual-axis gimbal with NEMA 14 stepper motors and Raspberry Pi controller.",
+    "section": "hardware",
+    "nextCaption": "CAD rendering of the dual-axis microgravity simulation platform.",
+    "nextSection": "hardware"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/20260702_11h59m25s_grim.png",
+    "caption": "Portable LED autofluorescence microscope — custom-built enclosure with 405/488/638 nm LED excitation sources.",
+    "section": "hardware",
+    "nextCaption": "Brightfield acquisition software with a common region of interest.",
+    "nextSection": "data_acquisition"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/20260702_12h02m03s_grim.png",
+    "caption": "Microscope LED illumination module and camera assembly showing multi-wavelength excitation configuration.",
+    "section": "hardware",
+    "nextCaption": "Blue-channel image acquisition software interface.",
+    "nextSection": "data_acquisition"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/20260702_12h53m03s_grim.png",
+    "caption": "Integrated microscope system with Raspberry Pi 5 controller and complete optical assembly.",
+    "section": "hardware",
+    "nextCaption": "Red-channel image acquisition software interface.",
+    "nextSection": "data_acquisition"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/led-excitation-wavelengths.png",
+    "caption": "LED excitation wavelengths and corresponding metabolite emissions: 405 nm → NAD(P)H (440–460 nm), 465 nm → FAD/flavins (510–540 nm), 520 nm → Lipofuscin (600–700 nm). Cellular autofluorescence imaging captures metabolic signatures.",
+    "section": "methodology",
+    "nextCaption": "Examples of low contrast and noisy autofluorescence images, with sources of noise.",
+    "nextSection": "research_problem"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/oral-cancer-statistics.png",
+    "caption": "Oral cancer statistics and motivation: 60–80% diagnosed at Stage III/IV in India; need for affordable rapid screening at primary care level using label-free non-invasive autofluorescence imaging.",
+    "section": "research_problem",
+    "nextCaption": "Literature comparison of deep-learning methods for oral cancer classification.",
+    "nextSection": "research_problem"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/sample-collection-workflow.png",
+    "caption": "Schematic representation of sample collection and imaging workflow: (A) Collecting oral cells using cotton swab. (B) Mixing cells in inoculum with PBS. (C) Centrifuge. (D) Smear preparation. (E) Imaging under multispectral microscope. (F) Multi-excitation autofluorescent images.",
+    "section": "experimental_setup",
+    "nextCaption": "Literature comparison of generative methods used for autofluorescence imaging.",
+    "nextSection": "methodology"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/afi-cell-images.png",
+    "caption": "Autofluorescent images of oral cells: (A) Excited at 405 nm (blue channel), (B) 488 nm (green), (C) 550 nm (red), (D) Pseudo-RGB composite with 256×256 ROI cropping. Complete single-cell oral AFI dataset with 3 channels for all study groups.",
+    "section": "data_acquisition",
+    "nextCaption": "Sample collection, preparation, and multispectral image acquisition workflow.",
+    "nextSection": "experimental_setup"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/fascanet-architecture.png",
+    "caption": "FASCANet denoising model architecture: db2 wavelet decomposition into LL (coarse structure/edges) and HL/LH/HH (texture/fine details/noise) subbands. Residual network with alternating 6 residual blocks and Spatial Cross-Attention. Bidirectional frequency-band information exchange preserves relevant texture while removing noise.",
+    "section": "computational_method",
+    "nextCaption": "Tables comparing denoising image quality and classification performance.",
+    "nextSection": "results"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/denoising-results.png",
+    "caption": "FASCANet denoising results: Raw autofluorescence input, corrupted versions under three noise models, FASCANet-denoised outputs, and residual noise maps. FASCANet preserves high-frequency details of AFI while removing noise. Trained using Noisier2Noise protocol with L1 loss.",
+    "section": "results",
+    "nextCaption": "Image quality comparison for synthetic augmentation methods.",
+    "nextSection": "results"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/denoising-metrics-table.png",
+    "caption": "Table 1: Image quality metrics for denoising models under mixed Poisson-Gaussian noise (λ=30, σ=0.02). FASCANet: PSNR 37.15 dB, SSIM 0.84, VIF 0.39. Table 2: 3-class classification performance — raw vs FASCANet-denoised AFI: cancer precision improved 0.86→0.96, specificity 0.94→0.98.",
+    "section": "results",
+    "nextCaption": "Classifier comparison table reporting macro F1, AUC, and cancer sensitivity.",
+    "nextSection": "results"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/redox-ratio-preservation.png",
+    "caption": "Optical redox ratio FAD/(NADH+FAD) before and after FASCANet denoising. Normal-suspicious-cancer ordering is preserved. FASCANet effectively suppresses noise while preserving subtle autofluorescence textures and biologically meaningful fluorescence characteristics.",
+    "section": "results",
+    "nextCaption": "Microscope prototype and component assembly montage.",
+    "nextSection": "hardware"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/edge-segmentation-brightfield.png",
+    "caption": "On-edge cell segmentation pipeline output — brightfield reference image with watershed-based cell boundary detection.",
+    "section": "computational_method",
+    "nextCaption": "Multichannel autofluorescence images, regions of interest, and composite.",
+    "nextSection": "data_acquisition"
+  },
+  {
+    "projectVariable": "microscopeId",
+    "file": "/research/microscope/edge-fluorescence-analysis.png",
+    "caption": "On-edge autofluorescence image processing pipeline output — segmented cells with fluorescence intensity analysis.",
+    "section": "computational_method",
+    "nextCaption": "Raw and synthetic fluorescence images for normal and cancer groups.",
+    "nextSection": "results"
+  },
+  {
+    "projectVariable": "ecgId",
+    "file": "/research/ecg-cannabis-detection/corer.png",
+    "caption": "ECG signal processing pipeline — bandpass and notch filtering with db4 wavelet baseline-wander removal for morphological feature extraction.",
+    "section": "methodology",
+    "nextCaption": "Scatterplot matrix of extracted ECG features.",
+    "nextSection": "results"
+  },
+  {
+    "projectVariable": "ecgId",
+    "file": "/research/ecg-cannabis-detection/download.png",
+    "caption": "Pan-Tompkins QRS detection and P/QRS/T wave delineation on sample ECG recordings.",
+    "section": "methodology",
+    "nextCaption": "Mean accuracy comparison across ECG classifiers.",
+    "nextSection": "results"
+  },
+  {
+    "projectVariable": "ecgId",
+    "file": "/research/ecg-cannabis-detection/feature-extraction.png",
+    "caption": "Morphological feature extraction — RR interval, QRS duration/amplitude, P-wave and T-wave parameters from delineated ECG signals.",
+    "section": "experimental_setup",
+    "nextCaption": "Original and baseline-corrected ECG signals.",
+    "nextSection": "methodology"
+  },
+  {
+    "projectVariable": "ecgId",
+    "file": "/research/ecg-cannabis-detection/classifier-results.png",
+    "caption": "ML classifier performance comparison — Gradient Boosting achieves 92% accuracy with AUC 0.98 for cannabis consumption detection.",
+    "section": "results",
+    "nextCaption": "ECG recording with annotated P, QRS, and T wave delineation.",
+    "nextSection": "methodology"
+  }
+]
