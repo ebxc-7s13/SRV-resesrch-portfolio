@@ -1,0 +1,51 @@
+# Publish application source and runtime assets, excluding local material.
+.git/
+node_modules/
+.next/
+out/
+build/
+dist/
+.env*
+.neon
+.aws/
+*.pem
+*.key
+*.p12
+*.pfx
+.agents/
+.claude/
+.codex/
+.opencode/
+.freebuff/
+.impeccable/
+graphify-out/
+skills-lock.json
+.qa/
+private/
+source-assets/
+.image-backups/
+.repair-baseline/
+byld_research_enhanced/
+verify/
+audit/
+data/
+*.db*
+*.sqlite*
+*.backup
+*.bak
+backups/
+*.log
+audit-dependencies.json
+coverage/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.vscode/
+.idea/
+*.tsbuildinfo
+Btech ECG project/
+Mtech coal volume detection/
+Mtech microgravity/
+Mtech microscope/
+wallpapers/
