@@ -260,14 +260,16 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-black">
-      <ResearchHero
-        projectCount={counts.projects}
-        thesisCount={counts.theses}
-      />
+      <div className="home-hero-layout">
+        <ResearchHero
+          projectCount={counts.projects}
+          thesisCount={counts.theses}
+        />
 
-      <section className="home-anatomy shell" aria-label="Interactive anatomical scan">
-        <XrayHero />
-      </section>
+        <section className="home-anatomy shell" aria-label="Interactive anatomical scan">
+          <XrayHero />
+        </section>
+      </div>
 
       {/* ═══ IMMERSIVE 3D RESEARCH LAB (HOME EXHIBIT) ═══ */}
       <Suspense fallback={null}>

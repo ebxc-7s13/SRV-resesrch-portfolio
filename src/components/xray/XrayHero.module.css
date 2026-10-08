@@ -103,6 +103,36 @@
 .attribution:hover { color: rgb(var(--accent)); }
 .attribution:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: 2px; }
 
+/* Desktop: restore the original illustration alongside the hero copy.
+   The shared viewer stays mounted when crossing the layout breakpoint. */
+@media (min-width: 901px) {
+  .host {
+    grid-template-rows: minmax(0, 1fr) auto auto;
+    gap: 10px;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    pointer-events: none;
+    contain: layout paint;
+  }
+  .image { width: 100%; height: 100%; }
+  .canvas[data-ready="true"] { pointer-events: auto; }
+  .instrument { pointer-events: auto; }
+  .caption { width: calc(100% - 32px); }
+  .captionLabel {
+    gap: 4px 12px;
+    padding: 8px 16px;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 14px;
+    background: linear-gradient(160deg, rgb(10 24 19 / 0.84), rgb(8 18 14 / 0.9));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07);
+  }
+  .attribution { pointer-events: auto; }
+}
+
 @media (max-width: 600px) {
   .host { padding: 18px 12px 12px; gap: 16px; border-radius: 18px; }
   .image { height: clamp(380px, 110vw, 500px); }

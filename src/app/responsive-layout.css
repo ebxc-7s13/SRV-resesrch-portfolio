@@ -1,5 +1,10 @@
 /* Responsive presentation only. Content, archive features and lab behavior
    continue to use their existing components. */
+.portfolio-shell[data-route="home"] .hero-copy { display: contents; }
+
+/* The compact redesign belongs to smaller displays. Desktop retains its
+   original text column and presents the same viewer alongside that column. */
+@media (max-width: 900px) {
 .portfolio-shell[data-route="home"] .research-hero {
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: 40px 64px;
@@ -16,6 +21,41 @@
 .portfolio-shell[data-route="home"] .hero-description { margin: 24px 0; font-size: 1rem; line-height: 1.85; }
 .portfolio-shell[data-route="home"] .hero-ledger { grid-column: 1 / -1; margin: 0; }
 .portfolio-shell[data-route="home"] .home-anatomy { padding-block: 40px 0; }
+}
+
+@media (min-width: 901px) {
+  .portfolio-shell[data-route="home"] .home-hero-layout {
+    position: relative;
+    width: min(1200px, calc(100% - 64px));
+    margin-inline: auto;
+  }
+  .portfolio-shell[data-route="home"] .home-hero-layout > .research-hero {
+    width: 100%;
+    margin-inline: 0;
+  }
+  .portfolio-shell[data-route="home"] .hero-copy {
+    display: block;
+    grid-column: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 2;
+  }
+  .portfolio-shell[data-route="home"] .home-anatomy {
+    position: absolute;
+    z-index: 1;
+    top: var(--space-8);
+    right: 0;
+    width: calc((100% - 36px) / 2.05);
+    height: min(720px, calc(100% - 180px));
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1000px) {
+  .portfolio-shell[data-route="home"] .home-anatomy { width: calc((100% - 24px) / 2.1); }
+}
+
 .portfolio-shell[data-route="home"] .home-lab-exhibit { margin-top: 48px; padding-top: 40px; }
 .portfolio-shell[data-route="home"] .home-lab-passage { height: 140px; margin-bottom: 36px; }
 

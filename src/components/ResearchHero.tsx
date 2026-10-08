@@ -18,6 +18,7 @@ export default function ResearchHero({
 }) {
   return (
     <section className="research-hero shell">
+      <div className="hero-copy">
       <Entrance className="hero-identity">
         <div className="eyebrow">
           <span className="signal-dot" />
@@ -107,6 +108,7 @@ export default function ResearchHero({
           </Link>
         </div>
       </Entrance>
+      </div>
       <Entrance className="hero-ledger" delay={0.15}>
         <div data-reveal>
           <strong>{String(projectCount).padStart(2, "0")}</strong>
