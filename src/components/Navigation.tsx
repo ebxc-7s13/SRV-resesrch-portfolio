@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import CellsControl from "./CellsControl";
 import NavIcon from "./NavIcons";
+import { useBackgroundMode } from "@/lib/background-mode";
 const navItems = [
   { href: "/", label: "HOME", icon: "home" },
   { href: "/research", label: "RESEARCH", icon: "science" },
@@ -17,8 +18,9 @@ const navItems = [
   { href: "/contact", label: "CONTACT", icon: "mail" },
   { href: "/search", label: "SEARCH", icon: "search" },
 ];
-export default function Navigation() {
+export default function Navigation({ playMode = false }: { playMode?: boolean }) {
   const pathname = usePathname();
+  const backgroundMode = useBackgroundMode();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [pending, setPending] = useState("");
@@ -140,7 +142,12 @@ export default function Navigation() {
     >
       <div className="navigation-bar shell">
         <div className="desktop-navigation">{links()}</div>
-        <CellsControl />
+        <CellsControl liquidOnly={playMode} />
+        {(backgroundMode === "liquid" || playMode) && (
+          <Link href="/play" className="liquid-play-link" aria-label="Enter Liquid play mode" aria-current={playMode ? "page" : undefined} data-pointer>
+            PLAY
+          </Link>
+        )}
         <button
           ref={menuButton}
           data-pointer

@@ -11,7 +11,7 @@ import ResearchEnvironment from "./ResearchEnvironment";
 import BackgroundSystem from "./background/BackgroundSystem";
 import MotionEffects from "./MotionEffects";
 import { Reveal } from "./Reveal";
-import { useBackgroundMode } from "@/lib/background-mode";
+import { setBackgroundMode, useBackgroundMode } from "@/lib/background-mode";
 
 // The optional WebGL layers (vanta/three, threejs-components) only download
 // when their mode is actually selected — the non-WebGL modes never fetch
@@ -36,6 +36,10 @@ export default function PortfolioFrame({
   // This is what lets the optional WebGL layers only enter the tree (and
   // trigger their dynamic chunks) when the user actually picks them.
   const backgroundMode = useBackgroundMode();
+  const isPlayRoute = path === "/play";
+  useEffect(() => {
+    if (isPlayRoute) setBackgroundMode("liquid");
+  }, [isPlayRoute]);
   // The lab owns its lighting, header and motion controls. Other routes retain
   // the original frame and do not mount a WebGL renderer.
   // The lab flag also lets lab.css lift the cursor-field canvas above the
@@ -81,24 +85,24 @@ export default function PortfolioFrame({
       {/* Site-wide cursor treatment: the magnetic field replaces the old
           white mouse glow on every route and every background mode, and the
           trail adds the short neon fade-out behind the native cursor head. */}
-      <CursorField />
-      <CursorTrail />
-      <MotionEffects />
-      {!isAdmin && <ResearchEnvironment />}
-      {!isAdmin && <BackgroundSystem />}
-      {!isAdmin && backgroundMode === "cells" && <VantaCellsLayer />}
-      {!isAdmin && backgroundMode === "liquid" && <LiquidMouseLayer />}
-      <Marquee direction="left" sticky />
-      <Navigation />
-      <div className="pt-16 relative" id="main-content" tabIndex={-1}>
+      {!isPlayRoute && <CursorField />}
+      {!isPlayRoute && <CursorTrail />}
+      {!isPlayRoute && <MotionEffects />}
+      {!isAdmin && !isPlayRoute && <ResearchEnvironment />}
+      {!isAdmin && !isPlayRoute && <BackgroundSystem />}
+      {!isAdmin && !isPlayRoute && backgroundMode === "cells" && <VantaCellsLayer />}
+      {!isAdmin && (isPlayRoute || backgroundMode === "liquid") && <LiquidMouseLayer />}
+      {!isPlayRoute && <Marquee direction="left" sticky />}
+      <Navigation playMode={isPlayRoute} />
+      {isPlayRoute ? children : <div className="pt-16 relative" id="main-content" tabIndex={-1}>
         <div key={path} className="route-view">
           {children}
         </div>
         <Reveal>
           <Footer />
         </Reveal>
-      </div>
-      <Marquee direction="right" />
+      </div>}
+      {!isPlayRoute && <Marquee direction="right" />}
     </div>
   );
 }

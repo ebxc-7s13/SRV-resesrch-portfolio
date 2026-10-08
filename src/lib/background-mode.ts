@@ -1,4 +1,4 @@
-// Background mode state — the ONLY place the ambient/cells preference lives.
+// Background mode state — the ONLY place the environment preference lives.
 // Foreground code reads via useBackgroundMode(); writers call
 // setBackgroundMode(). SSR snapshot is always "cells" so server and first
 // client render match; the stored preference hydrates post-mount.
@@ -22,7 +22,10 @@ function readStored(): BackgroundMode {
   } catch {
     /* storage unavailable — fall back to default */
   }
-  return "cells";
+  return typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 768px), (pointer: coarse)").matches
+    ? "liquid"
+    : "cells";
 }
 
 function emit() {

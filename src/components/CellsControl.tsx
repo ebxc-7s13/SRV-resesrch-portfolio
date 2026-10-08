@@ -227,7 +227,7 @@ function LiquidSliders() {
 // button that cycles Ambient → Cells → Liquid, plus a small downward arrow
 // that opens this environment's slider popup (water parameters for liquid:
 // ripple depth / metalness / roughness / brightness / rain).
-export default function CellsControl() {
+export default function CellsControl({ liquidOnly = false }: { liquidOnly?: boolean }) {
   const mode = useBackgroundMode();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -303,9 +303,9 @@ export default function CellsControl() {
           type="button"
           className="env-main"
           data-pointer
-          aria-label={`Environment: ${modeLabel} — switch to ${nextLabel}`}
-          title={`Switch to ${nextLabel} background`}
-          onClick={() => setBackgroundMode(next)}
+          aria-label={liquidOnly ? "Liquid background — open settings" : `Environment: ${modeLabel} — switch to ${nextLabel}`}
+          title={liquidOnly ? "Liquid background settings" : `Switch to ${nextLabel} background`}
+          onClick={() => liquidOnly ? setOpen(!open) : setBackgroundMode(next)}
         >
           <span className="env-orb" aria-hidden="true">
             <svg
