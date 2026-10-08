@@ -2,6 +2,8 @@
 
 This Next.js application runs on Vercel; its database runs on Neon through the existing `pg` driver. The production database must be separate from the disposable local PGlite database.
 
+Current live origin: https://srv-resesrch-portfolio.vercel.app. The public website was deployed from a clean GitHub clone to the Vercel project `ebxc/srv-resesrch-portfolio` and uses the existing Neon project. Future source uploads use `git push`; publish a new production build with `vercel deploy --prod --scope ebxc`. GitHub-triggered hosting deployment is not yet connected because the existing Vercel GitHub integration could not access the new repository. Configure that integration's access to this repository if automatic hosting deployments are desired. GitHub Actions checks already run on pushes.
+
 ## Hosting configuration
 
 Import the public GitHub repository into Vercel, select Next.js and Node.js 22, and use `npm ci`, `npm run build`, and the default Next.js output directory. GitHub Pages cannot run this application’s database-backed server routes.

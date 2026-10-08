@@ -26,7 +26,15 @@ Manual screen-reader testing and independently sourced multi-client proxy tests 
 
 ## Publication verification
 
-The final live URL, GitHub commit and fresh browser smoke-test results are added after deployment. Local evidence and screenshots are retained under ignored `.qa/github-readiness/`.
+- Live website: https://srv-resesrch-portfolio.vercel.app — anonymously accessible over HTTPS, with no Vercel login needed on the production domain.
+- Public source: https://github.com/ebxc-7s13/SRV-resesrch-portfolio, default branch `main`, no root software license detected by GitHub.
+- Deployed source commit: `bd270f7fd110e0394610b4d7a2edbee621e57ad5`; deployment `dpl_68Zsc6EPb55dABf9QAhTYxWhJE8G`, Vercel status READY. Vercel's Linux build, lint/type validation and Next.js compilation passed on Node 22.
+- GitHub Actions lint, type checks, 19 regression tests and production build passed for the initial source and hosting-exclusion commits.
+- Anonymous live browser checks: 28 page/viewport checks passed with substantive content and no horizontal overflow, including all public route families and all research/note detail pages. Protected admin/cron calls returned 401; the development viewer returned 404. Robots, sitemap and anatomy model files returned 200. An invalid contact body returned 400, confirming production proxy identification, rate-limit storage and validation are available without creating a message. No uncaught JavaScript exceptions were observed. The admin page's expected `/api/auth/me` 401 is classified separately from unexpected console errors.
+- A fresh clone of the public GitHub source successfully ran `npm ci`, `npm run setup:local` and `npm run dev`, using its own local database and generated credentials.
+- Vercel GitHub auto-deployment integration could not access the new repository. The successful current publication used the authenticated CLI. Future hosting updates need another CLI deployment until the integration is granted access. This does not affect the public website or public GitHub source.
+
+Local evidence and screenshots are retained under ignored `.qa/github-readiness/`. Later documentation-only commits do not change the deployed application code.
 
 Local browser results: 28 page/viewport checks passed, including all 6 research and 3 note detail pages. All tested pages returned 200, had substantive content and no horizontal overflow. The homepage was inspected at 1440px and 390px. Protected API and cron requests returned 401; the production development viewer returned 404; robots, sitemap and model files returned 200. No uncaught JavaScript errors were observed. Chromium's one resource error on the anonymous administration page is the expected `/api/auth/me` 401, not an application exception.
 

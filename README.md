@@ -2,6 +2,10 @@
 
 Raja Viveka Vardhan Siluveru's research portfolio. Built with Next.js 15, React 19, TypeScript, Tailwind CSS and PostgreSQL, with interactive anatomy and laboratory scenes.
 
+**Live website:** [srv-resesrch-portfolio.vercel.app](https://srv-resesrch-portfolio.vercel.app)
+
+**Public source:** [ebxc-7s13/SRV-resesrch-portfolio](https://github.com/ebxc-7s13/SRV-resesrch-portfolio)
+
 Production uses **Vercel for the website** and **Neon for PostgreSQL**. Neon does not host the frontend. Database credentials and administrator secrets are never included in the public repository.
 
 ## Run a fork locally
