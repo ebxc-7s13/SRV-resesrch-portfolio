@@ -2,7 +2,13 @@
 
 This Next.js application runs on Vercel; its database runs on Neon through the existing `pg` driver. The production database must be separate from the disposable local PGlite database.
 
-Current live origin: https://srv-resesrch-portfolio.vercel.app. The public website was deployed from a clean GitHub clone to the Vercel project `ebxc/srv-resesrch-portfolio` and uses the existing Neon project. Future source uploads use `git push`; publish a new production build with `vercel deploy --prod --scope ebxc`. GitHub-triggered hosting deployment is not yet connected because the existing Vercel GitHub integration could not access the new repository. Configure that integration's access to this repository if automatic hosting deployments are desired. GitHub Actions checks already run on pushes.
+Current live origin: https://srv-resesrch-portfolio.vercel.app. The Vercel project `ebxc/srv-resesrch-portfolio` is connected to `ebxc-7s13/SRV-resesrch-portfolio`, with `main` as its production branch, and uses the existing Neon project.
+
+## Automatic website updates
+
+Commit changes to `main` on GitHub, or push local commits with `git push origin main`. Vercel automatically builds the new commit and updates the same production URL after a successful deployment. Changes on other branches produce preview deployments; merge them into `main` to publish them. Local edits must be committed and pushed before they can appear online.
+
+The production URL stays the same and can be shared with visitors. Deployments take a few minutes; if a build fails, inspect the Vercel deployment logs and fix the failed commit. GitHub Actions separately runs lint, type checks, regression tests and a production build on pushes. Database schema changes require the explicit migration procedure below; normal deployments do not reseed Neon.
 
 ## Hosting configuration
 

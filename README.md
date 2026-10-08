@@ -37,6 +37,8 @@ The regression suite uses a disposable database on port 55434 and does not acces
 
 ## Publish
 
+The Vercel project is connected to this GitHub repository. Commits pushed or merged into `main` automatically deploy to [srv-resesrch-portfolio.vercel.app](https://srv-resesrch-portfolio.vercel.app) after a successful build. The public link stays the same.
+
 See [DEPLOYMENT.md](DEPLOYMENT.md) for Vercel + Neon configuration, initialization and verification. The public upload intentionally excludes local environments, private documents, source archives, databases, screenshots, installed agent skills and generated graphs. Runtime research images, videos, models, provenance and third-party notices remain included.
 
 ## Ownership and evaluation
