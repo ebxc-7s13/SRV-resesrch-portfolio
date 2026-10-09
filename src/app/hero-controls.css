@@ -1,4 +1,4 @@
-/* Transparent controls for the home hero; the role marquee has its own surface. */
+/* Hero layout. Button materials are defined in liquid-glass-buttons.css. */
 .portfolio-shell[data-route="home"] .research-hero .hero-description {
   margin: 24px 0 0;
   padding: 0;

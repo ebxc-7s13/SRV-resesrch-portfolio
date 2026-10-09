@@ -564,37 +564,37 @@ export default async function SearchPage({
           <div className="grid md:grid-cols-3 gap-4 pt-8 border-t border-slate-800">
             <Link
               href="/research"
-              className="bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              className="search-shortcut bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-indigo-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             >
               Browse All Research Projects
             </Link>
             <Link
               href="/publications"
-              className="bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-violet-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+              className="search-shortcut bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-violet-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
             >
               Browse All Publications
             </Link>
             <Link
               href="/blog"
-              className="bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-emerald-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+              className="search-shortcut bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-emerald-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             >
               Browse All Research Notes
             </Link>
             <Link
               href="/patents"
-              className="bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-purple-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+              className="search-shortcut bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-purple-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
             >
               Browse All Patents
             </Link>
             <Link
               href="/thesis"
-              className="bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-cyan-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
+              className="search-shortcut bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-cyan-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
             >
               Browse All Theses
             </Link>
             <Link
               href="/timeline"
-              className="bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-amber-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              className="search-shortcut bg-slate-900/50 rounded-xl border border-slate-800 text-center py-3.5 text-sm font-medium text-slate-300 transition-colors hover:border-amber-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             >
               Browse Full Timeline
             </Link>

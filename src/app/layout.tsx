@@ -25,6 +25,7 @@ import "./responsive-layout.css";
 import "./hero-controls.css";
 import "./liquid-play.css";
 import "./accent-colors.css";
+import "./liquid-glass-buttons.css";
 
 // Supported CMS text must refresh on every public page, including Contact.
 export const dynamic = "force-dynamic";

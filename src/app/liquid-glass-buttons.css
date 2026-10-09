@@ -1,0 +1,122 @@
+/* Shared optical surface for button-shaped controls. The original fill stays
+   beneath the reflections; content cards and ordinary text links are excluded. */
+:root {
+  --button-glass-blur: 14px;
+  --button-glass-image:
+    radial-gradient(120% 95% at 8% 0%, rgb(255 255 255 / 0.22), transparent 42%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.14), transparent 28%, rgb(0 0 0 / 0.035) 58%, rgb(255 255 255 / 0.035) 86%, rgb(255 255 255 / 0.12));
+  --button-glass-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.65),
+    inset 1px 0 1px rgb(255 255 255 / 0.18),
+    inset -1px 0 1px rgb(255 255 255 / 0.12),
+    inset 0 -1px 1px rgb(255 255 255 / 0.3),
+    inset 0 -5px 10px rgb(0 0 0 / 0.06),
+    0 4px 14px rgb(0 0 0 / 0.2);
+}
+
+html body :is(.portfolio-shell, .laboratory) :is(
+  .button,
+  .home-lab-continue,
+  .search-shortcut,
+  .galaxy-button > a,
+  .footer-chip,
+  .hero-archive-links a,
+  .timeline-filters button,
+  .discovery-controls button,
+  .lab-button,
+  .lab-header-back,
+  .lab-floating-button,
+  .lab-toolbar nav button,
+  .lab-inspection-controls button,
+  .lab-preferences > button,
+  .lab-panel-top button,
+  .lab-projector-controls button,
+  .lab-guided-controls button,
+  [data-xray-hero] button
+),
+html body .cells-popup :is(.cells-reset, .cells-close),
+html[data-accent] .portfolio-shell footer.site-footer .footer-chip {
+  border-radius: 999px;
+  background-image: var(--button-glass-image);
+  box-shadow: var(--button-glass-shadow);
+  -webkit-backdrop-filter: blur(var(--button-glass-blur)) saturate(1.65);
+  backdrop-filter: blur(var(--button-glass-blur)) saturate(1.65);
+}
+
+/* Transparent hero controls get neutral glass rather than a theme-colored fill.
+   These selectors also supersede the original hero's hover surface. */
+.portfolio-shell[data-route="home"] .research-hero .hero-actions a.button,
+.portfolio-shell[data-route="home"] .research-hero .hero-actions a.button:is(:hover, :focus-visible),
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a,
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a:is(:hover, :focus-visible) {
+  border-radius: 999px;
+  border-color: rgb(255 255 255 / 0.3);
+  background: var(--button-glass-image), rgb(255 255 255 / 0.035);
+  box-shadow: var(--button-glass-shadow);
+  -webkit-backdrop-filter: blur(var(--button-glass-blur)) saturate(1.65);
+  backdrop-filter: blur(var(--button-glass-blur)) saturate(1.65);
+  color: #fff;
+}
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a {
+  /* Inset labels within the curved rim while retaining the group's alignment. */
+  background-origin: border-box;
+  border: 1px solid rgb(255 255 255 / 0.24);
+  padding-inline: 12px;
+}
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a::after {
+  content: none;
+}
+
+/* Keep material on colored/selected states whose existing rules use the
+   background shorthand. Their fill and foreground continue to signal state. */
+html body .portfolio-shell .timeline-filters button[aria-pressed="true"],
+html body .laboratory .lab-toolbar nav button.selected,
+html body .laboratory .lab-button.primary,
+html body .laboratory .lab-button.primary:hover,
+html body .portfolio-shell .contact-form-panel .contact-submit {
+  background-image: var(--button-glass-image);
+  background-color: rgb(var(--accent-fill));
+  color: rgb(var(--on-accent));
+}
+html body .portfolio-shell .button.secondary {
+  background-image: var(--button-glass-image);
+}
+html body .portfolio-shell .galaxy-button,
+html body .portfolio-shell .galaxy-button > a {
+  border-radius: 999px;
+}
+
+/* White edge reflections on tinted footer glass remain light enough to read
+   in green, blue and red without replacing the footer's existing color. */
+html[data-accent] .portfolio-shell footer.site-footer .footer-chip:hover {
+  background-image: var(--button-glass-image);
+}
+
+html body :is(.portfolio-shell, .laboratory) :is(
+  .button, .galaxy-button > a, .hero-archive-links a, .timeline-filters button,
+  .lab-button, .lab-header-back, .lab-floating-button, .lab-toolbar nav button,
+  .lab-inspection-controls button, [data-xray-hero] button
+):not(:disabled):is(:hover, :focus-visible),
+html body .cells-popup :is(.cells-reset, .cells-close):not(:disabled):hover {
+  box-shadow: var(--button-glass-shadow), 0 0 16px rgb(var(--accent-glow) / 0.16);
+}
+.portfolio-shell[data-route="home"] .research-hero .hero-actions a.button:is(:hover, :focus-visible),
+.portfolio-shell[data-route="home"] .research-hero .hero-archive-links a:is(:hover, :focus-visible) {
+  border-color: rgb(255 255 255 / 0.65);
+  box-shadow: var(--button-glass-shadow), 0 0 16px rgb(255 255 255 / 0.1);
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  :root { --button-glass-blur: 10px; }
+}
+
+/* Browsers without backdrop filtering retain the same outlines and readable
+   surfaces. Colored controls keep their original background-color. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .portfolio-shell[data-route="home"] .research-hero .hero-actions a.button,
+  .portfolio-shell[data-route="home"] .research-hero .hero-actions a.button:is(:hover, :focus-visible),
+  .portfolio-shell[data-route="home"] .research-hero .hero-archive-links a,
+  .portfolio-shell[data-route="home"] .research-hero .hero-archive-links a:is(:hover, :focus-visible) {
+    background-color: rgb(15 20 27 / 0.86);
+  }
+}

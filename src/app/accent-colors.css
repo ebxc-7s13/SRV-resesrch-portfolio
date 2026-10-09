@@ -128,6 +128,9 @@ html:is([data-accent="blue"], [data-accent="red"]) .portfolio-shell .pane-frost 
 html:is([data-accent="blue"], [data-accent="red"]) .portfolio-shell .pane-frost .frost-meta { color: #4b5058; }
 html:is([data-accent="blue"], [data-accent="red"]) .portfolio-shell .pane-frost .frost-body { color: #303740; }
 html:is([data-accent="blue"], [data-accent="red"]) .portfolio-shell footer.site-footer { color: rgb(var(--on-accent)); }
+html:is([data-accent="blue"], [data-accent="red"]) .portfolio-shell footer.site-footer .footer-main p {
+  color: rgb(var(--on-accent));
+}
 html:is([data-accent="blue"], [data-accent="red"]) .portfolio-shell footer.site-footer .footer-chip {
   background: rgb(var(--on-accent) / 0.06);
   border-color: rgb(var(--on-accent) / 0.24);
