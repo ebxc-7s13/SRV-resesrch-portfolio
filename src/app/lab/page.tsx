@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { getLabContent } from "@/lib/lab-content";
 import LabExperience from "@/components/lab/LabExperience";
+import AccentColorControl from "@/components/AccentColorControl";
 import "./lab.css";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -30,9 +31,10 @@ export default async function LaboratoryPage() {
             Research archive <span>↗</span>
           </a>
         </nav>
-        <a className="lab-header-back" href="/">
-          Portfolio ↗
-        </a>
+        <div className="lab-header-actions">
+          <a className="lab-header-back" href="/">Portfolio ↗</a>
+          <AccentColorControl />
+        </div>
       </header>
       <LabExperience content={content} />
       <footer className="lab-footer">

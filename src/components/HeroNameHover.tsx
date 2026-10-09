@@ -1,17 +1,19 @@
 "use client";
 
 import {
+  useEffect,
   useRef,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
+import { getAccentColor, subscribeAccentColor } from "@/lib/accent-color";
+import { ACCENT_PALETTES } from "@/lib/accent-palette";
 
-const BASE = [183, 255, 74];
 const HOT = [255, 255, 255];
 
 /**
  * Cursor-speed heat tint for the neon hero name. On pointer movement each
- * character lerps from neon green toward white-hot by proximity to the
+ * character lerps from the selected accent toward white-hot by proximity to the
  * cursor; a faster cursor widens the radius and deepens saturation.
  * Text color only — no backgrounds, no layout, no Shuffle interference
  * (Shuffle owns textContent/opacity; this owns color). Respects
@@ -23,6 +25,7 @@ export default function HeroNameHover({
   children: ReactNode;
 }) {
   const wrapRef = useRef<HTMLSpanElement>(null);
+  const base = useRef<readonly number[]>(ACCENT_PALETTES.green.text);
   const state = useRef({
     x: 0,
     v: 0,
@@ -33,10 +36,21 @@ export default function HeroNameHover({
     left: true,
   });
 
+  useEffect(() => {
+    const sync = () => {
+      base.current = ACCENT_PALETTES[getAccentColor()].text;
+      wrapRef.current?.querySelectorAll<HTMLElement>(".shuffle-char").forEach(char => { char.style.color = ""; });
+    };
+    sync();
+    const unsubscribe = subscribeAccentColor(sync);
+    const animation = state.current;
+    return () => { unsubscribe(); cancelAnimationFrame(animation.raf); animation.running = false; };
+  }, []);
+
   const mix = (t: number) => {
-    const r = Math.round(BASE[0] + (HOT[0] - BASE[0]) * t);
-    const g = Math.round(BASE[1] + (HOT[1] - BASE[1]) * t);
-    const b = Math.round(BASE[2] + (HOT[2] - BASE[2]) * t);
+    const r = Math.round(base.current[0] + (HOT[0] - base.current[0]) * t);
+    const g = Math.round(base.current[1] + (HOT[1] - base.current[1]) * t);
+    const b = Math.round(base.current[2] + (HOT[2] - base.current[2]) * t);
     return `rgb(${r} ${g} ${b})`;
   };
 

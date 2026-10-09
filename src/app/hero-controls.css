@@ -71,9 +71,9 @@
 
 .portfolio-shell[data-route="home"] .research-hero .hero-actions a.button:hover,
 .portfolio-shell[data-route="home"] .research-hero .hero-actions a.button:focus-visible {
-  border-color: #b7ff4a;
+  border-color: rgb(var(--accent));
   background: none;
-  box-shadow: 0 0 18px rgb(183 255 74 / 0.12);
+  box-shadow: 0 0 18px rgb(var(--accent) / 0.12);
   color: #fff;
 }
 

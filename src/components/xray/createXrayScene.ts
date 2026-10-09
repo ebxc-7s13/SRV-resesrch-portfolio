@@ -1,4 +1,6 @@
-import { ACESFilmicToneMapping, AmbientLight, Box3, BufferGeometry, DirectionalLight, Group, Material, Mesh, MeshStandardMaterial, Object3D, OrthographicCamera, Scene, SRGBColorSpace, Texture, Vector2, Vector3, WebGLRenderer } from "three";
+import { ACESFilmicToneMapping, AmbientLight, Box3, BufferGeometry, Color, DirectionalLight, Group, Material, Mesh, MeshStandardMaterial, Object3D, OrthographicCamera, Scene, SRGBColorSpace, Texture, Vector2, Vector3, WebGLRenderer } from "three";
+import { getAccentColor, subscribeAccentColor } from "@/lib/accent-color";
+import { ACCENT_PALETTES } from "@/lib/accent-palette";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { createMeshoptWorker } from "./meshoptWorker";
 
@@ -28,6 +30,8 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
   const root = new Group(), abort = new AbortController();
   const geometries = new Set<BufferGeometry>(), materials = new Set<Material>(), textures = new Set<Texture>();
   const cursor = { value: new Vector2() }, cursorRadius = { value: 0 }, cursorReveal = { value: 0 };
+  const accentTint = { value: new Color() }, accentEnabled = { value: 0 };
+  let unsubscribeAccent: (() => void) | undefined;
   const layers = new Map<Layer, { object: Object3D; material: MeshStandardMaterial }>();
   const pending = new Map<Layer, Promise<void>>();
   const weights: Record<AnatomySystem, number> = { skeleton: 0, muscles: 0, nervous: 0 };
@@ -62,6 +66,7 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
   function dispose() {
     if (disposed) return;
     disposed = true; stop(); abort.abort(); decoder?.dispose(); observer?.disconnect();
+    unsubscribeAccent?.();
     canvas.removeEventListener("webglcontextlost", contextLost);
     canvas.removeEventListener("focus", keyboardInspect); canvas.removeEventListener("blur", leave);
     canvas.removeEventListener("pointermove", pointer); canvas.removeEventListener("pointerleave", leave);
@@ -107,10 +112,18 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
     wake();
   }
   function leave() { if (!disposed) { revealTarget = 0; wake(); } }
-  function applyWindow(material: MeshStandardMaterial, internal: boolean) {
+  function syncAccent() {
+    const color = getAccentColor(), channels = ACCENT_PALETTES[color].text;
+    accentTint.value.setRGB(channels[0] / 255, channels[1] / 255, channels[2] / 255, SRGBColorSpace);
+    accentEnabled.value = color === "green" ? 0 : 1;
+    if (ready) renderOnce();
+  }
+  function applyWindow(material: MeshStandardMaterial, internal: boolean, tintable: boolean) {
     material.onBeforeCompile = shader => {
       shader.uniforms.xrayCursor = cursor; shader.uniforms.xrayRadius = cursorRadius;
       shader.uniforms.xrayReveal = cursorReveal;
+      shader.uniforms.xrayAccentTint = accentTint;
+      shader.uniforms.xrayAccentEnabled = accentEnabled;
       shader.fragmentShader = shader.fragmentShader.replace("#include <common>", "#include <common>\nuniform vec2 xrayCursor;\nuniform float xrayRadius;\nuniform float xrayReveal;").replace("#include <alphamap_fragment>", [
         "#include <alphamap_fragment>",
         "float xrayDist = distance(gl_FragCoord.xy, xrayCursor);",
@@ -118,9 +131,15 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
         internal ? "diffuseColor.a *= xrayWindow;" : "diffuseColor.a *= (1.0 - xrayWindow);",
         "if (diffuseColor.a < 0.04) discard;",
       ].join("\n"));
+      // Theme only the presentation tint, preserving geometry, the reveal
+      // window, surface shading and the muscle layer's anatomical colors.
+      if (tintable) shader.fragmentShader = shader.fragmentShader
+        .replace("#include <common>", "#include <common>\nuniform vec3 xrayAccentTint;\nuniform float xrayAccentEnabled;")
+        .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722))) * xrayAccentTint, xrayAccentEnabled);")
+        .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance = mix(totalEmissiveRadiance, vec3(dot(totalEmissiveRadiance, vec3(0.2126, 0.7152, 0.0722))) * xrayAccentTint, xrayAccentEnabled);");
       if (internal) shader.fragmentShader = shader.fragmentShader.replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n#ifdef USE_COLOR\n totalEmissiveRadiance *= vColor.rgb;\n#endif");
     };
-    material.customProgramCacheKey = () => internal ? "anatomy-window-internal-v2" : "anatomy-window-surface-v2";
+    material.customProgramCacheKey = () => `anatomy-window-${internal ? "internal" : "surface"}-${tintable ? "accent" : "natural"}-v3`;
   }
   function instrument() {
     if (!renderer) return;
@@ -209,7 +228,7 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
       const palette = { base: ["#ffffff", "#173e2a", 0.22], skeleton: ["#dcf7bc", "#82ba68", 0.23], muscles: ["#9b8870", "#584a2c", 0.16], nervous: ["#a5dfca", "#57b593", 0.45] } as const;
       const [color, emissive, emissiveIntensity] = palette[key];
       const material = new MeshStandardMaterial({ color, emissive, emissiveIntensity, roughness: 0.68, metalness: 0, transparent: true, depthWrite: key === "base", opacity: key === "base" ? 1 : 0 });
-      applyWindow(material, key !== "base"); materials.add(material);
+      applyWindow(material, key !== "base", key !== "muscles"); materials.add(material);
       gltf.scene.traverse(node => {
         if (!(node instanceof Mesh)) return;
         geometries.add(node.geometry);
@@ -244,6 +263,7 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
     pending.set(key, promise); return promise;
   }
   try {
+    syncAccent(); unsubscribeAccent = subscribeAccentColor(syncAccent);
     canvas.dataset.xrayState = "loading"; canvas.dataset.reducedMotion = String(reduced);
     renderer = new WebGLRenderer({ canvas, alpha: true, antialias: !options.lowQuality, powerPreference: "low-power", failIfMajorPerformanceCaveat: true });
     renderer.setClearColor(0x070809, 0); renderer.outputColorSpace = SRGBColorSpace; renderer.toneMapping = ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;

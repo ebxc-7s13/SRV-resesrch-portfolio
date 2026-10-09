@@ -212,7 +212,7 @@ export default function FooterLogo() {
                 transition: "opacity 0.8s ease, transform 3.2s ease",
                 filter: "blur(28px)",
                 background:
-                  "radial-gradient(circle at 30% 40%, rgb(255 255 255 / 0.35), transparent 60%), radial-gradient(circle at 70% 60%, rgb(200 210 215 / 0.28), transparent 55%), radial-gradient(circle at 50% 50%, rgb(183 255 74 / 0.12), transparent 70%)",
+                  "radial-gradient(circle at 30% 40%, rgb(255 255 255 / 0.35), transparent 60%), radial-gradient(circle at 70% 60%, rgb(200 210 215 / 0.28), transparent 55%), radial-gradient(circle at 50% 50%, rgb(var(--accent) / 0.12), transparent 70%)",
               }}
             />
             <div

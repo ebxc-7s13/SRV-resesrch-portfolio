@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import { useBackgroundMode } from "@/lib/background-mode";
+import { useAccentColor } from "@/lib/accent-color";
+import { ACCENT_PALETTES } from "@/lib/accent-palette";
 import {
   DEFAULT_CELLS_TUNING,
   useCellsTuning,
@@ -77,6 +79,10 @@ function useDebouncedValue(value: number, delayMs: number) {
  */
 export default function VantaCellsLayer() {
   const mode = useBackgroundMode();
+  const accentColor = useAccentColor();
+  const palette = ACCENT_PALETTES[accentColor];
+  const color1 = (palette.text[0] << 16) | (palette.text[1] << 8) | palette.text[2];
+  const color2 = palette.secondary;
   const hostRef = useRef<HTMLDivElement>(null);
   const effectRef = useRef<VantaEffect | null>(null);
   const [failed, setFailed] = useState(false);
@@ -86,7 +92,7 @@ export default function VantaCellsLayer() {
   // Shader options update in place; brightness is CSS-only.
   const liveSpeed = useDebouncedValue(tuning.speed, 140);
   const liveSize = useDebouncedValue(tuning.size, 140);
-  const liveOptions = useRef({ speed: liveSpeed, size: liveSize });
+  const liveOptions = useRef({ speed: liveSpeed, size: liveSize, color1, color2 });
 
   const enabled = mode === "cells" && !failed;
 
@@ -94,9 +100,11 @@ export default function VantaCellsLayer() {
     liveOptions.current = {
       speed: reduced ? CELLS_OPTIONS_REDUCED.speed! : liveSpeed,
       size: liveSize,
+      color1,
+      color2,
     };
     effectRef.current?.setOptions(liveOptions.current);
-  }, [reduced, liveSpeed, liveSize]);
+  }, [reduced, liveSpeed, liveSize, color1, color2]);
 
   useEffect(() => {
     if (!enabled) return;

@@ -3,6 +3,7 @@ import { SiteContentProvider } from "@/components/SiteContent";
 import { getSiteContent } from "@/lib/site-content";
 import PortfolioFrame from "@/components/PortfolioFrame";
 import OffscreenPause from "@/components/OffscreenPause";
+import { ACCENT_BOOTSTRAP_SCRIPT } from "@/lib/accent-palette";
 import {
   Space_Grotesk,
   JetBrains_Mono,
@@ -23,6 +24,7 @@ import "@/styles/ui-polish.scss";
 import "./responsive-layout.css";
 import "./hero-controls.css";
 import "./liquid-play.css";
+import "./accent-colors.css";
 
 // Supported CMS text must refresh on every public page, including Contact.
 export const dynamic = "force-dynamic";
@@ -127,7 +129,7 @@ export default async function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{document.documentElement.dataset.theme='night';try{localStorage.setItem('theme','night');localStorage.removeItem('daynight');localStorage.removeItem('motion-preference');}catch(e){}document.documentElement.dataset.motion='active';}catch(e){}})();`,
+            __html: ACCENT_BOOTSTRAP_SCRIPT + `(function(){try{document.documentElement.dataset.theme='night';try{localStorage.setItem('theme','night');localStorage.removeItem('daynight');localStorage.removeItem('motion-preference');}catch(e){}document.documentElement.dataset.motion='active';}catch(e){}})();`,
           }}
         />
       </head>

@@ -174,9 +174,9 @@ button:focus-visible {
   font-family: var(--font-pixel), var(--font-display), sans-serif;
 }
 
-// 14. Footer: neon-green surface, white text with white glow.
+// 14. Footer: saturated accent surface with its paired foreground.
 .portfolio-shell footer {
-  background: rgb(var(--accent));
+  background: rgb(var(--accent-fill));
   border-color: rgb(var(--accent));
   box-shadow: 0 0 60px rgb(var(--accent) / 0.35);
 }

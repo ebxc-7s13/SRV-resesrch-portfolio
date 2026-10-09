@@ -115,7 +115,7 @@ export default function AdminSiteContentPage() {
               }}
               className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
                 selectedPage === page
-                  ? "bg-accent text-ink"
+                  ? "bg-accent text-on-accent"
                   : "bg-panel text-muted hover:text-ink hover:bg-panel"
               }`}
             >

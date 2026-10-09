@@ -1510,15 +1510,15 @@ html[data-lab-route="true"] canvas[data-cursor-field] {
   background: rgb(var(--accent));
 }
 .lab-button.primary {
-  background: rgb(var(--accent));
+  background: rgb(var(--accent-fill));
   color: rgb(var(--on-accent));
   border-color: rgb(var(--accent));
 }
 .lab-button.primary:hover {
-  background: rgb(var(--accent) / 0.85);
+  background: rgb(var(--accent-fill) / 0.85);
 }
 .lab-toolbar nav button.selected {
-  background: rgb(var(--accent));
+  background: rgb(var(--accent-fill));
   color: rgb(var(--on-accent));
 }
 .lab-toolbar nav button.selected > span {

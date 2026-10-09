@@ -1,13 +1,13 @@
 /* ==========================================================================
    GALAXY BUTTON — homepage CTA/navigation buttons only.
    Everything is scoped under .galaxy-button: no global selectors, no body
-   styles, no other buttons affected. Neon green (#B7FF4A) primary with a
+   styles, no other buttons affected. Neon green (rgb(var(--accent))) primary with a
    restrained cyan (#7DE7FF) secondary — no purple anywhere. Layers sit on
    top of each button's existing liquid-glass look without replacing it.
    ========================================================================== */
 .galaxy-button {
-  --galaxy-primary: #b7ff4a;
-  --galaxy-secondary: #7de7ff;
+  --galaxy-primary: rgb(var(--accent));
+  --galaxy-secondary: rgb(var(--accent-secondary));
   --galaxy-bg: #0c0e10;
   --galaxy-text: #f2f2ef;
   position: relative;
@@ -36,8 +36,8 @@
   z-index: 2;
   background: rgb(255 255 255 / 0.07);
   box-shadow:
-    0 0 18px rgb(183 255 74 / 0.22),
-    inset 0 0 12px rgb(183 255 74 / 0.07);
+    0 0 18px rgb(var(--accent) / 0.22),
+    inset 0 0 12px rgb(var(--accent) / 0.07);
   opacity: 0;
   transition: opacity 250ms ease;
 }

@@ -27,8 +27,6 @@ html body {
   --ink: 242 242 239;
   --muted: 184 188 191;
   --faint: 115 121 125;
-  --accent: 183 255 74;
-  --on-accent: 12 18 6;
   --line: 32 33 34;
   --danger: 255 157 148;
   --warm: 225 169 130;
@@ -75,7 +73,7 @@ html body {
     radial-gradient(1px at 44% 6%, rgb(255 255 255 / 0.35), transparent),
     radial-gradient(1.5px at 58% 56%, rgb(255 255 255 / 0.3), transparent),
     radial-gradient(1px at 76% 30%, rgb(125 231 255 / 0.5), transparent),
-    radial-gradient(1px at 90% 64%, rgb(183 255 74 / 0.45), transparent),
+    radial-gradient(1px at 90% 64%, rgb(var(--accent) / 0.45), transparent),
     radial-gradient(1px at 4% 40%, rgb(255 255 255 / 0.35), transparent),
     radial-gradient(1px at 18% 88%, rgb(255 255 255 / 0.4), transparent),
     radial-gradient(1px at 28% 30%, rgb(255 255 255 / 0.3), transparent),
@@ -85,7 +83,7 @@ html body {
     radial-gradient(1px at 84% 22%, rgb(255 255 255 / 0.3), transparent),
     radial-gradient(1px at 96% 50%, rgb(255 255 255 / 0.45), transparent),
     radial-gradient(140px at 82% 6%, rgb(125 231 255 / 0.05), transparent 70%),
-    radial-gradient(160px at 12% 94%, rgb(183 255 74 / 0.04), transparent 70%);
+    radial-gradient(160px at 12% 94%, rgb(var(--accent) / 0.04), transparent 70%);
   /* Graded blacks: each surface now falls through four stops — a slightly
      lifted shoulder, a long middle, then a settle into true page black at
      the far corner. Alpha stays in the original range, so the glass still
@@ -344,7 +342,7 @@ html[data-theme="night"] body {
 }
 .portfolio-shell .pane-frost h2,
 .portfolio-shell .pane-frost h3 {
-  color: #166534;
+  color: rgb(var(--accent-on-light));
 }
 /* Futuristic voice for highlight titles: Orbitron (the site's sci-fi
    display face) with open tracking. Wins over the Tailwind tracking-tight
@@ -368,7 +366,7 @@ html[data-theme="night"] body {
     box-shadow var(--duration-normal);
 }
 .portfolio-shell a.bg-white {
-  background: rgb(var(--accent));
+  background: rgb(var(--accent-fill));
   color: rgb(var(--on-accent));
   border-radius: var(--radius-sm);
 }
@@ -995,7 +993,7 @@ html[data-theme="night"] body {
 }
 /* Stacked hero name renders neon green instead of white. */
 .research-hero .hero-surname {
-  color: #b7ff4a;
+  color: rgb(var(--accent));
 }
 .hero-description {
   max-width: 46ch;
@@ -1459,10 +1457,10 @@ html[data-theme="night"] body {
   border: 1px solid rgb(255 255 255 / 0.22);
   border-radius: 12px;
   padding: 14px 16px;
-  color: #b7ff4a;
+  color: rgb(var(--accent));
   line-height: 1.6;
   text-shadow:
-    0 0 14px rgb(183 255 74 / 0.35),
+    0 0 14px rgb(var(--accent) / 0.35),
     0 1px 3px rgb(0 0 0 / 0.65);
 }
 .research-study .card-open {
@@ -1527,7 +1525,7 @@ html[data-theme="night"] body {
   color: rgb(var(--ink));
 }
 .project-index button[aria-pressed="true"] .index-mark {
-  background: rgb(var(--accent));
+  background: rgb(var(--accent-fill));
   color: rgb(var(--on-accent));
 }
 .empty-records {
@@ -2245,7 +2243,7 @@ html[data-motion-running="false"] .depth-card {
    state. Links and mobile rows are untouched. */
 @media (min-width: 1231px) {
   .site-navigation {
-    width: min(640px, calc(100% - 24px));
+    width: min(calc(640px + var(--nav-accent-space, 0px)), calc(100% - 24px));
   }
   /* Element-qualified to outrank the later base transition rule below, so
      the width animation survives it; box-shadow behavior is preserved. */
@@ -2262,13 +2260,13 @@ html[data-motion-running="false"] .depth-card {
     .desktop-navigation .nav-icon-item:nth-child(1):hover,
     .desktop-navigation .nav-icon-item:nth-child(1):focus-visible
   ) {
-    width: min(656px, calc(100% - 24px));
+    width: min(calc(656px + var(--nav-accent-space, 0px)), calc(100% - 24px));
   }
   nav.site-navigation:has(
     .desktop-navigation .nav-icon-item:nth-child(2):hover,
     .desktop-navigation .nav-icon-item:nth-child(2):focus-visible
   ) {
-    width: min(688px, calc(100% - 24px));
+    width: min(calc(688px + var(--nav-accent-space, 0px)), calc(100% - 24px));
   }
   nav.site-navigation:has(
     .desktop-navigation .nav-icon-item:nth-child(3):hover,
@@ -2278,7 +2276,7 @@ html[data-motion-running="false"] .depth-card {
     .desktop-navigation .nav-icon-item:nth-child(10):hover,
     .desktop-navigation .nav-icon-item:nth-child(10):focus-visible
   ) {
-    width: min(672px, calc(100% - 24px));
+    width: min(calc(672px + var(--nav-accent-space, 0px)), calc(100% - 24px));
   }
   nav.site-navigation:has(
     .desktop-navigation .nav-icon-item:nth-child(5):hover,
@@ -2286,13 +2284,13 @@ html[data-motion-running="false"] .depth-card {
     .desktop-navigation .nav-icon-item:nth-child(9):hover,
     .desktop-navigation .nav-icon-item:nth-child(9):focus-visible
   ) {
-    width: min(680px, calc(100% - 24px));
+    width: min(calc(680px + var(--nav-accent-space, 0px)), calc(100% - 24px));
   }
   nav.site-navigation:has(
     .desktop-navigation .nav-icon-item:nth-child(6):hover,
     .desktop-navigation .nav-icon-item:nth-child(6):focus-visible
   ) {
-    width: min(688px, calc(100% - 24px));
+    width: min(calc(688px + var(--nav-accent-space, 0px)), calc(100% - 24px));
   }
   nav.site-navigation:has(
     .desktop-navigation .nav-icon-item:nth-child(7):hover,
@@ -2300,7 +2298,7 @@ html[data-motion-running="false"] .depth-card {
     .desktop-navigation .nav-icon-item:nth-child(8):hover,
     .desktop-navigation .nav-icon-item:nth-child(8):focus-visible
   ) {
-    width: min(664px, calc(100% - 24px));
+    width: min(calc(664px + var(--nav-accent-space, 0px)), calc(100% - 24px));
   }
     .navigation-bar.shell {
     height: 48px;
@@ -2326,7 +2324,7 @@ html[data-motion-running="false"] .depth-card {
     background var(--motion-micro) var(--ease-out);
 }
 .desktop-navigation .nav-icon-item .nav-icon {
-  color: #b7ff4a;
+  color: rgb(var(--accent));
   opacity: 1;
   transition: opacity 0.2s ease;
 }
@@ -2335,7 +2333,7 @@ html[data-motion-running="false"] .depth-card {
   display: grid;
   place-items: center;
   text-align: center;
-  color: #b7ff4a;
+  color: rgb(var(--accent));
   /* Same specificity as the legacy tooltip hover rule below it in source
      order, so this wins and the label sits pixel-exact at pill center. */
   transform: none;
@@ -2522,9 +2520,9 @@ html[data-motion-running="false"] .depth-card {
   background: radial-gradient(
     circle at 32% 28%,
     rgb(255 255 255 / 0.95) 0%,
-    rgb(183 255 74 / 0.95) 38%,
-    rgb(46 122 58) 76%,
-    rgb(6 20 10) 100%
+    rgb(var(--accent) / 0.95) 38%,
+    rgb(var(--accent-orb-shadow)) 76%,
+    rgb(var(--accent-orb-dark)) 100%
   );
   box-shadow:
     inset 0 2px 3px rgb(255 255 255 / 0.55),
@@ -2705,7 +2703,7 @@ html[data-motion-running="false"] .depth-card {
   top: 100%;
   right: 24px;
   padding: 7px 12px;
-  background: rgb(var(--accent));
+  background: rgb(var(--accent-fill));
   color: rgb(var(--on-accent));
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   font-size: 0.7rem;
@@ -2914,11 +2912,11 @@ html[data-motion-running="true"] .route-view {
   border-radius: 12px;
   padding: 18px 20px;
   margin-bottom: 22px;
-  color: #b7ff4a;
+  color: rgb(var(--accent));
   font-size: 1rem;
   line-height: 1.6;
   text-shadow:
-    0 0 14px rgb(183 255 74 / 0.35),
+    0 0 14px rgb(var(--accent) / 0.35),
     0 1px 3px rgb(0 0 0 / 0.65);
 }
 .record-links {
@@ -3060,10 +3058,10 @@ html[data-motion-running="true"] .route-view {
   border: 1px solid rgb(255 255 255 / 0.22);
   border-radius: 12px;
   padding: 18px 20px;
-  color: #b7ff4a;
+  color: rgb(var(--accent));
   line-height: 1.6;
   text-shadow:
-    0 0 14px rgb(183 255 74 / 0.35),
+    0 0 14px rgb(var(--accent) / 0.35),
     0 1px 3px rgb(0 0 0 / 0.65);
 }
 .record-facts {
@@ -3260,7 +3258,7 @@ html[data-motion-running="true"] .route-view {
   background: rgb(var(--surface));
 }
 .timeline-filters button[aria-pressed="true"] {
-  background: rgb(var(--accent));
+  background: rgb(var(--accent-fill));
   color: rgb(var(--on-accent));
 }
 .timeline-filters > span {
@@ -3715,7 +3713,7 @@ html[data-motion-running="true"] .route-view {
 }
 .contact-form-panel .contact-submit {
   width: 100%;
-  background: rgb(var(--accent));
+  background: rgb(var(--accent-fill));
   color: rgb(var(--on-accent));
 }
 .contact-submit:disabled {
@@ -4194,32 +4192,32 @@ html[data-motion="paused"] .research-marquee > div {
    Contrast (worst case, bright cyan): ink 10.9:1, muted 6.4:1, lime 10.2:1.
    ========================================================================== */
 .portfolio-shell {
-  --glass-smoke: rgb(9 20 16 / 0.8);
-  --glass-smoke-elevated: rgb(8 18 14 / 0.86);
+  --glass-smoke: rgb(var(--smoke-base) / 0.8);
+  --glass-smoke-elevated: rgb(var(--smoke-dark) / 0.86);
   --text-tertiary: 155 163 160;
   --border: rgb(255 255 255 / 0.07);
-  --border-hover: rgb(183 255 74 / 0.45);
-  --accent-soft: rgb(183 255 74 / 0.12);
+  --border-hover: rgb(var(--accent) / 0.45);
+  --accent-soft: rgb(var(--accent) / 0.12);
   /* Shared smoked-glass material: one recipe, reused by every refined
      surface (Research highlights, About cards, Manuscripts, hero panels).
      --smoke-surface is exactly the Research highlights card surface;
      --smoke-surface-elevated is the same family one step deeper, for panels
      that sit on or inside a card (abstract, philosophy, ledger). */
   --smoke-surface:
-    radial-gradient(120% 80% at 0% 0%, rgb(183 255 74 / 0.06), transparent 60%),
+    radial-gradient(120% 80% at 0% 0%, rgb(var(--accent) / 0.06), transparent 60%),
     linear-gradient(
       162deg,
-      rgb(10 24 19 / 0.74) 0%,
+      rgb(var(--smoke-raised) / 0.74) 0%,
       var(--glass-smoke) 48%,
       var(--glass-smoke-elevated) 100%
     );
   --smoke-surface-elevated:
-    radial-gradient(110% 70% at 50% 0%, rgb(183 255 74 / 0.07), transparent 65%),
+    radial-gradient(110% 70% at 50% 0%, rgb(var(--accent) / 0.07), transparent 65%),
     linear-gradient(
       165deg,
-      rgb(11 27 21 / 0.84) 0%,
-      rgb(8 18 14 / 0.9) 55%,
-      rgb(6 14 11 / 0.94) 100%
+      rgb(var(--smoke-top) / 0.84) 0%,
+      rgb(var(--smoke-dark) / 0.9) 55%,
+      rgb(var(--smoke-floor) / 0.94) 100%
     );
   --smoke-edge: inset 0 1px 0 rgb(255 255 255 / 0.08);
   --smoke-shadow: 0 14px 32px rgb(0 0 0 / 0.32);
@@ -4286,7 +4284,7 @@ html[data-motion="paused"] .research-marquee > div {
   background: linear-gradient(
     90deg,
     transparent,
-    rgb(183 255 74 / 0.45),
+    rgb(var(--accent) / 0.45),
     transparent
   );
   opacity: 0.55;
@@ -4388,13 +4386,13 @@ html[data-motion="paused"] .research-marquee > div {
 }
 @keyframes ledger-glow {
   0% {
-    text-shadow: 0 0 0 rgb(183 255 74 / 0);
+    text-shadow: 0 0 0 rgb(var(--accent) / 0);
   }
   40% {
-    text-shadow: 0 0 22px rgb(183 255 74 / 0.6);
+    text-shadow: 0 0 22px rgb(var(--accent) / 0.6);
   }
   100% {
-    text-shadow: 0 0 14px rgb(183 255 74 / 0.18);
+    text-shadow: 0 0 14px rgb(var(--accent) / 0.18);
   }
 }
 @keyframes ledger-line {
@@ -4467,8 +4465,8 @@ html[data-motion="paused"] .research-marquee > div {
 .portfolio-shell .theme-map .depth-card,
 .portfolio-shell .capability-map .depth-card {
   background:
-    linear-gradient(90deg, transparent, rgb(183 255 74 / 0.34), transparent) top center / calc(100% - 56px) 1px no-repeat,
-    radial-gradient(90% 70% at 100% 100%, rgb(24 132 92 / 0.1), transparent 70%),
+    linear-gradient(90deg, transparent, rgb(var(--accent) / 0.34), transparent) top center / calc(100% - 56px) 1px no-repeat,
+    radial-gradient(90% 70% at 100% 100%, rgb(var(--accent-deep) / 0.1), transparent 70%),
     var(--smoke-surface);
   border-color: var(--border);
   box-shadow: var(--smoke-edge), var(--smoke-shadow);
@@ -4522,7 +4520,7 @@ html[data-motion="paused"] .research-marquee > div {
   background:
     radial-gradient(
       280px circle at var(--glass-x, 50%) var(--glass-y, 0%),
-      rgb(183 255 74 / 0.09),
+      rgb(var(--accent) / 0.09),
       transparent 70%
     ),
     radial-gradient(
@@ -4544,9 +4542,9 @@ html[data-motion="paused"] .research-marquee > div {
   background: linear-gradient(
     105deg,
     transparent 36%,
-    rgb(183 255 74 / 0.07) 46%,
+    rgb(var(--accent) / 0.07) 46%,
     rgb(255 255 255 / 0.09) 50%,
-    rgb(183 255 74 / 0.07) 54%,
+    rgb(var(--accent) / 0.07) 54%,
     transparent 64%
   );
   opacity: 0;
@@ -4561,9 +4559,9 @@ html[data-motion="paused"] .research-marquee > div {
   display: inline-flex;
   align-items: center;
   padding: 6px 11px;
-  border-color: rgb(183 255 74 / 0.24);
+  border-color: rgb(var(--accent) / 0.24);
   border-radius: 7px;
-  background-color: rgb(183 255 74 / 0.06);
+  background-color: rgb(var(--accent) / 0.06);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
   font-size: 0.9rem;
   transition:
@@ -4584,21 +4582,21 @@ html[data-motion="paused"] .research-marquee > div {
   color: rgb(var(--muted));
 }
 .portfolio-shell .theme-map .depth-card:focus-within .index-mark {
-  border-color: rgb(183 255 74 / 0.6);
-  background-color: rgb(183 255 74 / 0.14);
+  border-color: rgb(var(--accent) / 0.6);
+  background-color: rgb(var(--accent) / 0.14);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.1),
-    0 0 16px rgb(183 255 74 / 0.22);
-  text-shadow: 0 0 10px rgb(183 255 74 / 0.5);
+    0 0 16px rgb(var(--accent) / 0.22);
+  text-shadow: 0 0 10px rgb(var(--accent) / 0.5);
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .theme-map .depth-card:hover .index-mark {
-    border-color: rgb(183 255 74 / 0.6);
-    background-color: rgb(183 255 74 / 0.14);
+    border-color: rgb(var(--accent) / 0.6);
+    background-color: rgb(var(--accent) / 0.14);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.1),
-      0 0 16px rgb(183 255 74 / 0.22);
-    text-shadow: 0 0 10px rgb(183 255 74 / 0.5);
+      0 0 16px rgb(var(--accent) / 0.22);
+    text-shadow: 0 0 10px rgb(var(--accent) / 0.5);
   }
   /* Layered depth: the chip and the title counter-drift a pixel or two
      against the tilt, riding the --magnet-x/y variables the engine already
@@ -4669,8 +4667,8 @@ html[data-motion="paused"] .research-marquee > div {
   margin-top: calc(0.725em - 2.5px);
   border-radius: 1px;
   rotate: 45deg;
-  background-color: rgb(183 255 74 / 0.7);
-  box-shadow: 0 0 0 0 rgb(183 255 74 / 0);
+  background-color: rgb(var(--accent) / 0.7);
+  box-shadow: 0 0 0 0 rgb(var(--accent) / 0);
   transition:
     background-color var(--motion-standard) var(--ease-out),
     box-shadow var(--motion-standard) var(--ease-out),
@@ -4687,8 +4685,8 @@ html[data-motion="paused"] .research-marquee > div {
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    rgb(183 255 74 / 0.55),
-    rgb(183 255 74 / 0.12) 60%,
+    rgb(var(--accent) / 0.55),
+    rgb(var(--accent) / 0.12) 60%,
     transparent
   );
   transform: scaleX(0);
@@ -4704,7 +4702,7 @@ html[data-motion="paused"] .research-marquee > div {
   }
   .portfolio-shell .capability-map li:hover::before {
     background-color: rgb(var(--accent));
-    box-shadow: 0 0 10px 1px rgb(183 255 74 / 0.55);
+    box-shadow: 0 0 10px 1px rgb(var(--accent) / 0.55);
     scale: 1.25;
   }
   .portfolio-shell .capability-map li:hover::after {
@@ -4727,7 +4725,7 @@ html[data-motion="paused"] .research-marquee > div {
   border: 1px solid var(--border);
   border-radius: 24px;
   background:
-    linear-gradient(90deg, transparent, rgb(183 255 74 / 0.5), transparent) top center / min(56%, 480px) 1px no-repeat,
+    linear-gradient(90deg, transparent, rgb(var(--accent) / 0.5), transparent) top center / min(56%, 480px) 1px no-repeat,
     var(--smoke-surface-elevated);
   box-shadow: var(--smoke-edge), 0 24px 60px rgb(0 0 0 / 0.38);
   transition: border-color var(--motion-standard) var(--ease-out);
@@ -4740,9 +4738,9 @@ html[data-motion="paused"] .research-marquee > div {
   border-radius: inherit;
   pointer-events: none;
   background:
-    radial-gradient(44% 58% at 50% 14%, rgb(183 255 74 / 0.1), transparent 72%),
-    radial-gradient(62% 52% at 100% 100%, rgb(24 132 92 / 0.12), transparent 72%),
-    radial-gradient(48% 46% at 0% 100%, rgb(24 132 92 / 0.07), transparent 72%);
+    radial-gradient(44% 58% at 50% 14%, rgb(var(--accent) / 0.1), transparent 72%),
+    radial-gradient(62% 52% at 100% 100%, rgb(var(--accent-deep) / 0.12), transparent 72%),
+    radial-gradient(48% 46% at 0% 100%, rgb(var(--accent-deep) / 0.07), transparent 72%);
 }
 .portfolio-shell .philosophy-panel::after {
   content: "";
@@ -4754,7 +4752,7 @@ html[data-motion="paused"] .research-marquee > div {
   opacity: 0;
   background: radial-gradient(
     460px circle at var(--glass-x, 50%) var(--glass-y, 30%),
-    rgb(183 255 74 / 0.07),
+    rgb(var(--accent) / 0.07),
     transparent 70%
   );
   transition: opacity 0.5s var(--ease-out);
@@ -4766,17 +4764,17 @@ html[data-motion="paused"] .research-marquee > div {
   width: 64px;
   height: 64px;
   margin: 0 auto 28px;
-  border: 1px solid rgb(183 255 74 / 0.28);
+  border: 1px solid rgb(var(--accent) / 0.28);
   border-radius: 50%;
   background: radial-gradient(
     circle at 50% 35%,
-    rgb(183 255 74 / 0.14),
-    rgb(183 255 74 / 0.03) 70%
+    rgb(var(--accent) / 0.14),
+    rgb(var(--accent) / 0.03) 70%
   );
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.1),
-    0 0 0 6px rgb(183 255 74 / 0.04),
-    0 0 28px rgb(183 255 74 / 0.1);
+    0 0 0 6px rgb(var(--accent) / 0.04),
+    0 0 28px rgb(var(--accent) / 0.1);
   transition:
     border-color var(--motion-standard) var(--ease-out),
     box-shadow var(--motion-standard) var(--ease-out);
@@ -4785,7 +4783,7 @@ html[data-motion="paused"] .research-marquee > div {
   content: "";
   position: absolute;
   inset: -1px;
-  border: 1px solid rgb(183 255 74 / 0.5);
+  border: 1px solid rgb(var(--accent) / 0.5);
   border-radius: 50%;
   opacity: 0;
   pointer-events: none;
@@ -4794,7 +4792,7 @@ html[data-motion="paused"] .research-marquee > div {
   width: 30px;
   height: 30px;
   color: rgb(var(--accent));
-  filter: drop-shadow(0 0 7px rgb(183 255 74 / 0.4));
+  filter: drop-shadow(0 0 7px rgb(var(--accent) / 0.4));
   transition: filter var(--motion-standard) var(--ease-out);
 }
 .portfolio-shell .philosophy-quote {
@@ -4824,24 +4822,24 @@ html[data-motion="paused"] .research-marquee > div {
   content: "";
   width: 44px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgb(183 255 74 / 0.6), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--accent) / 0.6), transparent);
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .philosophy-panel:hover {
-    border-color: rgb(183 255 74 / 0.22);
+    border-color: rgb(var(--accent) / 0.22);
   }
   .portfolio-shell .philosophy-panel:hover::after {
     opacity: 1;
   }
   .portfolio-shell .philosophy-panel:hover .philosophy-mark {
-    border-color: rgb(183 255 74 / 0.55);
+    border-color: rgb(var(--accent) / 0.55);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.12),
-      0 0 0 6px rgb(183 255 74 / 0.06),
-      0 0 34px rgb(183 255 74 / 0.2);
+      0 0 0 6px rgb(var(--accent) / 0.06),
+      0 0 34px rgb(var(--accent) / 0.2);
   }
   .portfolio-shell .philosophy-panel:hover .philosophy-icon {
-    filter: drop-shadow(0 0 10px rgb(183 255 74 / 0.65));
+    filter: drop-shadow(0 0 10px rgb(var(--accent) / 0.65));
   }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -4873,15 +4871,15 @@ html[data-motion="paused"] .research-marquee > div {
      opaque near-black, plus the shared edge + soft shadow. */
   box-shadow:
     var(--smoke-edge),
-    4px 4px 0 rgb(8 18 14 / 0.55),
-    7px 7px 0 rgb(8 18 14 / 0.32),
+    4px 4px 0 rgb(var(--smoke-dark) / 0.55),
+    7px 7px 0 rgb(var(--smoke-dark) / 0.32),
     var(--smoke-shadow);
   overflow: clip;
   animation: none;
   interpolate-size: allow-keywords;
 }
 .portfolio-shell .publication-record.card-publication {
-  border-top: 2px solid rgb(183 255 74 / 0.42);
+  border-top: 2px solid rgb(var(--accent) / 0.42);
 }
 /* Hover ring (masked border at inset -1px) would be clipped; the border
    response below replaces it. */
@@ -4896,8 +4894,8 @@ html[data-motion="paused"] .research-marquee > div {
     border-color: var(--border-hover);
     box-shadow:
       var(--smoke-edge),
-      4px 4px 0 rgb(8 18 14 / 0.55),
-      7px 7px 0 rgb(8 18 14 / 0.32),
+      4px 4px 0 rgb(var(--smoke-dark) / 0.55),
+      7px 7px 0 rgb(var(--smoke-dark) / 0.32),
       var(--smoke-shadow-lift),
       0 0 0 1px var(--accent-soft);
     translate: 0 -2px;
@@ -4911,19 +4909,19 @@ html[data-motion="paused"] .research-marquee > div {
 .portfolio-shell .publication-record::after {
   background: radial-gradient(
     380px circle at var(--glass-x, 50%) var(--glass-y, 0%),
-    rgb(183 255 74 / 0.07),
+    rgb(var(--accent) / 0.07),
     transparent 70%
   );
 }
 .portfolio-shell .publication-record .document-spine {
   border-right-color: rgb(255 255 255 / 0.08);
-  background: linear-gradient(180deg, rgb(183 255 74 / 0.07), transparent 70%);
+  background: linear-gradient(180deg, rgb(var(--accent) / 0.07), transparent 70%);
   font-size: 0.78rem;
   transition: color var(--motion-standard) var(--ease-out), text-shadow var(--motion-standard) var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .publication-record:hover .document-spine {
-    text-shadow: 0 0 12px rgb(183 255 74 / 0.5);
+    text-shadow: 0 0 12px rgb(var(--accent) / 0.5);
   }
 }
 .portfolio-shell .publication-record .record-meta {
@@ -4938,8 +4936,8 @@ html[data-motion="paused"] .research-marquee > div {
 .portfolio-shell .publication-record .status-tag {
   gap: 8px;
   padding: 5px 11px 5px 10px;
-  border-color: rgb(183 255 74 / 0.28);
-  background-color: rgb(183 255 74 / 0.08);
+  border-color: rgb(var(--accent) / 0.28);
+  background-color: rgb(var(--accent) / 0.08);
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   transition:
@@ -4953,12 +4951,12 @@ html[data-motion="paused"] .research-marquee > div {
   height: 6px;
   border-radius: 50%;
   background: rgb(var(--accent));
-  box-shadow: 0 0 8px rgb(183 255 74 / 0.8);
+  box-shadow: 0 0 8px rgb(var(--accent) / 0.8);
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .publication-record:hover .status-tag {
-    border-color: rgb(183 255 74 / 0.55);
-    box-shadow: 0 0 14px rgb(183 255 74 / 0.22);
+    border-color: rgb(var(--accent) / 0.55);
+    box-shadow: 0 0 14px rgb(var(--accent) / 0.22);
   }
 }
 .portfolio-shell .publication-record .record-authors {
@@ -5002,7 +5000,7 @@ html[data-motion="paused"] .research-marquee > div {
   flex: none;
   width: 28px;
   height: 28px;
-  border: 1px solid rgb(183 255 74 / 0.3);
+  border: 1px solid rgb(var(--accent) / 0.3);
   border-radius: 50%;
   font-size: 1.1rem;
   line-height: 1;
@@ -5014,13 +5012,13 @@ html[data-motion="paused"] .research-marquee > div {
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .publication-record .reading-disclosure summary:hover span {
-    border-color: rgb(183 255 74 / 0.7);
+    border-color: rgb(var(--accent) / 0.7);
     background-color: var(--accent-soft);
-    box-shadow: 0 0 12px rgb(183 255 74 / 0.25);
+    box-shadow: 0 0 12px rgb(var(--accent) / 0.25);
   }
 }
 .portfolio-shell .publication-record .reading-disclosure[open] summary span {
-  border-color: rgb(183 255 74 / 0.7);
+  border-color: rgb(var(--accent) / 0.7);
   background-color: var(--accent-soft);
 }
 .portfolio-shell .publication-record .reading-disclosure > p {
@@ -5031,7 +5029,7 @@ html[data-motion="paused"] .research-marquee > div {
   /* Lit top edge (same cue as the other elevated panels) instead of a
      one-sided accent stripe. */
   background:
-    linear-gradient(90deg, transparent, rgb(183 255 74 / 0.45), transparent) top center / calc(100% - 48px) 1px no-repeat,
+    linear-gradient(90deg, transparent, rgb(var(--accent) / 0.45), transparent) top center / calc(100% - 48px) 1px no-repeat,
     var(--smoke-surface-elevated);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
@@ -5098,15 +5096,15 @@ html[data-motion="paused"] .research-marquee > div {
   margin: 24px 0 0 -20px;
   padding: 14px 48px 14px 20px;
   background:
-    linear-gradient(rgb(183 255 74 / 0.7), rgb(183 255 74 / 0.7)) left top / 12px 1px no-repeat,
-    linear-gradient(rgb(183 255 74 / 0.7), rgb(183 255 74 / 0.7)) left top / 1px 12px no-repeat,
-    linear-gradient(rgb(183 255 74 / 0.7), rgb(183 255 74 / 0.7)) left bottom / 12px 1px no-repeat,
-    linear-gradient(rgb(183 255 74 / 0.7), rgb(183 255 74 / 0.7)) left bottom / 1px 12px no-repeat,
+    linear-gradient(rgb(var(--accent) / 0.7), rgb(var(--accent) / 0.7)) left top / 12px 1px no-repeat,
+    linear-gradient(rgb(var(--accent) / 0.7), rgb(var(--accent) / 0.7)) left top / 1px 12px no-repeat,
+    linear-gradient(rgb(var(--accent) / 0.7), rgb(var(--accent) / 0.7)) left bottom / 12px 1px no-repeat,
+    linear-gradient(rgb(var(--accent) / 0.7), rgb(var(--accent) / 0.7)) left bottom / 1px 12px no-repeat,
     linear-gradient(
       90deg,
-      rgb(8 18 14 / 0.78) 0%,
-      rgb(8 18 14 / 0.72) 84%,
-      rgb(8 18 14 / 0) 100%
+      rgb(var(--smoke-dark) / 0.78) 0%,
+      rgb(var(--smoke-dark) / 0.72) 84%,
+      rgb(var(--smoke-dark) / 0) 100%
     );
   color: rgb(var(--ink) / 0.92);
   line-height: 1.75;
@@ -5124,7 +5122,7 @@ html[data-motion="paused"] .research-marquee > div {
   gap: 9px;
   padding: 7px 14px 7px 12px;
   border: 1px solid rgb(255 255 255 / 0.1);
-  background: linear-gradient(160deg, rgb(10 24 19 / 0.8), rgb(8 18 14 / 0.88));
+  background: linear-gradient(160deg, rgb(var(--smoke-raised) / 0.8), rgb(var(--smoke-dark) / 0.88));
   box-shadow: var(--smoke-edge), 0 6px 16px rgb(0 0 0 / 0.22);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
@@ -5143,20 +5141,20 @@ html[data-motion="paused"] .research-marquee > div {
   height: 5px;
   margin: 0;
   border-radius: 50%;
-  background: rgb(183 255 74 / 0.75);
-  box-shadow: 0 0 8px rgb(183 255 74 / 0.4);
+  background: rgb(var(--accent) / 0.75);
+  box-shadow: 0 0 8px rgb(var(--accent) / 0.4);
   transition: box-shadow var(--motion-standard) var(--ease-out), background-color var(--motion-standard) var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .research-hero .hero-domains span:hover {
-    border-color: rgb(183 255 74 / 0.45);
+    border-color: rgb(var(--accent) / 0.45);
     color: rgb(var(--ink));
     box-shadow: var(--smoke-edge), 0 8px 20px rgb(0 0 0 / 0.26), 0 0 0 1px var(--accent-soft);
     translate: 0 -1px;
   }
   .portfolio-shell .research-hero .hero-domains span:hover::before {
     background: rgb(var(--accent));
-    box-shadow: 0 0 12px rgb(183 255 74 / 0.8);
+    box-shadow: 0 0 12px rgb(var(--accent) / 0.8);
   }
 }
 
@@ -5190,10 +5188,10 @@ html[data-motion="paused"] .research-marquee > div {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.45),
     inset 0 -2px 0 rgb(0 0 0 / 0.14),
-    0 8px 22px rgb(183 255 74 / 0.14);
+    0 8px 22px rgb(var(--accent) / 0.14);
 }
 .portfolio-shell .research-hero .hero-actions a.button.secondary {
-  background: linear-gradient(160deg, rgb(12 30 23 / 0.88), rgb(8 18 14 / 0.94));
+  background: linear-gradient(160deg, rgb(var(--smoke-highlight) / 0.88), rgb(var(--smoke-dark) / 0.94));
   border-color: rgb(255 255 255 / 0.16);
   color: rgb(var(--ink));
   box-shadow:
@@ -5204,7 +5202,7 @@ html[data-motion="paused"] .research-marquee > div {
   background: linear-gradient(
     105deg,
     transparent 35%,
-    rgb(183 255 74 / 0.16) 50%,
+    rgb(var(--accent) / 0.16) 50%,
     transparent 65%
   );
 }
@@ -5216,26 +5214,26 @@ html[data-motion="paused"] .research-marquee > div {
 .portfolio-shell .research-hero .hero-actions a.button:not(.secondary):active {
   box-shadow:
     inset 0 2px 0 rgb(0 0 0 / 0.18),
-    0 3px 10px rgb(183 255 74 / 0.16);
+    0 3px 10px rgb(var(--accent) / 0.16);
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .research-hero .hero-actions a.button:not(.secondary):hover {
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.5),
       inset 0 -2px 0 rgb(0 0 0 / 0.12),
-      0 12px 30px rgb(183 255 74 / 0.3),
-      0 0 0 1px rgb(183 255 74 / 0.5);
+      0 12px 30px rgb(var(--accent) / 0.3),
+      0 0 0 1px rgb(var(--accent) / 0.5);
   }
   .portfolio-shell .research-hero .hero-actions a.button:hover .cta-label {
     translate: 2px -1px;
   }
   .portfolio-shell .research-hero .hero-actions a.button.secondary:hover {
-    border-color: rgb(183 255 74 / 0.55);
+    border-color: rgb(var(--accent) / 0.55);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.1),
-      inset 0 0 22px rgb(183 255 74 / 0.08),
+      inset 0 0 22px rgb(var(--accent) / 0.08),
       0 12px 30px rgb(0 0 0 / 0.32),
-      0 0 0 1px rgb(183 255 74 / 0.15);
+      0 0 0 1px rgb(var(--accent) / 0.15);
   }
   .portfolio-shell .research-hero .hero-actions a.button.secondary:hover .cta-arrow {
     translate: 0 3px;
@@ -5286,7 +5284,7 @@ html[data-motion="paused"] .research-marquee > div {
 }
 .portfolio-shell .research-hero .hero-archive-links a:focus-visible {
   color: rgb(var(--accent));
-  background-color: rgb(183 255 74 / 0.08);
+  background-color: rgb(var(--accent) / 0.08);
 }
 .portfolio-shell .research-hero .hero-archive-links a:focus-visible::after {
   transform: scaleX(1);
@@ -5294,7 +5292,7 @@ html[data-motion="paused"] .research-marquee > div {
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .research-hero .hero-archive-links a:hover {
     color: rgb(var(--accent));
-    background-color: rgb(183 255 74 / 0.08);
+    background-color: rgb(var(--accent) / 0.08);
     translate: 0 -1px;
   }
   .portfolio-shell .research-hero .hero-archive-links a:hover::after {
@@ -5327,8 +5325,8 @@ html[data-motion="paused"] .research-marquee > div {
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    rgb(183 255 74 / 0.6),
-    rgb(183 255 74 / 0.12) 70%,
+    rgb(var(--accent) / 0.6),
+    rgb(var(--accent) / 0.12) 70%,
     transparent
   );
   transform-origin: left center;
@@ -5345,7 +5343,7 @@ html[data-motion="paused"] .research-marquee > div {
   font-size: 2.3rem;
   line-height: 1;
   color: rgb(var(--ink));
-  text-shadow: 0 0 14px rgb(183 255 74 / 0.18);
+  text-shadow: 0 0 14px rgb(var(--accent) / 0.18);
   transition: text-shadow var(--motion-standard) var(--ease-out);
 }
 .portfolio-shell .research-hero .hero-ledger > div > span {
@@ -5387,7 +5385,7 @@ html[data-motion="paused"] .research-marquee > div {
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background: linear-gradient(270deg, rgb(183 255 74 / 0.09), transparent 80%);
+  background: linear-gradient(270deg, rgb(var(--accent) / 0.09), transparent 80%);
   opacity: 0;
   transition: opacity var(--motion-standard) var(--ease-out);
 }
@@ -5400,7 +5398,7 @@ html[data-motion="paused"] .research-marquee > div {
   width: 36px;
   height: 36px;
   margin-top: -18px;
-  border: 1px solid rgb(183 255 74 / 0.35);
+  border: 1px solid rgb(var(--accent) / 0.35);
   border-radius: 50%;
   pointer-events: none;
   transition:
@@ -5454,7 +5452,7 @@ html[data-motion="paused"] .research-marquee > div {
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-shell .research-hero .hero-ledger > div:hover strong {
-    text-shadow: 0 0 20px rgb(183 255 74 / 0.4);
+    text-shadow: 0 0 20px rgb(var(--accent) / 0.4);
   }
   .portfolio-shell .research-hero .hero-ledger > div:hover > span {
     color: rgb(var(--ink));
@@ -5463,9 +5461,9 @@ html[data-motion="paused"] .research-marquee > div {
     opacity: 1;
   }
   .portfolio-shell .research-hero .hero-ledger .hero-scroll:hover::after {
-    border-color: rgb(183 255 74 / 0.7);
+    border-color: rgb(var(--accent) / 0.7);
     background-color: var(--accent-soft);
-    box-shadow: 0 0 14px rgb(183 255 74 / 0.22);
+    box-shadow: 0 0 14px rgb(var(--accent) / 0.22);
   }
   .portfolio-shell .research-hero .hero-ledger .hero-scroll:hover .hero-scroll-label {
     color: rgb(var(--accent));

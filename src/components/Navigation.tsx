@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import CellsControl from "./CellsControl";
+import AccentColorControl from "./AccentColorControl";
 import NavIcon from "./NavIcons";
 import { useBackgroundMode } from "@/lib/background-mode";
 const navItems = [
@@ -160,6 +161,7 @@ export default function Navigation({ playMode = false }: { playMode?: boolean })
           <span>{mobileOpen ? "Close" : "Menu"}</span>
           <span aria-hidden="true">{mobileOpen ? "×" : "☰"}</span>
         </button>
+        <AccentColorControl />
       </div>
       {pending && (
         <div className="navigation-pending" role="status">

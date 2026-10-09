@@ -1,5 +1,8 @@
 "use client";
 
+import { getAccentColor, subscribeAccentColor } from "@/lib/accent-color";
+import { ACCENT_PALETTES } from "@/lib/accent-palette";
+
 import { useEffect, useRef } from "react";
 import { interaction, subscribeInteraction } from "@/lib/interaction";
 
@@ -48,7 +51,7 @@ export default function CursorField() {
     let active = false; // pointer currently over the page
     let visible = !document.hidden;
     let paused = document.documentElement.dataset.motion === "paused";
-    let accent = "183 255 74";
+    let accent = ACCENT_PALETTES[getAccentColor()].text.join(" ");
     // Damped motion vector: the last frame's cursor velocity, eased, drives
     // the whole field's lean. Decays to zero when the pointer rests.
     let vx = 0;
@@ -79,16 +82,7 @@ export default function CursorField() {
     media.reduced.addEventListener("change", onMediaChange);
 
     const resolveAccent = () => {
-      // Theme tokens are plain "r g b" channel triplets on :root; resolve
-      // once per resize rather than per frame. `--accent` is the site's
-      // neon signal colour, so the field always matches the theme.
-      const triplet = getComputedStyle(document.documentElement)
-        .getPropertyValue("--accent")
-        .trim()
-        .split(/\s+/)
-        .slice(0, 3)
-        .join(" ");
-      if (triplet) accent = triplet;
+      accent = ACCENT_PALETTES[getAccentColor()].text.join(" ");
     };
 
     const resize = () => {
@@ -221,6 +215,7 @@ export default function CursorField() {
 
     resize();
     const unsubscribe = subscribeInteraction(sync);
+    const unsubscribeAccent = subscribeAccentColor(() => { resolveAccent(); wake(); });
     window.addEventListener("resize", resize, { passive: true });
     document.addEventListener("visibilitychange", syncMotion);
     window.addEventListener("portfolio-motion", syncMotion);
@@ -229,6 +224,7 @@ export default function CursorField() {
 
     return () => {
       unsubscribe();
+      unsubscribeAccent();
       cancelAnimationFrame(frame);
       media.fine.removeEventListener("change", onMediaChange);
       media.reduced.removeEventListener("change", onMediaChange);

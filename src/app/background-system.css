@@ -205,7 +205,7 @@ html[data-motion="paused"] canvas[data-cursor-trail] {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 88% 60% at 78% 10%, rgb(183 255 74 / 0.05), transparent 58%),
+    radial-gradient(ellipse 88% 60% at 78% 10%, rgb(var(--accent) / 0.05), transparent 58%),
     radial-gradient(ellipse 74% 56% at 13% 32%, rgb(125 231 255 / 0.035), transparent 56%),
     radial-gradient(
       ellipse 120% 96% at 50% 24%,

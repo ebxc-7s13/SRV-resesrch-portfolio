@@ -1,6 +1,6 @@
 .host {
-  --xray-edge: #b7ff4a;
-  --xray-secondary: #7de7ff;
+  --xray-edge: rgb(var(--accent));
+  --xray-secondary: rgb(var(--accent-secondary));
   position: relative;
   display: grid;
   justify-items: center;
@@ -33,6 +33,8 @@
 .host[data-zoomed="true"] .canvas[data-ready="true"] { cursor: zoom-out; }
 .canvas:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: -2px; }
 .host[data-state="ready"] .poster { visibility: hidden; }
+:global(html[data-accent="blue"]) .poster { filter: grayscale(1) sepia(1) hue-rotate(180deg) saturate(2.5); }
+:global(html[data-accent="red"]) .poster { filter: grayscale(1) sepia(1) hue-rotate(300deg) saturate(3); }
 
 .instrument {
   display: grid;
@@ -67,8 +69,8 @@
 }
 .system:hover, .system[data-selected="true"] {
   background: transparent;
-  border-color: rgb(183 255 74 / 0.7);
-  box-shadow: 0 0 14px rgb(183 255 74 / 0.1);
+  border-color: rgb(var(--accent) / 0.7);
+  box-shadow: 0 0 14px rgb(var(--accent) / 0.1);
   color: #fff;
 }
 .system:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: 2px; }

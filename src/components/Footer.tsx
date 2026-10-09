@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer
       className="site-footer relative z-10 border-t-2 border-green-950/30"
-      style={{ backgroundColor: "#B7FF4A" }}
+      style={{ backgroundColor: "rgb(var(--accent-fill))" }}
     >
       <div className="footer-inner max-w-7xl mx-auto px-6 py-5">
         <div className="footer-main flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

@@ -1,10 +1,13 @@
 "use client";
 
+import { getAccentColor, subscribeAccentColor } from "@/lib/accent-color";
+import { ACCENT_PALETTES } from "@/lib/accent-palette";
+
 import { useEffect, useRef } from "react";
 import { interaction, subscribeInteraction } from "@/lib/interaction";
 
 /**
- * Laser cursor trail — a ray of light streaming behind the native neon-green
+ * Laser cursor trail — a ray of light streaming behind the native palette-matched
  * cursor (see globals.css "Site cursor").
  *
  * A fixed canvas keeps the last ~420ms of pointer positions and strokes them
@@ -48,7 +51,7 @@ export default function CursorTrail() {
     let frame = 0;
     let visible = !document.hidden;
     let paused = document.documentElement.dataset.motion === "paused";
-    let accent = "183 255 74";
+    let accent = ACCENT_PALETTES[getAccentColor()].text.join(" ");
     let lastPushX = Number.NaN;
     let lastPushY = Number.NaN;
     const points: TrailPoint[] = [];
@@ -70,15 +73,7 @@ export default function CursorTrail() {
     media.reduced.addEventListener("change", onMediaChange);
 
     const resolveAccent = () => {
-      // Theme tokens are plain "r g b" channel triplets on :root; resolve
-      // on resize rather than per frame so the trail matches the theme.
-      const triplet = getComputedStyle(document.documentElement)
-        .getPropertyValue("--accent")
-        .trim()
-        .split(/\s+/)
-        .slice(0, 3)
-        .join(" ");
-      if (triplet) accent = triplet;
+      accent = ACCENT_PALETTES[getAccentColor()].text.join(" ");
     };
 
     const resize = () => {
@@ -226,6 +221,7 @@ export default function CursorTrail() {
 
     resize();
     const unsubscribe = subscribeInteraction(sync);
+    const unsubscribeAccent = subscribeAccentColor(() => { resolveAccent(); wake(); });
     window.addEventListener("resize", resize, { passive: true });
     document.addEventListener("visibilitychange", syncMotion);
     window.addEventListener("portfolio-motion", syncMotion);
@@ -234,6 +230,7 @@ export default function CursorTrail() {
 
     return () => {
       unsubscribe();
+      unsubscribeAccent();
       cancelAnimationFrame(frame);
       media.fine.removeEventListener("change", onMediaChange);
       media.reduced.removeEventListener("change", onMediaChange);

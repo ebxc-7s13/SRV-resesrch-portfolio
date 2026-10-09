@@ -53,9 +53,8 @@ export default function Marquee({
             fontFamily: "var(--font-jetbrains), monospace",
             fontWeight: 700,
             letterSpacing: "0.15em",
-            // Dark ink on the white strip: lime (#B7FF4A) on white is ~1.6:1
-            // and fails WCAG; the accent survives on the dark page elsewhere.
-            color: "#16210a",
+            // Use the dark palette shade on this white strip.
+            color: "rgb(var(--marquee-ink))",
             textTransform: "uppercase",
           }}
         >
