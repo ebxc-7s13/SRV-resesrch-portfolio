@@ -2,7 +2,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
-  DEFAULT_TECHNICAL_TUNING,
+  getDefaultTechnicalTuning,
   TECHNICAL_TUNING_LIMITS,
   resetTechnicalTuning,
   setTechnicalTuning,
@@ -111,7 +111,7 @@ function CellsSliders() {
 
 function TechnicalSliders({ mode }: { mode: TechnicalBackgroundMode }) {
   const tuning = useTechnicalTuning(mode);
-  const isDefault = Object.entries(DEFAULT_TECHNICAL_TUNING).every(
+  const isDefault = Object.entries(getDefaultTechnicalTuning(mode)).every(
     ([key, value]) => tuning[key as keyof typeof tuning] === value,
   );
   const hint = {

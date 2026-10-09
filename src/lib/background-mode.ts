@@ -1,6 +1,6 @@
 // Background mode state — the ONLY place the environment preference lives.
 // Foreground code reads via useBackgroundMode(); writers call
-// setBackgroundMode(). SSR snapshot is always "cells" so server and first
+// setBackgroundMode(). SSR snapshot is always "flux" so server and first
 // client render match; the stored preference hydrates post-mount.
 "use client";
 
@@ -18,7 +18,7 @@ export function isTechnicalBackground(mode: BackgroundMode): mode is TechnicalBa
 const STORAGE_KEY = "background-mode";
 const EVENT_NAME = "portfolio-background";
 
-let current: BackgroundMode = "cells";
+let current: BackgroundMode = "flux";
 let hydrated = false;
 
 function readStored(): BackgroundMode {
@@ -32,7 +32,7 @@ function readStored(): BackgroundMode {
   return typeof window !== "undefined" &&
     window.matchMedia("(max-width: 768px), (pointer: coarse)").matches
     ? "liquid"
-    : "cells";
+    : "flux";
 }
 
 function emit() {
@@ -70,7 +70,7 @@ function subscribe(callback: () => void) {
 }
 
 function serverSnapshot(): BackgroundMode {
-  return "cells";
+  return "flux";
 }
 
 export function useBackgroundMode(): BackgroundMode {
