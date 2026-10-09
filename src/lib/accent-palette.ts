@@ -5,8 +5,8 @@ export const ACCENT_STORAGE_KEY = "accent-color";
 
 export const ACCENT_PALETTES = {
   green: { label: "Neon green", text: [183, 255, 74], fill: [183, 255, 74], onFill: [12, 18, 6], onLight: [22, 101, 52], secondary: 0x7de7ff },
-  blue: { label: "Deep blue", text: [143, 177, 255], fill: [35, 67, 190], onFill: [255, 255, 255], onLight: [25, 53, 145], secondary: 0x99c8ff },
-  red: { label: "Deep red", text: [255, 151, 161], fill: [161, 27, 49], onFill: [255, 255, 255], onLight: [130, 24, 43], secondary: 0xffb4a2 },
+  blue: { label: "Royal blue", text: [111, 160, 255], fill: [47, 85, 245], onFill: [255, 255, 255], onLight: [25, 53, 145], secondary: 0x99c8ff },
+  red: { label: "Neon red", text: [255, 115, 121], fill: [218, 30, 52], onFill: [255, 255, 255], onLight: [130, 24, 43], secondary: 0xffb4a2 },
 } as const;
 
 export function isAccentColor(value: unknown): value is AccentColor {
