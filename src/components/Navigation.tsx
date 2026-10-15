@@ -174,6 +174,7 @@ export default function Navigation({ playMode = false }: { playMode?: boolean })
             <motion.button
               className="nav-backdrop"
               aria-label="Dismiss navigation"
+              data-sound-event="close"
               tabIndex={-1}
               onClick={close}
               initial={{ opacity: 0 }}

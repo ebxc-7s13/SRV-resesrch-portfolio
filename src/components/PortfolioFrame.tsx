@@ -9,6 +9,7 @@ import Footer from "./Footer";
 import Marquee from "./Marquee";
 import BackgroundSystem from "./background/BackgroundSystem";
 import MotionEffects from "./MotionEffects";
+import SoundSystem from "./sound/SoundSystem";
 import { Reveal } from "./Reveal";
 import { setBackgroundMode, useBackgroundMode } from "@/lib/background-mode";
 
@@ -75,6 +76,7 @@ export default function PortfolioFrame({
             surface too (the lab owns its lighting, not its cursor). */}
         <CursorField />
         <CursorTrail />
+        <SoundSystem />
         {children}
       </div>
     );
@@ -104,6 +106,7 @@ export default function PortfolioFrame({
         </Reveal>
       </div>}
       {!isPlayRoute && <Marquee direction="right" />}
+      <SoundSystem />
     </div>
   );
 }

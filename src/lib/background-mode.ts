@@ -69,6 +69,9 @@ function subscribe(callback: () => void) {
   return () => window.removeEventListener(EVENT_NAME, callback);
 }
 
+/** Fires only when setBackgroundMode() runs — never on hydration. */
+export const subscribeBackgroundMode = subscribe;
+
 function serverSnapshot(): BackgroundMode {
   return "flux";
 }

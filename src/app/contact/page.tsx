@@ -1,6 +1,7 @@
 "use client";
 import { SiteText } from "@/components/SiteContent";
 import PageHeader from "@/components/ui/PageHeader";
+import { playInterface } from "@/lib/sound-engine";
 
 import { useState } from "react";
 
@@ -52,6 +53,8 @@ export default function ContactPage() {
           message: "Message sent successfully! I'll get back to you soon.",
         });
         form.reset();
+        // Confirmation cue only after the server accepted the message.
+        playInterface("button", "confirm");
       } else {
         setFormState({
           status: "error",
