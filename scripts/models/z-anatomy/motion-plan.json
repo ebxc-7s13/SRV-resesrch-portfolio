@@ -1,0 +1,17 @@
+{
+  "note": "CMU Graphics Lab Motion Capture Database trials (mocap.cs.cmu.edu). Frame ranges are at the source 120 fps.",
+  "clips": [
+    { "name": "idle", "subject": "143", "trial": "143_25", "from": 0, "to": 100, "mode": "inplace" },
+    { "name": "wave", "subject": "143", "trial": "143_25", "from": 60, "to": 640, "mode": "inplace" },
+    { "name": "stretch", "subject": "143", "trial": "143_30", "from": 0, "to": 370, "mode": "inplace" },
+    { "name": "peekaboo", "subject": "143", "trial": "143_33", "from": 0, "to": 300, "mode": "inplace" },
+    { "name": "jump", "subject": "143", "trial": "143_06", "from": 60, "to": 393, "mode": "inplace" },
+    { "name": "sit", "subject": "75", "trial": "75_20", "from": 60, "to": 480, "mode": "inplace" },
+    { "name": "run", "subject": "143", "trial": "143_01", "from": 0, "to": 100, "mode": "cycle", "repeats": 7 },
+    { "name": "chickenDance", "subject": "143", "trial": "143_34", "from": 0, "to": 760, "mode": "inplace" },
+    { "name": "macarena", "subject": "143", "trial": "143_35", "from": 60, "to": 1090, "mode": "inplace" },
+    { "name": "charleston", "subject": "93", "trial": "93_03", "from": 0, "to": 442, "mode": "inplace" },
+    { "name": "walk", "subject": "143", "trial": "143_32", "from": 30, "to": 310, "mode": "travel" },
+    { "name": "sneak", "subject": "143", "trial": "143_41", "from": 60, "to": 560, "mode": "travel" }
+  ]
+}

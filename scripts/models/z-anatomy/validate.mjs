@@ -17,6 +17,9 @@ for (const [system,info] of Object.entries(meta.systems)) {
     assert.equal(doc.getRoot().listMeshes()[0].listPrimitives().length,1);
     assert.equal(fs.statSync(file).size,stats.bytes);
     assert.ok(doc.getRoot().listExtensionsRequired().some(ext=>ext.extensionName==='EXT_meshopt_compression'));
+    // Every layer is skinned to the one shared motion rig (anatomy-motion.json).
+    const skin=doc.getRoot().listMeshes()[0].listPrimitives()[0];
+    assert.ok(skin.getAttribute('JOINTS_0')&&skin.getAttribute('WEIGHTS_0'),`${system} ${tier} skin influences`);
     const bounds={min:[Infinity,Infinity,Infinity],max:[-Infinity,-Infinity,-Infinity]};
     for(const node of doc.getRoot().listNodes()) {
       if(!node.getMesh())continue;
@@ -42,9 +45,13 @@ for(const excluded of [...selection.excluded.cranial,...selection.excluded.brain
 for (const name of selection.excluded.softNose) assert.ok(!selection.systems.skeleton.includes(name),`Soft nasal cartilage excluded: ${name}`);
 for (const name of ['Sclera.l','Sclera.r','Retina.l','Retina.r']) assert.ok(selection.systems.nervous.includes(name),`Anatomical eyes included: ${name}`);
 assert.equal(JSON.parse(fs.readFileSync(`${directory}/brain-source.json`)).license,'CC-BY-SA-3.0');
-assert.ok(meta.systems.base.tiers.standard.bytes<250000);
-assert.ok(meta.systems.base.tiers.low.bytes<120000);
+// Budgets include the rig's JOINTS_0/WEIGHTS_0 (~31 KB standard, ~17 KB low).
+assert.ok(meta.systems.base.tiers.standard.bytes<260000);
+assert.ok(meta.systems.base.tiers.low.bytes<125000);
+const motion=JSON.parse(fs.readFileSync(`${directory}/anatomy-motion.json`));
+assert.equal(motion.format,'xyz-delta');
+assert.ok(fs.statSync(`${directory}/anatomy-motion.json`).size<320000,'motion payload budget');
 assert.ok(!fs.readdirSync(directory).some(file=>/\.(zip|blend|fbx)$/i.test(file)));
-report.checks=['8 GLBs decoded successfully','one mesh/primitive per pack','required Meshopt compression','finite coordinates inside shared body volume','source object counts match audit','uncertain/noncommercial subtrees excluded','base payload budgets met','no raw archive/source file in runtime'];
+report.checks=['8 GLBs decoded successfully','one mesh/primitive per pack','required Meshopt compression','finite coordinates inside shared body volume','source object counts match audit','uncertain/noncommercial subtrees excluded','base payload budgets met','shared motion rig on every layer','no raw archive/source file in runtime'];
 fs.mkdirSync('.qa/z-anatomy',{recursive:true});fs.writeFileSync('.qa/z-anatomy/asset-validation.json',JSON.stringify(report,null,2));
 console.log(report);

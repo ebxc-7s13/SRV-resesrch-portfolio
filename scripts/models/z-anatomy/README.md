@@ -57,3 +57,23 @@ same base material, rotation and reveal shader, with no extra draw call/texture.
 For a clothing-only rebuild, run the fitting script, then
 `node scripts/models/z-anatomy/optimize.mjs .qa/z-anatomy/raw base` and `poster.py`.
 Raw body buffers are never modified by fitting, so rebuilds are idempotent.
+
+## Human motion rig (hero animation)
+
+The homepage figure moves with real human motion capture. Download the CMU
+ASF/AMC files named in `motion-plan.json` from `http://mocap.cs.cmu.edu/subjects/<subject>/`
+(e.g. `143.asf`, `143_25.amc`) into the git-ignored `source-assets/mocap/cmu/`.
+Start from UNRIGGED GLBs (the files written by `optimize.mjs`), then:
+
+```powershell
+node scripts/models/z-anatomy/rig-export.mjs        # model-space vertices -> .qa/rig
+python -I scripts/models/z-anatomy/rig.py           # fit joints, skin weights, anatomy-rig.json
+node scripts/models/z-anatomy/rig-apply.mjs         # add JOINTS_0/WEIGHTS_0 (geometry unchanged)
+python -I scripts/models/z-anatomy/retarget.py scripts/models/z-anatomy/motion-plan.json
+```
+
+Run Python with `-I`: this folder's `select.py` would otherwise shadow the
+standard-library `select` module. `rig-apply.mjs` refuses already-rigged files.
+At runtime every layer binds to one shared skeleton (`anatomyMotion.ts`), so
+skin, bones, muscles and nerves always share the same pose.
+

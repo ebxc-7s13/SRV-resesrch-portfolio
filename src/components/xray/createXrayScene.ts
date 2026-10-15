@@ -3,6 +3,7 @@ import { getAccentColor, subscribeAccentColor } from "@/lib/accent-color";
 import { ACCENT_PALETTES } from "@/lib/accent-palette";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { createMeshoptWorker } from "./meshoptWorker";
+import { createAnatomyMotion, validateMotionData, type AnatomyMotion } from "./anatomyMotion";
 
 export type AnatomySystem = "skeleton" | "muscles" | "nervous";
 type Layer = "base" | AnatomySystem;
@@ -46,6 +47,14 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
   let reportTime = 0, reportFrames = 0, reportIntervals = 0, reportRenderTime = 0;
   let downloads = 0, bytes = 0, parses = 0;
   let telemetryAt = -Infinity;
+  // Human motion (desktop, motion allowed): one shared rig for every layer.
+  // If the data cannot load, the body keeps its original turntable spin.
+  let motion: AnatomyMotion | null = null;
+  const bodyPoint = new Vector3();
+  const motionReady: Promise<AnatomyMotion | null> = reduced ? Promise.resolve(null) : fetch("/models/anatomy/anatomy-motion.json", { signal: abort.signal })
+    .then(response => { if (!response.ok) throw new Error("Anatomical motion unavailable"); return response.json(); })
+    .then(data => createAnatomyMotion(validateMotionData(data)))
+    .catch(error => { if (process.env.NODE_ENV !== "production" && !abort.signal.aborted) console.warn("Anatomical motion unavailable:", error); return null; });
   const frameInterval = 1000 / (options.lowQuality ? 24 : 30);
 
   function release(object: Object3D) {
@@ -65,7 +74,7 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
   }
   function dispose() {
     if (disposed) return;
-    disposed = true; stop(); abort.abort(); decoder?.dispose(); observer?.disconnect();
+    disposed = true; stop(); abort.abort(); decoder?.dispose(); observer?.disconnect(); motion?.dispose(); motion = null;
     unsubscribeAccent?.();
     canvas.removeEventListener("webglcontextlost", contextLost);
     canvas.removeEventListener("focus", keyboardInspect); canvas.removeEventListener("blur", leave);
@@ -85,10 +94,21 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
   function setZoomed(next: boolean) {
     if (disposed) return;
     zoomed = next; canvas.dataset.xrayZoom = zoomed ? "face" : "body";
-    targetY = zoomed ? bounds.max.y - size.y * 0.08 : center.y;
+    motion?.setHold(zoomed);
+    targetY = zoomed ? bounds.max.y - size.y * 0.08 : bodyViewY();
     targetZoom = zoomed ? 6.5 : 1; wake();
   }
-  function setReducedMotion(next: boolean) { reduced = next; canvas.dataset.reducedMotion = String(next); wake(); }
+  function setReducedMotion(next: boolean) {
+    reduced = next; canvas.dataset.reducedMotion = String(next);
+    if (motion) {
+      // Settle at once into a calm, centred standing pose; no further motion.
+      motion.setHold(next || zoomed, next); motion.update(0);
+      root.rotation.y = motion.yaw; root.position.copy(center).add(motion.offset);
+    }
+    wake();
+  }
+  /** Moving figures need headroom for jumps and a lifted view for the floor. */
+  function bodyViewY() { return motion ? center.y + size.y * 0.1 : center.y; }
   function setSystem(next: AnatomySystem | null) {
     if (disposed) return;
     desired = next; canvas.dataset.anatomyRequested = next ?? "base";
@@ -103,7 +123,7 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
     const px = (event.clientX - rect.left) * (canvas.width / rect.width);
     const py = (rect.height - (event.clientY - rect.top)) * (canvas.height / rect.height);
     cursor.value.set(px, py); cursorRadius.value = Math.max(24, Math.min(canvas.width, canvas.height) * 0.17);
-    projected.copy(center).project(camera);
+    projected.copy(motion ? motion.pelvis(bodyPoint) : center).project(camera);
     const cx = (projected.x * 0.5 + 0.5) * canvas.width, cy = (projected.y * 0.5 + 0.5) * canvas.height;
     const visibleHeight = (camera.top - camera.bottom) / camera.zoom;
     const silhouette = size.y * 0.52 * (canvas.height / visibleHeight);
@@ -161,7 +181,7 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
   function resize() {
     if (!renderer || disposed) return;
     const rect = canvas.getBoundingClientRect(), width = Math.max(1, Math.round(rect.width)), height = Math.max(1, Math.round(rect.height)), aspect = width / height;
-    const viewHeight = Math.max(size.y * 1.2, (size.x * 1.16) / aspect);
+    const viewHeight = Math.max(size.y * (motion ? 1.36 : 1.2), (size.x * (motion ? 1.5 : 1.16)) / aspect);
     camera.left = -viewHeight * aspect / 2; camera.right = viewHeight * aspect / 2; camera.top = viewHeight / 2; camera.bottom = -viewHeight / 2;
     camera.updateProjectionMatrix(); renderer.setPixelRatio(degraded ? 0.75 : Math.min(window.devicePixelRatio || 1, options.lowQuality ? 1.25 : 1.5));
     renderer.setSize(width, height, false); if (ready) renderOnce();
@@ -171,7 +191,11 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
     if (lastDraw && now - lastDraw < (degraded ? 1000 / 24 : frameInterval) - 0.5) { frame = requestAnimationFrame(tick); return; }
     const interval = lastDraw ? now - lastDraw : frameInterval; lastDraw = now;
     const delta = Math.min(interval, 150) / 1000; activeTime += interval;
-    if (!reduced) root.rotation.y += delta * 0.42;
+    if (motion && !reduced) {
+      motion.update(delta);
+      root.rotation.y = motion.yaw; root.position.copy(center).add(motion.offset);
+      canvas.dataset.anatomyMotion = motion.state;
+    } else if (!reduced) root.rotation.y += delta * 0.42;
     const damping = reduced ? 1 : 1 - Math.exp(-6 * delta);
     camera.zoom += (targetZoom - camera.zoom) * damping; viewY += (targetY - viewY) * damping;
     camera.position.y = viewY; camera.lookAt(center.x, viewY, center.z); camera.updateProjectionMatrix();
@@ -242,11 +266,25 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
         camera.position.set(center.x, center.y, bounds.max.z + size.y * 3); camera.far = size.y * 8; camera.lookAt(center);
         const ambient = new AmbientLight("#d6e5dc", 1.0), main = new DirectionalLight("#eff8e5", 2.5);
         main.position.set(center.x - size.x * 1.5, bounds.max.y + size.y * 0.4, bounds.max.z + size.y * 2); main.target.position.copy(center);
-        scene.add(ambient, main, main.target); viewY = center.y; targetY = center.y; setZoomed(zoomed); resize();
+        scene.add(ambient, main, main.target); viewY = center.y; targetY = center.y;
       }
       // Every system uses the SAME base center, never independent fitting.
-      gltf.scene.position.sub(center); root.add(gltf.scene); layers.set(key, { object: gltf.scene, material });
+      gltf.scene.position.sub(center);
+      const rigged = await motionReady; if (disposed) { release(gltf.scene); return; }
+      if (rigged) {
+        if (!motion) {
+          motion = rigged; motion.rig.position.copy(gltf.scene.position); root.add(motion.rig); motion.setHold(zoomed || reduced);
+          // Development-only QA handle; removed from production bundles.
+          if (process.env.NODE_ENV !== "production") Object.assign(canvas, { anatomyMotion: motion });
+        }
+        motion.bind(gltf.scene);
+      }
+      root.add(gltf.scene); layers.set(key, { object: gltf.scene, material });
       gltf.scene.visible = true; await renderer?.compileAsync(scene, camera); if (disposed) return;
+      if (key === "base") {
+        setZoomed(zoomed); viewY = targetY; resize();
+        camera.position.y = viewY; camera.lookAt(center.x, viewY, center.z); camera.updateProjectionMatrix();
+      }
       if (key === "base") { if (!renderOnce()) return; ready = true; canvas.dataset.xrayState = active ? "active" : "paused"; options.onReady(); schedulePreload(); }
       else { gltf.scene.visible = false; options.onSystemState?.(key, "ready"); }
       wake();

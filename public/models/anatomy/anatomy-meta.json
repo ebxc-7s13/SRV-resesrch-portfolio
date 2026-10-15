@@ -43,7 +43,7 @@
       "tiers": {
         "standard": {
           "file": "base.glb",
-          "bytes": 222896,
+          "bytes": 254436,
           "drawCalls": 1,
           "triangles": 50287,
           "vertices": 25452,
@@ -51,7 +51,7 @@
         },
         "low": {
           "file": "base-low.glb",
-          "bytes": 99868,
+          "bytes": 117328,
           "drawCalls": 1,
           "triangles": 20785,
           "vertices": 10701,
@@ -66,7 +66,7 @@
       "tiers": {
         "standard": {
           "file": "skeleton.glb",
-          "bytes": 609932,
+          "bytes": 623500,
           "drawCalls": 1,
           "triangles": 144942,
           "vertices": 72569,
@@ -74,7 +74,7 @@
         },
         "low": {
           "file": "skeleton-low.glb",
-          "bytes": 259224,
+          "bytes": 265860,
           "drawCalls": 1,
           "triangles": 59968,
           "vertices": 30153,
@@ -88,7 +88,7 @@
       "tiers": {
         "standard": {
           "file": "muscles.glb",
-          "bytes": 783344,
+          "bytes": 926832,
           "drawCalls": 1,
           "triangles": 179800,
           "vertices": 91284,
@@ -96,7 +96,7 @@
         },
         "low": {
           "file": "muscles-low.glb",
-          "bytes": 339780,
+          "bytes": 411736,
           "drawCalls": 1,
           "triangles": 74934,
           "vertices": 38883,
@@ -110,7 +110,7 @@
       "tiers": {
         "standard": {
           "file": "nervous.glb",
-          "bytes": 759628,
+          "bytes": 804984,
           "drawCalls": 1,
           "triangles": 179848,
           "vertices": 92672,
@@ -118,7 +118,7 @@
         },
         "low": {
           "file": "nervous-low.glb",
-          "bytes": 371796,
+          "bytes": 401088,
           "drawCalls": 1,
           "triangles": 84934,
           "vertices": 44634,
@@ -126,5 +126,10 @@
         }
       }
     }
+  },
+  "rig": {
+    "joints": "JOINTS_0 / WEIGHTS_0, 4 influences",
+    "skeleton": "anatomy-motion.json",
+    "fitting": "scripts/models/z-anatomy/rig.py"
   }
 }
