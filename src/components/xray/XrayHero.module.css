@@ -44,22 +44,22 @@
   min-width: 0;
 }
 .controls {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
   width: 100%;
   background: none;
 }
+/* Icon-only system controls; names live in aria-label / title. */
 .system {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-width: 0;
-  min-height: 36px;
-  padding: 7px 10px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  padding: 0;
   border: 1px solid rgb(255 255 255 / 0.2);
-  border-radius: 999px;
+  border-radius: 50%;
   background: transparent;
   color: #fff;
   font: 0.65rem/1.25 var(--font-jetbrains), monospace;
@@ -76,33 +76,18 @@
 .system:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: 2px; }
 .system[aria-pressed="true"] { border-bottom-color: var(--xray-edge); }
 .system:disabled { border-color: rgb(255 255 255 / 0.12); box-shadow: none; cursor: default; }
-.systemIcon { width: 18px; height: 18px; flex-shrink: 0; }
-.systemStatus { min-height: 18px; color: #fff; font: 0.64rem/1.55 var(--font-jetbrains), monospace; letter-spacing: 0.03em; text-align: center; }
-
-.caption {
-  width: 100%;
-  min-width: 0;
-  font: 0.7rem/1.6 var(--font-jetbrains), monospace;
-  letter-spacing: 0.08em;
-  color: #fff;
-}
-.captionLabel {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 6px 20px;
-  text-align: center;
-}
-.attribution { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.9em; letter-spacing: 0; text-decoration: underline; text-underline-offset: 3px; color: #fff; transition: color var(--motion-micro) var(--ease-out); }
-.attribution:hover { color: rgb(var(--accent)); }
-.attribution:focus-visible { outline: 2px solid var(--xray-edge); outline-offset: 2px; }
+.systemIcon { width: 24px; height: 24px; flex-shrink: 0; }
+/* Licence credit: smaller and quieter than the three system controls. */
+.credit { width: 36px; height: 36px; align-self: center; border-color: rgb(255 255 255 / 0.12); color: rgb(255 255 255 / 0.7); }
+.credit .systemIcon { width: 18px; height: 18px; }
+.credit:hover { color: #fff; }
+.srOnly { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 /* Desktop: restore the original illustration alongside the hero copy.
    The shared viewer stays mounted when crossing the layout breakpoint. */
 @media (min-width: 901px) {
   .host {
-    grid-template-rows: minmax(0, 1fr) auto auto;
+    grid-template-rows: minmax(0, 1fr) auto;
     gap: 10px;
     height: 100%;
     padding: 0;
@@ -116,22 +101,11 @@
   .image { width: 100%; height: 100%; }
   .canvas[data-ready="true"] { pointer-events: auto; }
   .instrument { pointer-events: auto; }
-  .caption { width: calc(100% - 32px); }
-  .captionLabel {
-    gap: 4px 12px;
-    padding: 8px 16px;
-    background: none;
-  }
-  .attribution { pointer-events: auto; }
 }
 
 @media (max-width: 600px) {
   .host { padding: 18px 12px 12px; gap: 16px; border-radius: 18px; }
   .image { height: clamp(380px, 110vw, 500px); }
   .controls { gap: 6px; }
-  .system { padding: 7px 6px; gap: 5px; font-size: 0.6rem; letter-spacing: 0.02em; }
-  .caption { font-size: 0.62rem; }
-  .captionLabel { flex-direction: column; gap: 0; }
 }
-@media (pointer: coarse) { .system { min-height: 44px; } }
 @media (prefers-reduced-motion: reduce) { .system { transition: none; } }

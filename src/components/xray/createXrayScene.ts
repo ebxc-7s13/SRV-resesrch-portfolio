@@ -107,8 +107,8 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
     }
     wake();
   }
-  /** Moving figures need headroom for jumps and a lifted view for the floor. */
-  function bodyViewY() { return motion ? center.y + size.y * 0.1 : center.y; }
+  /** Moving figures are framed tightly; the camera rises only during jumps. */
+  function bodyViewY() { return motion ? center.y + size.y * 0.03 : center.y; }
   function setSystem(next: AnatomySystem | null) {
     if (disposed) return;
     desired = next; canvas.dataset.anatomyRequested = next ?? "base";
@@ -181,7 +181,7 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
   function resize() {
     if (!renderer || disposed) return;
     const rect = canvas.getBoundingClientRect(), width = Math.max(1, Math.round(rect.width)), height = Math.max(1, Math.round(rect.height)), aspect = width / height;
-    const viewHeight = Math.max(size.y * (motion ? 1.36 : 1.2), (size.x * (motion ? 1.5 : 1.16)) / aspect);
+    const viewHeight = Math.max(size.y * (motion ? 1.12 : 1.2), (size.x * (motion ? 1.5 : 1.16)) / aspect);
     camera.left = -viewHeight * aspect / 2; camera.right = viewHeight * aspect / 2; camera.top = viewHeight / 2; camera.bottom = -viewHeight / 2;
     camera.updateProjectionMatrix(); renderer.setPixelRatio(degraded ? 0.75 : Math.min(window.devicePixelRatio || 1, options.lowQuality ? 1.25 : 1.5));
     renderer.setSize(width, height, false); if (ready) renderOnce();
@@ -195,6 +195,11 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
       motion.update(delta);
       root.rotation.y = motion.yaw; root.position.copy(center).add(motion.offset);
       canvas.dataset.anatomyMotion = motion.state;
+      if (!zoomed) {
+        // Keep the whole head in frame at the top of a jump.
+        const half = camera.top / camera.zoom, crown = motion.crown(bodyPoint).y + size.y * 0.03;
+        targetY = Math.max(bodyViewY(), crown - half);
+      }
     } else if (!reduced) root.rotation.y += delta * 0.42;
     const damping = reduced ? 1 : 1 - Math.exp(-6 * delta);
     camera.zoom += (targetZoom - camera.zoom) * damping; viewY += (targetY - viewY) * damping;

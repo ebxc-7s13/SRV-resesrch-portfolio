@@ -45,7 +45,8 @@
     top: var(--space-8);
     right: 0;
     width: calc((100% - 36px) / 2.05);
-    height: min(720px, calc(100% - 180px));
+    /* Clears the stats strip at the foot of the hero and stays above the fold. */
+    height: min(760px, calc(100% - 180px), calc(100svh - 112px));
     margin: 0;
     padding: 0;
   }

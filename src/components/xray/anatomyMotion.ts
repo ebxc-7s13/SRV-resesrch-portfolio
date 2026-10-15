@@ -39,6 +39,8 @@ for (const s of ["L", "R"]) Object.assign(PARENTS, {
 
 const PERFORMANCES = ["jump", "sit", "run", "wave", "stretch", "chickenDance", "macarena", "charleston", "peekaboo"] as const;
 const SPIN_SPEED = 0.42;
+/** Atlas (C1) to the top of the skull, in model units. */
+const CROWN = 0.18;
 const FADE = 0.45;
 
 function decode(base64: string) {
@@ -68,6 +70,8 @@ export interface AnatomyMotion {
   setHold(hold: boolean, immediate?: boolean): void;
   /** World position of the pelvis, for hit-testing the moving body. */
   pelvis(target: Vector3): Vector3;
+  /** World position of the top of the head, for keeping jumps in frame. */
+  crown(target: Vector3): Vector3;
   readonly yaw: number;
   readonly offset: Vector3;
   readonly state: string;
@@ -288,6 +292,7 @@ export function createAnatomyMotion(data: MotionData, random: () => number = Mat
     rig, bind, update,
     setHold(next: boolean, immediate = false) { hold = next; holdNow = immediate; },
     pelvis(target: Vector3) { bones.get("hips")!.getWorldPosition(target); return target; },
+    crown(target: Vector3) { return bones.get("head")!.localToWorld(target.set(0, CROWN, 0)); },
     get yaw() { return yaw; },
     get offset() { return offset; },
     get state() { return state; },

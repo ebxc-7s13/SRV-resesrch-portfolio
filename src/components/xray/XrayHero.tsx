@@ -91,7 +91,7 @@ export default function XrayHero() {
   const reset = () => { setHovered(null); setFocused(null); setPinned(null); scene.current?.clearInspection(); };
   const toggleZoom = () => setZoomed(value => !value);
   const loadState = selected ? loads[selected] : undefined;
-  const status = failed ? "Anatomical preview" : loadState === "loading" ? `Loading ${selected === "nervous" ? "nerves" : selected}…` : loadState === "error" ? "System unavailable · body remains available" : `${systems.find(s => s.key === selected)?.label} · MOVE POINTER OVER BODY`;
+  const status = failed ? "Anatomical preview" : loadState === "loading" ? `Loading ${selected === "nervous" ? "nerves" : selected}…` : loadState === "error" ? "System unavailable · body remains available" : `${systems.find(s => s.key === selected)?.accessible.replace("Show ", "")} selected. Move the pointer over the body to reveal it; click to zoom.`;
 
   return (
     <div ref={host} className={styles.host} data-xray-hero data-system={selected} data-zoomed={zoomed} data-state={failed ? "fallback" : ready ? "ready" : "static"} onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); reset(); } }}>
@@ -104,7 +104,7 @@ export default function XrayHero() {
       </div>
       <div className={styles.instrument}>
         <div className={styles.controls} role="group" aria-label="Anatomical systems">
-          {systems.map(system => <button key={system.key} type="button" className={styles.system} aria-label={system.accessible} aria-pressed={(pinned ?? "skeleton") === system.key} aria-busy={loads[system.key] === "loading"} disabled={!ready || failed} data-selected={selected === system.key} data-loading={loads[system.key] === "loading"}
+          {systems.map(system => <button key={system.key} type="button" className={styles.system} aria-label={system.accessible} title={system.accessible} aria-pressed={(pinned ?? "skeleton") === system.key} aria-busy={loads[system.key] === "loading"} disabled={!ready || failed} data-selected={selected === system.key} data-loading={loads[system.key] === "loading"}
             onPointerDown={event => { touchSelection.current = event.pointerType === "touch"; }}
             onPointerEnter={event => { if (event.pointerType !== "touch") { intent.current = true; setFocused(null); setHovered(system.key); } }} onPointerLeave={() => setHovered(null)}
             onPointerUp={event => { if (event.pointerType === "touch") { intent.current = true; setPinned(system.key); scene.current?.setSystem(system.key); scene.current?.inspectAtCenter(); } }}
@@ -118,16 +118,18 @@ export default function XrayHero() {
                 scene.current?.setSystem(system.key); scene.current?.inspectAtCenter();
               }
             }}>
-            <AnatomyIcon system={system.key} />{system.label}
+            <AnatomyIcon system={system.key} />
           </button>)}
+          {/* Licence credit (CC BY-SA 4.0) kept as an icon link: no visible text. */}
+          <a className={`${styles.system} ${styles.credit}`} href="/models/anatomy/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer"
+            aria-label="Model credits: Z-Anatomy, CC BY-SA 4.0 (opens in a new tab)" title="Z-Anatomy · CC BY-SA 4.0">
+            <svg className={styles.systemIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" />
+            </svg>
+          </a>
         </div>
-        <span className={styles.systemStatus} role="status" aria-live="polite">{status}</span>
-      </div>
-      <div className={styles.caption}>
-        <div className={styles.captionLabel}>
-          <span>{zoomed ? "FACE SCAN · CLICK TO RETURN" : "ANATOMICAL SCAN · HOVER TO REVEAL · CLICK TO ZOOM"}</span>
-          <a className={styles.attribution} href="/models/anatomy/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Z-Anatomy · CC BY-SA 4.0</a>
-        </div>
+        {/* Status is announced to assistive technology only. */}
+        <span className={styles.srOnly} role="status" aria-live="polite">{zoomed ? `Face scan. ${status}` : status}</span>
       </div>
     </div>
   );
