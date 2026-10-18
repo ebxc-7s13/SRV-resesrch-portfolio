@@ -97,8 +97,10 @@ test("Every public route has a stone counterpart and every counterpart re-uses t
 });
 
 test("Stone styles are fully scoped and monochrome", () => {
-  const css = fs.readFileSync(path.join(root, "src/app/stone/stone.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
-  const blocks = css.replace(/@media[^{]+\{/g, "").split("}").map((b) => b.split("{")[0].trim()).filter(Boolean);
+  const css = ["stone.css", "stone-architecture.css"]
+    .map((f) => fs.readFileSync(path.join(root, "src/app/stone", f), "utf8"))
+    .join("\n").replace(/\/\*[\s\S]*?\*\//g, "");
+  const blocks = css.replace(/@(media|supports)[^{]+\{/g, "").split("}").map((b) => b.split("{")[0].trim()).filter(Boolean);
   for (const selectorList of blocks) {
     if (/^(from|to|\d+%)$/.test(selectorList)) continue;
     for (const selector of splitTopLevel(selectorList)) {
@@ -115,6 +117,7 @@ test("Stone styles are fully scoped and monochrome", () => {
   assert.ok(!/#(000000|ffffff|000|fff)\b/i.test(css), "no pure black or white");
   // The stylesheet is loaded only by the stone layout.
   assert.match(fs.readFileSync(path.join(root, "src/app/stone/layout.tsx"), "utf8"), /import "\.\/stone\.css"/);
+  assert.match(fs.readFileSync(path.join(root, "src/app/stone/layout.tsx"), "utf8"), /import "\.\/stone-architecture\.css"/);
   assert.ok(!fs.readFileSync(path.join(root, "src/app/layout.tsx"), "utf8").includes("stone/stone.css"));
   // Fonts are self-hosted: a build must never depend on Google Fonts responses.
   const layout = fs.readFileSync(path.join(root, "src/app/stone/layout.tsx"), "utf8");
@@ -130,7 +133,8 @@ test("Stone Mode wiring: activation, exit, cursor and 3D overrides", () => {
   assert.doesNotMatch(read("src/components/stone/SrvStoneKey.tsx"), /onPointerDown|onMouseDown|onTouchStart/);
   assert.match(read("src/components/stone/StoneShell.tsx"), /data-stone-exit/, "a visible exit exists");
   assert.match(read("src/app/layout.tsx"), /dataset\.stone=''/, "stone attribute is set before paint");
-  for (const f of ["chisel.svg", "chisel-active.svg", "chisel.png", "chisel-active.png", "grain.svg", "grain-soft.svg", "cloud.svg", "meander.svg"])
+  for (const f of ["chisel.svg", "chisel-active.svg", "chisel.png", "chisel-active.png", "grain.svg", "grain-soft.svg", "cloud.svg", "meander.svg",
+    "ashlar.svg", "slab-cracks.svg", "crack-a.svg", "crack-b.svg", "crack-c.svg", "dentils.svg", "pilaster-capital.svg", "pilaster-shaft.svg", "pilaster-base.svg"])
     assert.ok(fs.existsSync(path.join(root, "public/stone", f)), f);
   const lab = read("src/components/lab/StoneMaterials.tsx");
   assert.match(lab, /original\.clone\(\)/, "stone uses material clones");

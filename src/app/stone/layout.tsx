@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./stone.css";
+import "./stone-architecture.css";
 
 // Stone Mode's own faces load only on /stone routes: lapidary capitals for
 // inscriptions, an old-style serif for reading. Self-hosted (SIL OFL 1.1,
