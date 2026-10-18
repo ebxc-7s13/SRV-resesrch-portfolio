@@ -116,6 +116,11 @@ test("Stone styles are fully scoped and monochrome", () => {
   // The stylesheet is loaded only by the stone layout.
   assert.match(fs.readFileSync(path.join(root, "src/app/stone/layout.tsx"), "utf8"), /import "\.\/stone\.css"/);
   assert.ok(!fs.readFileSync(path.join(root, "src/app/layout.tsx"), "utf8").includes("stone/stone.css"));
+  // Fonts are self-hosted: a build must never depend on Google Fonts responses.
+  const layout = fs.readFileSync(path.join(root, "src/app/stone/layout.tsx"), "utf8");
+  assert.doesNotMatch(layout, /next\/font\/google/);
+  for (const f of ["cinzel-latin.woff2", "eb-garamond-latin.woff2", "eb-garamond-italic-latin.woff2", "OFL-Cinzel.txt", "OFL-EBGaramond.txt"])
+    assert.ok(fs.existsSync(path.join(root, "src/app/stone/fonts", f)), f);
 });
 
 test("Stone Mode wiring: activation, exit, cursor and 3D overrides", () => {
