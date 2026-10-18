@@ -5,6 +5,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import HyperSiteText from "@/components/ui/hyper-site-text";
 import DepthCard from "@/components/ui/DepthCard";
 import GlassTitle from "@/components/GlassTitle";
+import SrvStoneKey from "@/components/stone/SrvStoneKey";
 
 export const metadata = {
   alternates: { canonical: "/about" },
@@ -44,13 +45,8 @@ export default async function AboutPage() {
         }
       />
       <section className="shell researcher-intro">
-        <div className="identity-object" aria-hidden="true">
-          <div className="identity-orbit orbit-one" />
-          <div className="identity-orbit orbit-two" />
-          <div className="identity-orbit orbit-three" />
-          <strong>SRV</strong>
-          <span>IMAGING / COMPUTATION / ENGINEERING</span>
-        </div>
+        {/* The SRV mark doubles as the Stone Mode key (three presses). */}
+        <SrvStoneKey />
         <div>
           <div className="eyebrow">From instrument to insight</div>
           <p>

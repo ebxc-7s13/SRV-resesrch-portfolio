@@ -19,6 +19,8 @@ import SoundControl from "./SoundControl";
 /** The background family actually on screen for a route, if any. */
 export function visibleScene(path: string, mode: BackgroundMode): SceneFamily | null {
   if (path === "/play") return "liquid";
+  // Stone Mode shows no background environment.
+  if (path === "/stone" || path.startsWith("/stone/")) return null;
   if (path.startsWith("/lab") || path.startsWith("/admin")) return null;
   return mode;
 }

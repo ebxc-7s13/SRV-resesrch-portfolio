@@ -15,6 +15,7 @@ import { ResearchMonitor, ResearchProjector } from "./ResearchMedia";
 import { labStations, labPalette, cameraTargets, type Station } from "@/lib/lab-scene-config";
 import { Block, Print, Monitor, Cable, StationLabel } from "./ScenePrimitives";
 const LabPostProcessing = lazy(() => import("./LabPostProcessing"));
+import StoneMaterials from "./StoneMaterials";
 import {
   researchDevices,
   type ArchiveSelection,
@@ -30,6 +31,8 @@ export type CameraCommand = {
   tick: number;
 };
 export type SceneProps = {
+  /** Stone Mode: limestone materials and neutral light; geometry untouched. */
+  stone?: boolean;
   theme?: "night" | "day" | "blossom";
   view: LabView;
   quality: Quality;
@@ -1145,25 +1148,25 @@ function SceneContents(props: SceneProps) {
       gl.getContext().getExtension("WEBGL_lose_context")?.loseContext();
   }, [gl, props.debug, props.fault]);
   const inspecting = researchDevices.some((d) => d.id === props.view);
+  const stone = !!props.stone;
+  // Stone keeps the original light intensities; only hue is neutralised.
   const night = props.theme === "night";
-  const blossom = props.theme === "blossom";
+  const blossom = props.theme === "blossom" && !stone;
+  // Stone Mode keeps every light and its placement; only hue goes neutral.
+  const hue = (color: string) => (stone ? "#f3f1ec" : color);
+  const room = stone ? "#bdb7ac" : night ? "#101b22" : blossom ? "#e4d8dd" : "#dbe6e8";
   return (
     <>
+      {stone && <StoneMaterials />}
       {/* Room tones harmonized with the site background system (the lab keeps
           its own opaque stage — postprocessing requires an opaque buffer). */}
-      <color
-        attach="background"
-        args={[night ? "#101b22" : blossom ? "#e4d8dd" : "#dbe6e8"]}
-      />
-      <fog
-        attach="fog"
-        args={[night ? "#101b22" : blossom ? "#e4d8dd" : "#dbe6e8", 15, 34]}
-      />
+      <color attach="background" args={[room]} />
+      <fog attach="fog" args={[room, 15, 34]} />
       {/* base: soft room bounce, lifted at night so overheads read */}
       <hemisphereLight
         args={[
-          night ? "#cfe4e2" : "#f7f3e6",
-          night ? "#2c3a35" : "#8a978d",
+          stone ? "#f1efea" : night ? "#cfe4e2" : "#f7f3e6",
+          stone ? "#8e887e" : night ? "#2c3a35" : "#8a978d",
           inspecting ? 0.9 : night ? 0.95 : 1.15,
         ]}
       />
@@ -1171,7 +1174,7 @@ function SceneContents(props: SceneProps) {
       <directionalLight
         position={[3.5, 5.5, 4.5]}
         intensity={night ? 1.7 : 2.2}
-        color={night ? "#ffeeda" : "#fff6e2"}
+        color={hue(night ? "#ffeeda" : "#fff6e2")}
         castShadow={props.quality !== "low"}
         shadow-mapSize={props.quality === "high" ? [2048, 2048] : [1024, 1024]}
         shadow-camera-left={-8}
@@ -1185,14 +1188,14 @@ function SceneContents(props: SceneProps) {
       <directionalLight
         position={[-2, 3.2, -4]}
         intensity={night ? 0.55 : 0.85}
-        color={blossom ? "#e8d3e2" : "#d8e8f1"}
+        color={hue(blossom ? "#e8d3e2" : "#d8e8f1")}
       />
       {/* rim: cool edge definition so instrument silhouettes separate from
           the fluid backdrop (night gets the strongest read) */}
       <directionalLight
         position={[-4.5, 4.2, -6]}
         intensity={night ? 0.85 : 0.4}
-        color={blossom ? "#f6e7f0" : night ? "#e8f4f6" : "#ffffff"}
+        color={hue(blossom ? "#f6e7f0" : night ? "#e8f4f6" : "#ffffff")}
       />
       {/* accents: one warm imaging spot, one cool engineering spot */}
       {props.quality !== "low" && (
@@ -1204,7 +1207,7 @@ function SceneContents(props: SceneProps) {
             intensity={night ? 20 : 12}
             distance={6.5}
             decay={2}
-            color="#ffd9a8"
+            color={hue("#ffd9a8")}
             target-position={[-3.7, 0.9, -1]}
           />
           <spotLight
@@ -1214,7 +1217,7 @@ function SceneContents(props: SceneProps) {
             intensity={night ? 22 : 13}
             distance={7}
             decay={2}
-            color="#cfeef2"
+            color={hue("#cfeef2")}
             target-position={[3.35, 0.9, -1]}
           />
           <pointLight
@@ -1222,7 +1225,7 @@ function SceneContents(props: SceneProps) {
             intensity={night ? 2.6 : 1.2}
             distance={3.6}
             decay={2}
-            color={blossom ? "#f3d3e6" : "#d9ecf0"}
+            color={hue(blossom ? "#f3d3e6" : "#d9ecf0")}
           />
         </>
       )}

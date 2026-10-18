@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { AnatomySystem, XraySceneController } from "./createXrayScene";
 import styles from "./XrayHero.module.css";
+import { usePathname } from "next/navigation";
+import { isStonePath } from "@/lib/stone-mode";
 
 const systems = [
   { key: "skeleton", label: "SKELETON", accessible: "Show skeleton" },
@@ -31,6 +33,9 @@ function AnatomyIcon({ system }: { system: AnatomySystem }) {
 }
 
 export default function XrayHero() {
+  // Stone Mode: the same figure in limestone (set once per mount).
+  const stone = isStonePath(usePathname());
+  const stoneRef = useRef(stone);
   const host = useRef<HTMLDivElement>(null), canvas = useRef<HTMLCanvasElement>(null);
   const scene = useRef<XraySceneController | null>(null);
   const activeRef = useRef(false), motionRef = useRef(false), intent = useRef(false);
@@ -71,7 +76,7 @@ export default function XrayHero() {
     void import("./createXrayScene").then(({ createXrayScene }) => {
       if (cancelled) return null;
       return createXrayScene(target, {
-        ...tier.current!, reducedMotion: motionRef.current,
+        ...tier.current!, reducedMotion: motionRef.current, stone: stoneRef.current,
         onReady: () => { if (!cancelled) setReady(true); },
         onFailure: () => { if (!cancelled) setFailed(true); },
         onSystemState: (key, state) => { if (!cancelled) setLoads(previous => previous[key] === state ? previous : { ...previous, [key]: state }); },

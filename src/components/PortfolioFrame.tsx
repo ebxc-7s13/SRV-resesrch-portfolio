@@ -12,6 +12,8 @@ import MotionEffects from "./MotionEffects";
 import SoundSystem from "./sound/SoundSystem";
 import { Reveal } from "./Reveal";
 import { setBackgroundMode, useBackgroundMode } from "@/lib/background-mode";
+import { isStonePath, toOriginalPath } from "@/lib/stone-mode";
+import StoneShell from "./stone/StoneShell";
 
 // The optional WebGL layers (vanta/three, threejs-components) only download
 // when their mode is actually selected.
@@ -30,7 +32,16 @@ export default function PortfolioFrame({
 }: {
   children: React.ReactNode;
 }) {
-  const path = usePathname();
+  const fullPath = usePathname();
+  // Stone Mode (/stone/*) renders the same pages; route logic below always
+  // works on the original path so layouts and route styles stay identical.
+  const stone = isStonePath(fullPath);
+  const path = toOriginalPath(fullPath);
+  useEffect(() => {
+    // Set before paint by the layout bootstrap; kept in sync for client nav.
+    if (stone) document.documentElement.dataset.stone = "";
+    else delete document.documentElement.dataset.stone;
+  }, [stone]);
   // Read the mode store before any early return so hook order stays stable.
   // This is what lets the optional WebGL layers only enter the tree (and
   // trigger their dynamic chunks) when the user actually picks them.
@@ -73,9 +84,11 @@ export default function PortfolioFrame({
     return (
       <div id="main-content" tabIndex={-1}>
         {/* The cursor field is site-wide: it runs on the lab's native dark
-            surface too (the lab owns its lighting, not its cursor). */}
-        <CursorField />
-        <CursorTrail />
+            surface too (the lab owns its lighting, not its cursor). Stone
+            Mode replaces it with the chisel cursor. */}
+        {!stone && <CursorField />}
+        {!stone && <CursorTrail />}
+        {stone && <StoneShell />}
         <SoundSystem />
         {children}
       </div>
@@ -89,14 +102,17 @@ export default function PortfolioFrame({
       {/* Site-wide cursor treatment: the magnetic field replaces the old
           white mouse glow on every route and every background mode, and the
           trail adds the short neon fade-out behind the native cursor head. */}
-      {!isPlayRoute && <CursorField />}
-      {!isPlayRoute && <CursorTrail />}
-      {!isPlayRoute && <MotionEffects />}
-      {!isAdmin && !isPlayRoute && <BackgroundSystem />}
-      {!isAdmin && !isPlayRoute && backgroundMode === "cells" && <VantaCellsLayer />}
-      {!isAdmin && (isPlayRoute || backgroundMode === "liquid") && <LiquidMouseLayer />}
+      {/* Stone Mode is one carved surface: no colour fields, cursor
+          effects or tilting cards — the stone shell supplies its own. */}
+      {stone && <StoneShell />}
+      {!stone && !isPlayRoute && <CursorField />}
+      {!stone && !isPlayRoute && <CursorTrail />}
+      {!stone && !isPlayRoute && <MotionEffects />}
+      {!stone && !isAdmin && !isPlayRoute && <BackgroundSystem />}
+      {!stone && !isAdmin && !isPlayRoute && backgroundMode === "cells" && <VantaCellsLayer />}
+      {!stone && !isAdmin && (isPlayRoute || backgroundMode === "liquid") && <LiquidMouseLayer />}
       {!isPlayRoute && <Marquee direction="left" sticky />}
-      <Navigation playMode={isPlayRoute} />
+      <Navigation playMode={isPlayRoute} stone={stone} />
       {isPlayRoute ? children : <div className="pt-16 relative" id="main-content" tabIndex={-1}>
         <div key={path} className="route-view">
           {children}

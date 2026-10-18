@@ -96,7 +96,8 @@ source-assets/
 
 # Local agent installations, generated knowledge graphs and original documents.
 .agents/
-.claude/
+.claude/*
+!.claude/skills/
 .codex/
 .opencode/
 .freebuff/

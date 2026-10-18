@@ -1,0 +1,64 @@
+/* The About-page SRV mark as the Stone Mode key, plus the entry veil. Global
+   because the key also lives on the original About page; every rule targets
+   only its own elements. */
+
+.srv-stone-key {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: scale 220ms var(--ease-out, ease-out);
+}
+/* The rings are spans now: keep them centred, not on the caption baseline. */
+.srv-stone-key > .identity-orbit {
+  bottom: auto;
+}
+.srv-stone-key:focus-visible {
+  outline-offset: -6px;
+}
+/* Restrained, colourless acknowledgement: the mark settles a little deeper
+   with each press. */
+.srv-stone-key strong {
+  transition: opacity 180ms ease-out, filter 180ms ease-out;
+}
+.srv-stone-key[data-presses="1"] { scale: 0.985; }
+.srv-stone-key[data-presses="1"] strong { opacity: 0.86; }
+.srv-stone-key[data-presses="2"] { scale: 0.97; }
+.srv-stone-key[data-presses="2"] strong { opacity: 0.72; filter: grayscale(0.6); }
+.srv-stone-key[data-presses="3"] { scale: 0.96; }
+.srv-stone-key[data-presses="3"] strong { opacity: 0.6; filter: grayscale(1); }
+.srv-stone-key:active { scale: 0.975; }
+
+/* Entry veil: limestone closes over the page while /stone renders, then
+   settles away. Pointer-transparent; removed by StoneShell or a timeout. */
+#stone-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  pointer-events: none;
+  background-color: #c4bfb5;
+  background-image: url("/stone/grain.svg"), radial-gradient(120% 90% at 30% 20%, #d3cfc7, #b5afa4);
+  background-size: 240px 240px, 100% 100%;
+  animation: stone-veil-close 460ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+#stone-veil[data-state="settle"] {
+  animation: stone-veil-settle 620ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes stone-veil-close {
+  from { clip-path: inset(50% 0 50% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes stone-veil-settle {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .srv-stone-key, .srv-stone-key strong { transition: none; }
+  #stone-veil { animation: none; display: none; }
+}

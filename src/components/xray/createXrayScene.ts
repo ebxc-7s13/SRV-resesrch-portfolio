@@ -9,6 +9,8 @@ export type AnatomySystem = "skeleton" | "muscles" | "nervous";
 type Layer = "base" | AnatomySystem;
 interface XraySceneOptions {
   lowQuality: boolean;
+  /** Stone Mode: every layer in limestone values, no accent tint. */
+  stone?: boolean;
   reducedMotion?: boolean;
   deferPreload?: boolean;
   onReady: () => void;
@@ -133,6 +135,7 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
   }
   function leave() { if (!disposed) { revealTarget = 0; wake(); } }
   function syncAccent() {
+    if (options.stone) { accentEnabled.value = 0; if (ready) renderOnce(); return; }
     const color = getAccentColor(), channels = ACCENT_PALETTES[color].text;
     accentTint.value.setRGB(channels[0] / 255, channels[1] / 255, channels[2] / 255, SRGBColorSpace);
     accentEnabled.value = color === "green" ? 0 : 1;
@@ -158,8 +161,13 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
         .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722))) * xrayAccentTint, xrayAccentEnabled);")
         .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance = mix(totalEmissiveRadiance, vec3(dot(totalEmissiveRadiance, vec3(0.2126, 0.7152, 0.0722))) * xrayAccentTint, xrayAccentEnabled);");
       if (internal) shader.fragmentShader = shader.fragmentShader.replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n#ifdef USE_COLOR\n totalEmissiveRadiance *= vColor.rgb;\n#endif");
+      // Stone Mode: anatomical vertex colours become stone luminance steps,
+      // so layers stay distinguishable by value alone.
+      if (options.stone) shader.fragmentShader = shader.fragmentShader
+        .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb = vec3(0.84, 0.82, 0.78) * (0.55 + 0.45 * pow(dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722)), 0.6));")
+        .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance = vec3(dot(totalEmissiveRadiance, vec3(0.2126, 0.7152, 0.0722)));");
     };
-    material.customProgramCacheKey = () => `anatomy-window-${internal ? "internal" : "surface"}-${tintable ? "accent" : "natural"}-v3`;
+    material.customProgramCacheKey = () => `anatomy-window-${internal ? "internal" : "surface"}-${tintable ? "accent" : "natural"}${options.stone ? "-stone" : ""}-v3`;
   }
   function instrument() {
     if (!renderer) return;
@@ -254,7 +262,10 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
       if (!loader) { decoder = createMeshoptWorker(); loader = new GLTFLoader().setMeshoptDecoder(decoder.decoder); }
       const gltf = await loader.parseAsync(buffer, "/models/anatomy/"); parses++;
       if (disposed) { release(gltf.scene); return; }
-      const palette = { base: ["#ffffff", "#173e2a", 0.22], skeleton: ["#dcf7bc", "#82ba68", 0.23], muscles: ["#9b8870", "#584a2c", 0.16], nervous: ["#a5dfca", "#57b593", 0.45] } as const;
+      const palette = options.stone
+        // Limestone: the body is the pale slab, inner systems step darker.
+        ? { base: ["#e9e6e0", "#3a3732", 0.12], skeleton: ["#f2efe9", "#6c675f", 0.2], muscles: ["#b9b2a6", "#4a463f", 0.14], nervous: ["#8f897e", "#5a554d", 0.3] } as const
+        : { base: ["#ffffff", "#173e2a", 0.22], skeleton: ["#dcf7bc", "#82ba68", 0.23], muscles: ["#9b8870", "#584a2c", 0.16], nervous: ["#a5dfca", "#57b593", 0.45] } as const;
       const [color, emissive, emissiveIntensity] = palette[key];
       const material = new MeshStandardMaterial({ color, emissive, emissiveIntensity, roughness: 0.68, metalness: 0, transparent: true, depthWrite: key === "base", opacity: key === "base" ? 1 : 0 });
       applyWindow(material, key !== "base", key !== "muscles"); materials.add(material);
@@ -269,7 +280,8 @@ export async function createXrayScene(canvas: HTMLCanvasElement, options: XraySc
         bounds.setFromObject(gltf.scene); bounds.getSize(size); bounds.getCenter(center);
         if (!Number.isFinite(size.y) || size.y <= 0) throw new Error("Invalid anatomical bounds"); root.position.copy(center); scene.add(root);
         camera.position.set(center.x, center.y, bounds.max.z + size.y * 3); camera.far = size.y * 8; camera.lookAt(center);
-        const ambient = new AmbientLight("#d6e5dc", 1.0), main = new DirectionalLight("#eff8e5", 2.5);
+        // Stone Mode lights the same way with neutral (hue-free) light.
+        const ambient = new AmbientLight(options.stone ? "#e4e2de" : "#d6e5dc", 1.0), main = new DirectionalLight(options.stone ? "#f4f2ee" : "#eff8e5", 2.5);
         main.position.set(center.x - size.x * 1.5, bounds.max.y + size.y * 0.4, bounds.max.z + size.y * 2); main.target.position.copy(center);
         scene.add(ambient, main, main.target); viewY = center.y; targetY = center.y;
       }

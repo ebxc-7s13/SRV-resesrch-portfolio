@@ -19,6 +19,8 @@ import {
   type Quality,
 } from "@/lib/lab-devices";
 import { safeExternalHref } from "@/lib/safe-url";
+import { usePathname } from "next/navigation";
+import { isStonePath } from "@/lib/stone-mode";
 import type { CameraCommand } from "./LabScene";
 import LabDiagnostics from "./LabDiagnostics";
 import LabArchivePanel from "./LabArchivePanel";
@@ -73,6 +75,8 @@ class SceneBoundary extends Component<
 }
 
 export default function LabExperience({ content }: { content: LabContent }) {
+  // Stone Mode shows the same laboratory carved in limestone.
+  const stone = isStonePath(usePathname());
   const [theme] = useState<"night">("night");
   const deepLinkHandled = useRef(false);
   const [selection, setSelection] = useState<ArchiveSelection | null>(null);
@@ -423,6 +427,7 @@ export default function LabExperience({ content }: { content: LabContent }) {
             ) : (
               <SceneBoundary onFailure={onFailure}>
                 <LabScene
+                  stone={stone}
                   theme={theme}
                   view={view}
                   quality={quality}

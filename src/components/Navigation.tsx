@@ -7,6 +7,7 @@ import CellsControl from "./CellsControl";
 import AccentColorControl from "./AccentColorControl";
 import NavIcon from "./NavIcons";
 import { useBackgroundMode } from "@/lib/background-mode";
+import { STONE_PREFIX, toOriginalPath } from "@/lib/stone-mode";
 const navItems = [
   { href: "/", label: "HOME", icon: "home" },
   { href: "/research", label: "RESEARCH", icon: "science" },
@@ -19,8 +20,11 @@ const navItems = [
   { href: "/contact", label: "CONTACT", icon: "mail" },
   { href: "/search", label: "SEARCH", icon: "search" },
 ];
-export default function Navigation({ playMode = false }: { playMode?: boolean }) {
-  const pathname = usePathname();
+export default function Navigation({ playMode = false, stone = false }: { playMode?: boolean; stone?: boolean }) {
+  // In Stone Mode the same destinations live under /stone.
+  const pathname = toOriginalPath(usePathname());
+  const base = stone ? STONE_PREFIX : "";
+  const hrefFor = (href: string) => (base ? (href === "/" ? base : base + href) : href);
   const backgroundMode = useBackgroundMode();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -64,7 +68,7 @@ export default function Navigation({ playMode = false }: { playMode?: boolean })
       // Dynamic routes only prefetch their loading shell by default. Warm the
       // intended destination before the click, without fetching every page.
       const prefetch = () => {
-        if (pathname !== item.href) router.prefetch(item.href);
+        if (pathname !== item.href) router.prefetch(hrefFor(item.href));
       };
       const active =
         pathname === item.href ||
@@ -79,7 +83,7 @@ export default function Navigation({ playMode = false }: { playMode?: boolean })
         return (
           <Item
             key={item.href}
-            href={item.href}
+            href={hrefFor(item.href)}
             onPointerEnter={prefetch}
             onFocus={prefetch}
             onTouchStart={prefetch}
@@ -102,7 +106,7 @@ export default function Navigation({ playMode = false }: { playMode?: boolean })
       return (
         <Item
           key={item.href}
-          href={item.href}
+          href={hrefFor(item.href)}
           onPointerEnter={prefetch}
           onFocus={prefetch}
           onTouchStart={prefetch}
@@ -143,8 +147,9 @@ export default function Navigation({ playMode = false }: { playMode?: boolean })
     >
       <div className="navigation-bar shell">
         <div className="desktop-navigation">{links()}</div>
-        <CellsControl liquidOnly={playMode} />
-        {(backgroundMode === "liquid" || playMode) && (
+        {/* Environment and colour controls have no meaning on stone. */}
+        {!stone && <CellsControl liquidOnly={playMode} />}
+        {!stone && (backgroundMode === "liquid" || playMode) && (
           <Link href="/play" className="liquid-play-link" aria-label="Enter Liquid play mode" aria-current={playMode ? "page" : undefined} data-pointer>
             PLAY
           </Link>
@@ -161,7 +166,7 @@ export default function Navigation({ playMode = false }: { playMode?: boolean })
           <span>{mobileOpen ? "Close" : "Menu"}</span>
           <span aria-hidden="true">{mobileOpen ? "×" : "☰"}</span>
         </button>
-        <AccentColorControl />
+        {!stone && <AccentColorControl />}
       </div>
       {pending && (
         <div className="navigation-pending" role="status">

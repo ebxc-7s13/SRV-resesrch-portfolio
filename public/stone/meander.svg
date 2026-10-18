@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="20" viewBox="0 0 40 20">
+  <!-- Greek key (meander), one repeat, cut into the stone: a continuous base
+       line with the key rising from it; the lit lower-right wall sits under
+       the shadowed groove (light from the upper left). -->
+  <g fill="none" stroke-linecap="square" stroke-width="1.6">
+    <path d="M0 17H40M8 17V3H22V13H14V8" stroke="#e3e0d9" transform="translate(0.8 0.8)"/>
+    <path d="M0 17H40M8 17V3H22V13H14V8" stroke="#5f5a52"/>
+  </g>
+</svg>

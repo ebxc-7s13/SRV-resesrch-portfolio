@@ -27,6 +27,7 @@ import "./liquid-play.css";
 import "./accent-colors.css";
 import "./liquid-glass-buttons.css";
 import "./sound-system.css";
+import "./stone-key.css";
 
 // Supported CMS text must refresh on every public page, including Contact.
 export const dynamic = "force-dynamic";
@@ -131,7 +132,7 @@ export default async function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: ACCENT_BOOTSTRAP_SCRIPT + `(function(){try{document.documentElement.dataset.theme='night';try{localStorage.setItem('theme','night');localStorage.removeItem('daynight');localStorage.removeItem('motion-preference');}catch(e){}document.documentElement.dataset.motion='active';}catch(e){}})();`,
+            __html: ACCENT_BOOTSTRAP_SCRIPT + `(function(){try{document.documentElement.dataset.theme='night';try{localStorage.setItem('theme','night');localStorage.removeItem('daynight');localStorage.removeItem('motion-preference');}catch(e){}document.documentElement.dataset.motion='active';var p=location.pathname;if(p==='/stone'||p.indexOf('/stone/')===0)document.documentElement.dataset.stone='';}catch(e){}})();`,
           }}
         />
       </head>

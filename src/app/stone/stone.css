@@ -1,0 +1,603 @@
+/* ==========================================================================
+   STONE MODE — the portfolio carved into one cool, pale limestone.
+   Every selector is scoped to :root[data-stone] (set only on /stone routes),
+   so nothing here can reach the original portfolio. Light comes from the
+   upper left for text, bevels, grooves and the 3D key light alike.
+   See .claude/skills/srv-stone-architecture/SKILL.md.
+   ========================================================================== */
+
+/* ---- 1. Material tokens ------------------------------------------------- */
+:root[data-stone] {
+  --stone-highlight: #e3e0d9;
+  --stone-light: #d5d1c9;
+  --stone-base: #c6c1b7;
+  --stone-recess: #b8b2a7;
+  --stone-mid: #9e988d;
+  --stone-dark: #6d685f;
+  --stone-deep: #47433c;
+  --stone-text: #34312b;
+  --stone-muted: #4d4942;
+  --stone-border: #a29c91;
+  --stone-focus: #34312b;
+  --stone-texture-opacity: 1;
+  /* shadow colour carries the stone's own warmth, never a hue of its own */
+  --stone-shadow: 52 46 38;
+  --stone-light-rgb: 255 253 248;
+  /* light direction: upper left */
+  --relief-raised:
+    inset 1px 1px 0 rgb(var(--stone-light-rgb) / 0.55),
+    inset -1px -1px 0 rgb(var(--stone-shadow) / 0.2),
+    1px 2px 3px rgb(var(--stone-shadow) / 0.2),
+    4px 8px 18px rgb(var(--stone-shadow) / 0.13);
+  --relief-raised-hover:
+    inset 1px 1px 0 rgb(var(--stone-light-rgb) / 0.62),
+    inset -1px -1px 0 rgb(var(--stone-shadow) / 0.22),
+    2px 3px 5px rgb(var(--stone-shadow) / 0.22),
+    6px 12px 26px rgb(var(--stone-shadow) / 0.15);
+  --relief-pressed:
+    inset 2px 2px 5px rgb(var(--stone-shadow) / 0.3),
+    inset -1px -1px 0 rgb(var(--stone-light-rgb) / 0.45);
+  --relief-recessed:
+    inset 2px 2px 5px rgb(var(--stone-shadow) / 0.24),
+    inset 1px 1px 1px rgb(var(--stone-shadow) / 0.18),
+    inset -1px -1px 0 rgb(var(--stone-light-rgb) / 0.5);
+  --relief-sculpted:
+    inset 2px 2px 0 rgb(var(--stone-light-rgb) / 0.45),
+    inset -2px -2px 0 rgb(var(--stone-shadow) / 0.16),
+    3px 5px 8px rgb(var(--stone-shadow) / 0.2),
+    10px 18px 44px rgb(var(--stone-shadow) / 0.18);
+  --engrave-line: 0 1px 0 rgb(var(--stone-light-rgb) / 0.6);
+  --emboss-raised: -1px -1px 0 rgb(var(--stone-light-rgb) / 0.7), 1px 1px 0 rgb(var(--stone-shadow) / 0.3), 2px 2px 2px rgb(var(--stone-shadow) / 0.14);
+  --emboss-incised: 1px 1px 0 rgb(var(--stone-light-rgb) / 0.65), -1px -1px 0 rgb(var(--stone-shadow) / 0.28);
+  --emboss-subtle: 1px 1px 0 rgb(var(--stone-light-rgb) / 0.5);
+  --stone-grain: url("/stone/grain-soft.svg");
+  --stone-grain-slab: url("/stone/grain.svg");
+  --stone-cloud: url("/stone/cloud.svg");
+  --stone-display: var(--stone-font-display, "Cinzel", "Trajan Pro", Georgia, serif);
+  --stone-serif: var(--stone-font-text, "EB Garamond", Garamond, Georgia, serif);
+  color-scheme: light;
+}
+
+/* The original palette, remapped: every component that reads the site's
+   tokens is already stone before any rule below targets it. */
+:root[data-stone] body {
+  --page: 198 193 183;
+  --surface: 205 200 191;
+  --panel: 213 209 201;
+  --tint: 190 184 173;
+  --ink: 52 49 43;
+  --muted: 77 73 66;
+  --faint: 104 99 91;
+  --line: 162 156 145;
+  --danger: 71 67 60;
+  --warm: 109 104 95;
+  --accent: 71 67 60;
+  --accent-fill: 93 88 80;
+  --accent-glow: 93 88 80;
+  --on-accent: 227 224 217;
+  --accent-on-light: 71 67 60;
+  --accent-orb-shadow: 109 104 95;
+  --accent-orb-dark: 71 67 60;
+  --accent-secondary: 109 104 95;
+  --accent-deep: 71 67 60;
+  --smoke-base: 198 193 183;
+  --smoke-dark: 190 184 173;
+  --smoke-raised: 205 200 191;
+  --smoke-top: 213 209 201;
+  --smoke-floor: 184 178 167;
+  --smoke-highlight: 220 216 209;
+  --ink-on-light: 52 49 43;
+  --marquee-ink: 77 73 66;
+  --footer-ink: 52 49 43;
+  --emerald-300: 109 104 95;
+  --emerald-400: 93 88 80;
+  --emerald-500: 77 73 66;
+  --shadow: var(--relief-raised);
+  --glass-edge: inset 0 0 0 transparent;
+  --glass-hairline: inset 0 0 0 transparent;
+  --glass-underlight: inset 0 0 0 transparent;
+  --glass-depth: 0 0 0 transparent;
+  --glass-specular: linear-gradient(transparent, transparent);
+  --card-stars: linear-gradient(transparent, transparent);
+  --card-surface: linear-gradient(transparent, transparent);
+  --card-panel: linear-gradient(transparent, transparent);
+  --card-tint: linear-gradient(transparent, transparent);
+  --card-surface-flat: linear-gradient(transparent, transparent);
+  --radius-sm: 2px;
+  --radius: 3px;
+  --radius-lg: 4px;
+  color-scheme: light;
+  /* The slab itself: limestone, a broad quarry drift and fine grain. */
+  background-color: var(--stone-base) !important;
+  background-image: var(--stone-grain-slab), var(--stone-cloud),
+    radial-gradient(140% 90% at 18% 0%, rgb(var(--stone-light-rgb) / 0.18), transparent 60%) !important;
+  background-size: 240px 240px, 900px 900px, 100% 100% !important;
+  background-attachment: scroll, scroll, fixed !important;
+  color: var(--stone-text) !important;
+  font-family: var(--stone-serif) !important;
+  font-size: 1.0625rem;
+}
+
+/* ---- 2. Remove the original visual language ------------------------------
+   Colour, glow, glass and decorative fields go; structure stays. Later,
+   more specific rules re-introduce stone surfaces where they belong. */
+:root[data-stone] body * {
+  color: inherit !important;
+  border-color: var(--stone-border) !important;
+  outline-color: var(--stone-focus) !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  caret-color: var(--stone-text) !important;
+  accent-color: var(--stone-dark) !important;
+  font-family: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-stone] body *::before,
+:root[data-stone] body *::after {
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  border-color: var(--stone-border) !important;
+}
+/* Hard-coded colours inside inline SVG icons follow the text colour. */
+:root[data-stone] body svg :is([fill^="#"], [fill^="rgb"], [fill^="hsl"], [fill="white"], [fill="black"]) { fill: currentColor !important; }
+:root[data-stone] body svg :is([stroke^="#"], [stroke^="rgb"], [stroke^="hsl"], [stroke="white"], [stroke="black"]) { stroke: currentColor !important; }
+:root[data-stone] body svg stop { stop-color: var(--stone-dark) !important; }
+/* Purely decorative colour devices of the original theme. */
+:root[data-stone] body :is(.galaxy__container, .galaxy, .galaxy__ring, .backdrop, .star, .star--static,
+  .environment-floor, .environment-grid, .research-environment, .orbit-glow, .cursor-trail) { display: none !important; }
+
+/* Research imagery keeps every value; only hue is removed (files untouched). */
+:root[data-stone] body :is(img, video, picture, iframe) {
+  filter: grayscale(1) contrast(1.04) !important;
+}
+:root[data-stone] body :is(img, video) { background-color: var(--stone-recess) !important; }
+
+/* ---- 3. Typography: inscriptions on stone ---------------------------------- */
+:root[data-stone] body :is(h1, h2, h3, h4, h5, h6, .page-title, .section-heading, .hero-surname) {
+  font-family: var(--stone-display) !important;
+  color: var(--stone-deep) !important;
+  font-weight: 600;
+  letter-spacing: 0.04em !important;
+  text-transform: none;
+  text-shadow: var(--emboss-raised) !important;
+  line-height: 1.12;
+}
+:root[data-stone] body :is(h3, h4, h5, h6) { text-shadow: var(--emboss-incised) !important; font-weight: 600; letter-spacing: 0.03em !important; }
+/* Large titles: deep-carved, the darkest stone with stepped relief. */
+:root[data-stone] body :is(.page-title, h1) {
+  color: var(--stone-deep) !important;
+  letter-spacing: 0.035em !important;
+  text-shadow:
+    -1px -1px 0 rgb(var(--stone-light-rgb) / 0.75),
+    1px 1px 0 #8f897e,
+    2px 2px 0 #9a9489,
+    3px 3px 1px rgb(var(--stone-shadow) / 0.28),
+    5px 7px 12px rgb(var(--stone-shadow) / 0.2) !important;
+}
+:root[data-stone] body :is(p, li, dd, td, blockquote, figcaption) {
+  color: var(--stone-text) !important;
+  text-shadow: var(--emboss-subtle) !important;
+}
+:root[data-stone] body :is(.eyebrow, .index-mark, .record-meta, .card-metadata, .highlight-meta, .chronology-year,
+  .figure-index, time, small, .status-tag, .capability-index, .nav-tip, label, th, legend, figcaption, .chronology-year > h2 span) {
+  font-family: var(--stone-serif) !important;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em !important;
+  color: var(--stone-muted) !important;
+  text-shadow: var(--emboss-incised) !important;
+}
+:root[data-stone] body :is(code, pre, kbd, samp) {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace !important;
+  background-color: var(--stone-recess) !important;
+  box-shadow: var(--relief-recessed) !important;
+  border-radius: 2px;
+  padding: 0.1em 0.35em;
+  color: var(--stone-text) !important;
+}
+:root[data-stone] body pre { padding: 1rem 1.2rem; overflow-x: auto; }
+:root[data-stone] body pre code { box-shadow: none !important; background: none !important; padding: 0; }
+:root[data-stone] body a { text-decoration-color: var(--stone-mid) !important; text-underline-offset: 0.2em; }
+:root[data-stone] body ::selection { background: var(--stone-dark); color: var(--stone-highlight); -webkit-text-fill-color: var(--stone-highlight); }
+
+/* ---- 4. Focus: a carved outline, never a colour ----------------------------- */
+:root[data-stone] body :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--stone-focus) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 5px rgb(var(--stone-light-rgb) / 0.55) !important;
+}
+
+/* ---- 5. Architecture: frieze, lintel, plinth -------------------------------- */
+/* The top marquee becomes an engraved frieze; the lower one a Greek-key band. */
+:root[data-stone] body .research-marquee {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  box-shadow: inset 0 -1px 0 rgb(var(--stone-shadow) / 0.28), inset 0 1px 0 rgb(var(--stone-light-rgb) / 0.6), 0 2px 4px rgb(var(--stone-shadow) / 0.12) !important;
+}
+:root[data-stone] body .research-marquee * {
+  color: var(--stone-dark) !important;
+  font-family: var(--stone-display) !important;
+  letter-spacing: 0.22em !important;
+  text-shadow: var(--emboss-incised) !important;
+}
+:root[data-stone] body .research-marquee:not([style*="sticky"]) {
+  height: 22px;
+  background-image: url("/stone/meander.svg"), var(--stone-grain) !important;
+  background-size: 40px 20px, 240px 240px !important;
+  background-repeat: repeat-x, repeat !important;
+  background-position: 0 1px, 0 0 !important;
+}
+:root[data-stone] body .research-marquee:not([style*="sticky"]) * { visibility: hidden; }
+
+/* Navigation: a lintel channel cut across the top, links engraved in it. */
+:root[data-stone] body .site-navigation .navigation-bar {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  border: 0 !important;
+  border-radius: 3px !important;
+  box-shadow: var(--relief-raised) !important;
+}
+:root[data-stone] body .site-navigation :is(.nav-item, .mobile-menu-toggle) {
+  color: var(--stone-muted) !important;
+  border-radius: 2px !important;
+  font-family: var(--stone-serif) !important;
+}
+:root[data-stone] body .site-navigation :is(.nav-item, .mobile-menu-toggle):hover {
+  color: var(--stone-text) !important;
+  background-color: rgb(var(--stone-light-rgb) / 0.35) !important;
+}
+:root[data-stone] body .site-navigation .nav-item.is-active,
+:root[data-stone] body .site-navigation .nav-item[aria-current="page"] {
+  color: var(--stone-deep) !important;
+  background-color: var(--stone-recess) !important;
+  box-shadow: var(--relief-recessed) !important;
+}
+:root[data-stone] body .site-navigation .nav-item::after { background-color: var(--stone-deep) !important; }
+:root[data-stone] body .site-navigation .nav-tip {
+  background-color: var(--stone-light) !important;
+  box-shadow: var(--relief-raised) !important;
+  color: var(--stone-text) !important;
+}
+:root[data-stone] body :is(.mobile-navigation-panel) {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  box-shadow: var(--relief-sculpted) !important;
+}
+:root[data-stone] body .nav-backdrop { background-color: rgb(var(--stone-shadow) / 0.28) !important; }
+:root[data-stone] body .navigation-pending {
+  background-color: var(--stone-light) !important;
+  box-shadow: var(--relief-raised) !important;
+  color: var(--stone-text) !important;
+}
+
+/* Footer: the plinth, a darker course of the same stone. */
+:root[data-stone] body .site-footer {
+  background-color: var(--stone-recess) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  box-shadow: inset 0 2px 0 rgb(var(--stone-light-rgb) / 0.45), inset 0 3px 6px rgb(var(--stone-shadow) / 0.18) !important;
+  border-top: 0 !important;
+}
+:root[data-stone] body .site-footer :is(.footer-name, .footer-name *) {
+  font-family: var(--stone-display) !important;
+  color: var(--stone-deep) !important;
+  text-shadow: var(--emboss-raised) !important;
+}
+:root[data-stone] body .site-footer :is(p, span, a) { color: var(--stone-text) !important; }
+:root[data-stone] body .site-footer .footer-legal { border-top: 1px solid var(--stone-border) !important; box-shadow: var(--engrave-line) !important; }
+:root[data-stone] body .site-footer img { filter: grayscale(1) contrast(1.1) brightness(0.92) !important; background: none !important; }
+
+/* ---- 6. Surfaces ----------------------------------------------------------------- */
+/* Raised plaques: research, publication, timeline and device records. */
+:root[data-stone] body :is(.depth-card, .highlight-card, .depth-plane, .milestone-card, .card-device,
+  .publication-record, .research-study, .bg-slate-900\/50, .rounded-2xl.border) {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  border: 0 !important;
+  border-radius: 3px !important;
+  box-shadow: var(--relief-raised) !important;
+  transform: none !important;
+  transition: box-shadow 220ms ease-out;
+}
+:root[data-stone] body :is(.depth-card, .highlight-card, .milestone-card, .publication-record, .research-study):hover {
+  box-shadow: var(--relief-raised-hover) !important;
+}
+/* Plaques nested in plaques read as recessed panels, not stacks of cards. */
+:root[data-stone] body :is(.depth-card, .highlight-card, .depth-plane, .publication-record) :is(.depth-card, .highlight-card, .depth-plane) {
+  background-color: var(--stone-base) !important;
+  box-shadow: var(--relief-recessed) !important;
+}
+:root[data-stone] body .research-card-media,
+:root[data-stone] body .research-card-image { background-color: var(--stone-recess) !important; box-shadow: var(--relief-recessed) !important; }
+
+/* Page headers: an inscription panel cut into the wall. */
+:root[data-stone] body .page-header {
+  position: relative;
+  padding-block: clamp(28px, 4vw, 48px) !important;
+}
+:root[data-stone] body .page-header .header-rule,
+:root[data-stone] body .page-header .header-rule * {
+  height: 6px !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid rgb(var(--stone-shadow) / 0.35) !important;
+  border-bottom: 1px solid rgb(var(--stone-light-rgb) / 0.65) !important;
+}
+:root[data-stone] body .page-header .page-intro p { font-size: 1.15rem; line-height: 1.65; max-width: 62ch; }
+/* Engraved divider for horizontal rules and section borders. */
+:root[data-stone] body hr { border: 0 !important; border-top: 1px solid rgb(var(--stone-shadow) / 0.32) !important; box-shadow: var(--engrave-line) !important; }
+:root[data-stone] body :is(.about-section, .home-section) { border-top-color: rgb(var(--stone-shadow) / 0.25) !important; }
+
+/* Home hero: the great inscription. */
+:root[data-stone] body .research-hero :is(h1, .hero-surname, .hero-name, .hero-title) {
+  font-family: var(--stone-display) !important;
+  font-weight: 700 !important;
+  color: var(--stone-deep) !important;
+  letter-spacing: 0.02em !important;
+  text-shadow:
+    -1px -1px 0 rgb(var(--stone-light-rgb) / 0.8),
+    1px 1px 0 #8f897e,
+    2px 2px 0 #968f84,
+    3px 3px 0 #a09a8f,
+    4px 5px 2px rgb(var(--stone-shadow) / 0.3),
+    8px 12px 20px rgb(var(--stone-shadow) / 0.22) !important;
+}
+:root[data-stone] body .research-hero :is(h1 *, .hero-surname *) { color: inherit !important; text-shadow: inherit !important; }
+
+/* ---- 7. Controls ------------------------------------------------------------------ */
+/* Raised stone buttons and button-like links. */
+:root[data-stone] body :is(button, .button, .galaxy-button > a, .galaxy-button, .text-link, .footer-chip, .carousel-control,
+  .media-action, .card-open, .contact-submit, [role="button"], input[type="submit"], input[type="button"],
+  .timeline-filters :is(button, a), .liquid-glass, .lab-header-back) {
+  color: var(--stone-text) !important;
+  border-color: transparent !important;
+  border-radius: 2px !important;
+  font-family: var(--stone-serif) !important;
+}
+:root[data-stone] body :is(.button, .galaxy-button > a, .contact-submit, input[type="submit"], .footer-chip, .carousel-control,
+  .timeline-filters :is(button, a), .hero-archive-links a, .lab-header-back, .media-action) {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  box-shadow: var(--relief-raised) !important;
+  transition: box-shadow 160ms ease-out, transform 160ms ease-out;
+}
+:root[data-stone] body :is(.button, .galaxy-button > a, .contact-submit, input[type="submit"], .footer-chip, .carousel-control,
+  .timeline-filters :is(button, a), .hero-archive-links a, .lab-header-back, .media-action):hover {
+  box-shadow: var(--relief-raised-hover) !important;
+}
+:root[data-stone] body :is(button, .button, .galaxy-button > a, .footer-chip, .carousel-control, .contact-submit, .hero-archive-links a, .media-action):active {
+  box-shadow: var(--relief-pressed) !important;
+  transform: translateY(1px) !important;
+}
+:root[data-stone] body :is(button, [role="button"]):disabled,
+:root[data-stone] body :is(button, [role="button"])[aria-disabled="true"] {
+  opacity: 0.55 !important;
+  box-shadow: none !important;
+  text-decoration: line-through 1px rgb(var(--stone-shadow) / 0.35);
+}
+/* Selected / pressed state: cut into the stone, and heavier, never coloured. */
+:root[data-stone] body :is([aria-pressed="true"], [aria-selected="true"], [aria-current="page"], .is-active, [data-active="true"]):is(button, a, [role="tab"]) {
+  background-color: var(--stone-recess) !important;
+  box-shadow: var(--relief-recessed) !important;
+  color: var(--stone-deep) !important;
+  font-weight: 600 !important;
+}
+/* Inputs are channels cut into the slab. */
+:root[data-stone] body :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="submit"], [type="button"]), textarea, select) {
+  background-color: var(--stone-recess) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  border: 0 !important;
+  border-radius: 2px !important;
+  box-shadow: var(--relief-recessed) !important;
+  color: var(--stone-text) !important;
+  font-family: var(--stone-serif) !important;
+  font-size: 1.05rem;
+}
+:root[data-stone] body :is(input, textarea)::placeholder { color: var(--stone-muted) !important; -webkit-text-fill-color: var(--stone-muted) !important; opacity: 1; }
+:root[data-stone] body :is(input, textarea, select):focus { box-shadow: var(--relief-recessed), 0 0 0 2px var(--stone-focus) !important; }
+:root[data-stone] body :is(input[type="checkbox"], input[type="radio"], input[type="range"]) { accent-color: var(--stone-deep) !important; }
+/* Status and tags: small incised plaques; meaning is in the words. */
+:root[data-stone] body :is(.status-tag, .tag, .chip, [class*="badge"]) {
+  background-color: var(--stone-base) !important;
+  box-shadow: var(--relief-recessed) !important;
+  border: 0 !important;
+  border-radius: 2px !important;
+  color: var(--stone-text) !important;
+  padding-inline: 0.55em;
+}
+/* Tables: engraved rules. */
+:root[data-stone] body table { border-collapse: collapse; }
+:root[data-stone] body :is(th, td) { border-bottom: 1px solid rgb(var(--stone-shadow) / 0.25) !important; box-shadow: var(--engrave-line) !important; }
+:root[data-stone] body :is(.overflow-x-auto, .table-wrap) { box-shadow: var(--relief-recessed) !important; background-color: var(--stone-base) !important; }
+/* Disclosure, dialogs, popovers and menus. */
+:root[data-stone] body :is(dialog, [role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"], .cells-popup, .sound-panel, details > div) {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  box-shadow: var(--relief-sculpted) !important;
+  border: 0 !important;
+  color: var(--stone-text) !important;
+}
+:root[data-stone] body dialog::backdrop { background: rgb(var(--stone-shadow) / 0.45); }
+:root[data-stone] body summary { color: var(--stone-text) !important; }
+
+/* Timeline: a groove with carved milestones. */
+:root[data-stone] body :is(.chronology-beam, .timeline-line, .chronology::before) {
+  background-color: var(--stone-recess) !important;
+  box-shadow: var(--relief-recessed) !important;
+}
+/* Only the year numeral is carved in display capitals; its cards read as text. */
+:root[data-stone] body .chronology-year { font-variant-caps: normal; letter-spacing: normal !important; color: var(--stone-text) !important; text-shadow: none !important; }
+:root[data-stone] body .chronology-year > h2 { font-family: var(--stone-display) !important; color: var(--stone-deep) !important; }
+:root[data-stone] body .chronology-year > h2 span { font-family: var(--stone-serif) !important; font-variant-caps: all-small-caps; color: var(--stone-muted) !important; text-shadow: var(--emboss-incised) !important; }
+
+/* Lab entrance on Home and loading states: sculpted, quiet. */
+:root[data-stone] body :is(.home-lab-exhibit, .home-lab-stage) { box-shadow: var(--relief-sculpted) !important; background-color: var(--stone-light) !important; border-radius: 3px; }
+:root[data-stone] body :is(.home-lab-loading, .lab-canvas-fallback, [aria-busy="true"]) { color: var(--stone-muted) !important; }
+:root[data-stone] body .lab-spinner { border-color: var(--stone-recess) !important; border-top-color: var(--stone-deep) !important; }
+:root[data-stone] body :is(.laboratory, .lab-header, .lab-footer) { background-color: transparent !important; }
+:root[data-stone] body .lab-header {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  box-shadow: var(--relief-raised) !important;
+}
+:root[data-stone] body .lab-monogram { font-family: var(--stone-display) !important; }
+
+/* Corner screws on the collaboration slab become drilled peg holes. */
+:root[data-stone] body .frost-screw { background-color: var(--stone-recess) !important; box-shadow: var(--relief-recessed) !important; border-radius: 50%; }
+
+/* ---- 8. The SRV mark as a carved roundel ------------------------------------------- */
+:root[data-stone] body .identity-orbit { border: 1px solid rgb(var(--stone-shadow) / 0.38) !important; box-shadow: 0 1px 0 rgb(var(--stone-light-rgb) / 0.55) !important; }
+:root[data-stone] body .identity-object strong {
+  font-family: var(--stone-display) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: var(--stone-deep) !important;
+  text-shadow: -1px -1px 0 rgb(var(--stone-light-rgb) / 0.8), 1px 1px 0 #8f897e, 2px 2px 0 #9a9489, 4px 6px 10px rgb(var(--stone-shadow) / 0.25) !important;
+}
+:root[data-stone] body .identity-object > span:not(.identity-orbit) { color: var(--stone-muted) !important; font-family: var(--stone-serif) !important; }
+
+/* ---- 9. Stone Mode chrome --------------------------------------------------------------- */
+:root[data-stone] body .stone-return {
+  position: fixed;
+  z-index: 60;
+  left: max(16px, env(safe-area-inset-left));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px 0 12px;
+  border-radius: 2px;
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  box-shadow: var(--relief-raised) !important;
+  color: var(--stone-text) !important;
+  font-family: var(--stone-serif) !important;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+:root[data-stone] body .stone-return:hover { box-shadow: var(--relief-raised-hover) !important; }
+:root[data-stone] body .stone-return:active { box-shadow: var(--relief-pressed) !important; }
+:root[data-stone] body .stone-return svg { width: 18px; height: 18px; flex: none; }
+@media (max-width: 520px) {
+  :root[data-stone] body .stone-return span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :root[data-stone] body .stone-return { padding: 0 13px; }
+}
+/* Sound dock and panel follow the same material. */
+:root[data-stone] body .sound-dock-button {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  box-shadow: var(--relief-raised) !important;
+  color: var(--stone-text) !important;
+}
+:root[data-stone] body .sound-dock-dot { background-color: var(--stone-deep) !important; }
+:root[data-stone] body .sound-profile.is-selected { background-color: var(--stone-recess) !important; box-shadow: var(--relief-recessed) !important; }
+:root[data-stone] body :is(.sound-switch-track) { background-color: var(--stone-recess) !important; box-shadow: var(--relief-recessed) !important; }
+:root[data-stone] body .sound-switch[aria-checked="true"] .sound-switch-track { background-color: var(--stone-dark) !important; }
+:root[data-stone] body :is(.sound-switch-thumb) { background-color: var(--stone-highlight) !important; box-shadow: var(--relief-raised) !important; }
+:root[data-stone] body .sound-profile-badge { background-color: var(--stone-deep) !important; color: var(--stone-highlight) !important; -webkit-text-fill-color: var(--stone-highlight) !important; }
+
+/* ---- 10. The chisel cursor (fine pointers only) ------------------------------------------ */
+@media (pointer: fine) {
+  :root[data-stone],
+  :root[data-stone] body {
+    cursor: url("/stone/chisel.svg") 3 3, url("/stone/chisel.png") 3 3, auto;
+  }
+  :root[data-stone] body :is(a[href], button:not(:disabled), [role="button"], summary, select, label[for],
+    input:is([type="checkbox"], [type="radio"], [type="range"], [type="submit"], [type="button"]),
+    [tabindex]:not([tabindex="-1"]):not(input, textarea)) {
+    cursor: url("/stone/chisel-active.svg") 3 3, url("/stone/chisel-active.png") 3 3, pointer !important;
+  }
+  :root[data-stone] body :is(a[href], button, [role="button"]) * { cursor: inherit !important; }
+  :root[data-stone] body :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="submit"], [type="button"]), textarea, [contenteditable="true"]) {
+    cursor: text !important;
+  }
+  /* Readable text keeps the native I-beam for selection. */
+  :root[data-stone] body :is(p, li, h1, h2, h3, h4, blockquote, figcaption, td, dd, pre, code):not(a *, button *) { cursor: text; }
+}
+
+/* ---- 11. Motion --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-stone] body * { transition: none !important; }
+}
+
+/* ---- 12. Hero details --------------------------------------------------------------- */
+/* The role line: one incised inscription, without the original ghost trail. */
+:root[data-stone] body .hero-role-marquee { mask-image: none !important; -webkit-mask-image: none !important; }
+:root[data-stone] body .hero-role-marquee .marquee_blur { display: none !important; }
+:root[data-stone] body .hero-role-marquee .marquee_text {
+  font-family: var(--stone-display) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.32em !important;
+  color: var(--stone-dark) !important;
+  text-shadow: var(--emboss-incised) !important;
+}
+/* Ledger figures: carved numerals, captions on one line. */
+:root[data-stone] body .hero-ledger strong { font-family: var(--stone-display) !important; color: var(--stone-deep) !important; text-shadow: var(--emboss-raised) !important; }
+:root[data-stone] body .hero-ledger span { white-space: nowrap; font-variant-caps: all-small-caps; letter-spacing: 0.06em !important; color: var(--stone-muted) !important; }
+:root[data-stone] body .hero-ledger { border-color: rgb(var(--stone-shadow) / 0.25) !important; }
+
+/* Original dark backing band behind section headings. */
+:root[data-stone] body .section-heading::before { background-color: transparent !important; }
+:root[data-stone] body .section-heading { text-shadow: none !important; }
+/* Colour-theme control has no meaning in stone (lab header keeps its own). */
+:root[data-stone] body .accent-color-control { display: none !important; }
+
+/* ---- 13. Laboratory overlays ---------------------------------------------------------- */
+/* The cover shade becomes a limestone fade so the entry inscription reads. */
+:root[data-stone] body .lab-cover-shade {
+  background-image: linear-gradient(0deg, rgb(206 201 192 / 0.94), rgb(206 201 192 / 0.62) 42%, rgb(206 201 192 / 0) 76%) !important;
+}
+:root[data-stone] body .lab-entry :is(h2, p, span) { color: var(--stone-deep) !important; }
+:root[data-stone] body .lab-entry p { color: var(--stone-text) !important; font-size: 0.95rem; }
+:root[data-stone] body .lab-button {
+  background-color: var(--stone-light) !important;
+  background-image: var(--stone-grain) !important;
+  background-size: 240px 240px !important;
+  box-shadow: var(--relief-raised) !important;
+  color: var(--stone-text) !important;
+  border: 0 !important;
+}
+:root[data-stone] body .lab-button:hover { box-shadow: var(--relief-raised-hover) !important; }
+:root[data-stone] body .lab-button:active { box-shadow: var(--relief-pressed) !important; }
+:root[data-stone] body .lab-button.primary { font-weight: 600; color: var(--stone-deep) !important; }
+:root[data-stone] body .lab-button.subtle { background-color: transparent !important; box-shadow: none !important; }
+/* Station rail and in-scene labels: plaques and engraved names. */
+:root[data-stone] body :is(.laboratory, .lab-explorer) :is(nav button, .lab-plan-marker, .lab-floor-plan summary, .lab-floating-button) {
+  background-color: var(--stone-light) !important;
+  box-shadow: var(--relief-raised) !important;
+  color: var(--stone-text) !important;
+}
+:root[data-stone] body :is(.laboratory, .lab-explorer) :is(nav button, .lab-plan-marker)[aria-pressed="true"] {
+  background-color: var(--stone-recess) !important;
+  box-shadow: var(--relief-recessed) !important;
+  color: var(--stone-deep) !important;
+}
+:root[data-stone] body :is(.laboratory, .lab-explorer) :is(.lab-floor-plan, .lab-spatial-plan, .lab-research-panel, .lab-device-card, .lab-paper, [class*="lab-dialog"], [class*="lab-archive-"], [class*="projector"]) {
+  background-image: var(--stone-grain) !important;
+  box-shadow: var(--relief-raised) !important;
+  background-color: var(--stone-light) !important;
+  color: var(--stone-text) !important;
+}
+:root[data-stone] body .lab-spatial-plan svg :is(path, rect) { stroke: var(--stone-dark) !important; fill: none !important; }
+
+:root[data-stone] body .lab-status-tag { background-color: var(--stone-base) !important; box-shadow: var(--relief-recessed) !important; color: var(--stone-text) !important; }
+:root[data-stone] body .lab-live-dot { background-color: var(--stone-deep) !important; }
+:root[data-stone] body :is(.lab-intro h1, .lab-section-heading h2) { color: var(--stone-deep) !important; }
+/* Labels that sit in recessed wells use the full text value for contrast. */
+:root[data-stone] body :is(.research-card-media, .research-card-image, .figure-trigger) :is(.figure-index, span, small) { color: var(--stone-text) !important; }
+:root[data-stone] body .figure-index { color: var(--stone-text) !important; }
+:root[data-stone] body :is(.hero-archive-links a, .hero-actions a, .button) { border-radius: 2px !important; }
